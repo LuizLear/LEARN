@@ -12,7 +12,6 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -156,12 +155,12 @@
         <div class="header">
             <div class="logo">LEARN <small>| Plataforma EAD</small></div>
             <div class="nav">
-                <a onclick="showSection('home')"><i class="fas fa-home"></i> <span data-key="home">Início</span></a>
-                <a onclick="showSection('courses')"><i class="fas fa-book-open"></i> <span data-key="courses">Cursos</span></a>
-                <a onclick="showSection('certificates')"><i class="fas fa-certificate"></i> <span data-key="certificates">Certificados</span></a>
-                <a onclick="showSection('forum')"><i class="fas fa-comments"></i> <span data-key="forum">Fórum</span></a>
-                <a onclick="showRanking()"><i class="fas fa-trophy"></i> <span data-key="ranking">Ranking</span></a>
-                <a onclick="showSection('admin')" id="adminNav" style="display: none;"><i class="fas fa-users"></i> <span data-key="admin">Admin</span></a>
+                <a onclick="showSection('home')"><i class="fas fa-home"></i> Início</a>
+                <a onclick="showSection('courses')"><i class="fas fa-book-open"></i> Cursos</a>
+                <a onclick="showSection('certificates')"><i class="fas fa-certificate"></i> Certificados</a>
+                <a onclick="showSection('forum')"><i class="fas fa-comments"></i> Fórum</a>
+                <a onclick="showRanking()"><i class="fas fa-trophy"></i> Ranking</a>
+                <a onclick="showSection('admin')" id="adminNav" style="display: none;"><i class="fas fa-users"></i> Admin</a>
                 <select class="lang-select" id="appLanguageSelect" onchange="changeLanguage(this.value)">
                     <option value="pt">🇧🇷 PT</option><option value="en">🇺🇸 EN</option><option value="es">🇪🇸 ES</option>
                 </select>
@@ -179,15 +178,15 @@
 
         <div id="homeSection">
             <div class="hero">
-                <h1><span data-key="welcome">Bem-vindo(a)</span>, <span id="welcomeName">Aluno</span>!</h1>
-                <p data-key="heroText">Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!</p>
+                <h1>Bem-vindo(a), <span id="welcomeName">Aluno</span>!</h1>
+                <p>Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!</p>
                 <div class="stats-row">
-                    <div class="stat-card"><div class="stat-number" id="userPointsStat">0</div><div data-key="points">Pontos</div></div>
-                    <div class="stat-card"><div class="stat-number" id="completedCountStat">0</div><div data-key="completed">Cursos</div></div>
-                    <div class="stat-card"><div class="stat-number" id="levelStat">🥉 Bronze</div><div data-key="level">Nível</div></div>
+                    <div class="stat-card"><div class="stat-number" id="userPointsStat">0</div><div>Pontos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="completedCountStat">0</div><div>Cursos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="levelStat">🥉 Bronze</div><div>Nível</div></div>
                 </div>
                 <div class="progress-dashboard">
-                    <p><strong data-key="progress">📊 Progresso Geral</strong></p>
+                    <p><strong>📊 Progresso Geral</strong></p>
                     <div class="progress-bar-container"><div class="progress-bar-fill" id="globalProgress"></div></div>
                     <p id="progressText" style="font-size: 13px; margin-top: 6px;">0% concluído</p>
                 </div>
@@ -195,22 +194,22 @@
 
             <div class="section">
                 <div class="section-header">
-                    <h2 data-key="featured">🎯 Cursos em Destaque</h2>
-                    <a onclick="showSection('courses')" style="color: #D82A28; cursor: pointer;" data-key="viewAll">Ver todos →</a>
+                    <h2>🎯 Cursos em Destaque</h2>
+                    <a onclick="showSection('courses')" style="color: #D82A28; cursor: pointer;">Ver todos →</a>
                 </div>
                 <div class="courses-grid" id="featuredCourses"></div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <h2 data-key="badgesTitle">🏆 Suas Conquistas</h2>
+                    <h2>🏆 Suas Conquistas</h2>
                 </div>
                 <div class="badges-container" id="badgesContainer"></div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <h2 data-key="nextSteps">📌 Próximos Passos</h2>
+                    <h2>📌 Próximos Passos</h2>
                 </div>
                 <div class="courses-grid" id="nextSteps"></div>
             </div>
@@ -219,7 +218,7 @@
         <div id="coursesSection" style="display: none;">
             <div class="section">
                 <div class="section-header">
-                    <h2 data-key="allCourses">📚 Todos os Cursos</h2>
+                    <h2>📚 Todos os Cursos</h2>
                 </div>
                 <div class="courses-grid" id="allCourses"></div>
             </div>
@@ -227,7 +226,7 @@
 
         <div id="certificatesSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2 data-key="myCertificates">🏆 Meus Certificados</h2></div>
+                <div class="section-header"><h2>🏆 Meus Certificados</h2></div>
                 <div id="certificatesList"></div>
             </div>
         </div>
@@ -235,7 +234,7 @@
         <div id="forumSection" style="display: none;">
             <div class="section">
                 <div class="section-header">
-                    <h2 data-key="forumTitle">💬 Fórum de Dúvidas</h2>
+                    <h2>💬 Fórum de Dúvidas</h2>
                     <button class="btn-sm" onclick="showNewPostModal()">+ Nova Pergunta</button>
                 </div>
                 <div id="forumList"></div>
@@ -244,16 +243,15 @@
 
         <div id="adminSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2 data-key="adminPanel">👑 Painel Administrativo</h2></div>
+                <div class="section-header"><h2>👑 Painel Administrativo</h2></div>
                 <div class="stats-row">
                     <div class="stat-card"><div class="stat-number" id="adminTotalUsers">0</div><div>Usuários</div></div>
                     <div class="stat-card"><div class="stat-number" id="adminTotalCourses">3</div><div>Cursos</div></div>
                     <div class="stat-card"><div class="stat-number" id="adminTotalPoints">0</div><div>Pontos</div></div>
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <button class="btn-sm" onclick="exportBackup()" style="background: #10b981;">💾 Backup Local</button>
-                    <button class="btn-sm" onclick="syncToCloud()" style="background: #1a2c3e; margin-left: 8px;">☁️ Forçar Sincronização</button>
-                    <button class="btn-sm" onclick="exportUsersCSV()" style="background: #D82A28; margin-left: 8px;">📊 Exportar CSV</button>
+                    <button class="btn-sm" onclick="exportBackup()" style="background: #10b981;">💾 Backup</button>
+                    <button class="btn-sm" onclick="exportUsersCSV()" style="background: #D82A28; margin-left: 8px;">📊 CSV</button>
                 </div>
                 <h3>👥 Usuários</h3>
                 <div id="adminUsersList"></div>
@@ -271,7 +269,7 @@
     <div id="lessonModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeLessonModal()">&times;</span><div id="lessonModalContent"></div></div></div>
     <div id="profileModal" class="modal"><div class="modal-content" style="max-width: 450px;"><span class="modal-close" onclick="closeProfileModal()">&times;</span><div id="profileModalContent"></div></div></div>
     <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()">&times;</span><div id="certPreviewContent"></div><div style="text-align:center; padding-top:15px;"><button class="complete-btn" onclick="generatePdfFromPreview()">📄 Baixar PDF</button></div></div></div>
-    <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()">&times;</span><h2 style="color:#D82A28;"><i class="fas fa-trophy"></i> Ranking Geral</h2><div id="rankingList"></div></div></div>
+    <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()">&times;</span><h2 style="color:#D82A28;"><i class="fas fa-trophy"></i> Ranking</h2><div id="rankingList"></div></div></div>
     <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()">&times;</span><h3 style="color:#D82A28;">➕ Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><textarea id="postContent" placeholder="Sua dúvida..." style="width:100%; padding:10px; margin:8px 0; border-radius:10px;" rows="3"></textarea><button class="complete-btn" onclick="createNewPost()">Publicar</button></div></div>
 
     <script>
@@ -284,17 +282,89 @@
             messagingSenderId: "177385285776",
             appId: "1:177385285776:web:f41879d6282558cc7f1015"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        // Cursos
+        // ============================================
+        // CURSOS COM AULAS COMPLETAS
+        // ============================================
+        
+        // CURSO 1: BUSINESS ENGLISH (10 AULAS COMPLETAS)
+        const course1Lessons = [
+            { id: 1, title: "Greetings and Introductions", content: `<h2>🇬🇧 Lesson 1: Greetings and Introductions</h2><h3>Saudações e Apresentações</h3><p>No ambiente de negócios, as primeiras impressões são fundamentais. Saber cumprimentar e se apresentar corretamente em inglês é essencial.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplos de Saudações:</strong><br>• "Good morning" - Bom dia (usado até 12h)<br>• "Good afternoon" - Boa tarde (12h às 18h)<br>• "Good evening" - Boa noite (após 18h)<br>• "Hello" / "Hi" - Olá / Oi (informal)</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Vocabulário Importante:</strong><br>• Nice to meet you - Prazer em conhecê-lo<br>• How are you? - Como você está?<br>• I'm fine, thank you - Estou bem, obrigado<br>• What's your name? - Qual é o seu nome?<br>• My name is... - Meu nome é...</div><h3>Diálogo de Exemplo:</h3><p><strong>A:</strong> Good morning! My name is John. What's your name?<br><strong>B:</strong> Hello, John. I'm Maria. Nice to meet you!<br><strong>A:</strong> Nice to meet you too, Maria. How are you?<br><strong>B:</strong> I'm fine, thank you. And you?<br><strong>A:</strong> Very well, thanks!</p>` },
+            { id: 2, title: "Introducing Yourself and Others", content: `<h2>🇬🇧 Lesson 2: Introducing Yourself and Others</h2><h3>Apresentando-se e Apresentando Outras Pessoas</h3><p>Aprenda a se apresentar formalmente e a apresentar colegas em reuniões e eventos.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Apresentação Pessoal Formal:</strong><br>• "Allow me to introduce myself..."<br>• "I would like to introduce..."<br>• "This is my colleague, [name]"</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Frases Úteis:</strong><br>• I work as a [profession] - Eu trabalho como [profissão]<br>• I'm responsible for... - Sou responsável por...<br>• Let me introduce you to... - Deixe-me apresentar-lhe...<br>• Have you met [name]? - Você já conheceu [nome]?</div><h3>Diálogo de Exemplo:</h3><p><strong>Maria:</strong> Hello everyone. Allow me to introduce myself. My name is Maria Silva, and I'm the Production Manager at Lear.<br><strong>John:</strong> Nice to meet you, Maria. I'm John, from the Quality Department.<br><strong>Maria:</strong> Have you met my colleague, Carlos? He's our Logistics Coordinator.<br><strong>John:</strong> Not yet. Nice to meet you, Carlos!</p>` },
+            { id: 3, title: "Numbers, Dates and Time", content: `<h2>🇬🇧 Lesson 3: Numbers, Dates and Time</h2><h3>Números, Datas e Horas</h3><p>Números são essenciais para falar sobre quantidades, prazos e horários no ambiente corporativo.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Números (1-20):</strong><br>1-One, 2-Two, 3-Three, 4-Four, 5-Five, 6-Six, 7-Seven, 8-Eight, 9-Nine, 10-Ten,<br>11-Eleven, 12-Twelve, 13-Thirteen, 14-Fourteen, 15-Fifteen, 16-Sixteen, 17-Seventeen, 18-Eighteen, 19-Nineteen, 20-Twenty</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Datas e Horários:</strong><br>• What time is it? - Que horas são?<br>• It's 3 o'clock - São 3 horas<br>• Half past - Meia hora (ex: half past two = 2:30)<br>• Quarter to/past - Quinze minutos para/após<br>• Dates: May 10th, 2025 - 10 de maio de 2025</div><h3>Exemplo de Uso:</h3><p>"The meeting is scheduled for <strong>Wednesday, June 15th, at half past nine (9:30 AM)</strong>. We have <strong>15 people</strong> confirmed."</p>` },
+            { id: 4, title: "Emails and Messages", content: `<h2>🇬🇧 Lesson 4: Emails and Messages</h2><h3>E-mails e Mensagens Corporativas</h3><p>A comunicação escrita é fundamental no ambiente de trabalho.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Estrutura de um E-mail Profissional:</strong><br><strong>Subject:</strong> Clear and objective<br><strong>Greeting:</strong> Dear Mr./Ms. [Last Name],<br><strong>Body:</strong> Purpose of the message<br><strong>Closing:</strong> Best regards / Sincerely</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Frases para E-mails:</strong><br>• I am writing to... - Estou escrevendo para...<br>• Could you please... - Você poderia por favor...<br>• Thank you for your prompt response - Obrigado pela resposta rápida<br>• Please find attached... - Segue anexo...</div><h3>E-mail de Exemplo:</h3><p><strong>Subject:</strong> Production Meeting - Wednesday 10 AM<br><br><strong>Dear Team,</strong><br><br>I am writing to confirm the production meeting scheduled for Wednesday at 10 AM in Conference Room B.<br><br>Best regards,<br>Maria Silva</p>` },
+            { id: 5, title: "Telephone Calls", content: `<h2>🇬🇧 Lesson 5: Telephone Calls</h2><h3>Atendimento Telefônico</h3><p>Atender e fazer chamadas telefônicas em inglês pode ser desafiador. Aprenda as frases essenciais.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Frases para Atender Chamadas:</strong><br>• "Hello, this is [Name] from [Company]. How may I help you?"<br>• "Could I speak to [Name], please?"<br>• "I'm calling about..." - Estou ligando sobre...<br>• "One moment, please. I'll transfer you."<br>• "Can I take a message?" - Posso anotar um recado?</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Vocabulário Telefônico:</strong><br>• Hang on / Hold on - Aguarde<br>• Call back - Retornar a ligação<br>• Wrong number - Número errado<br>• Extension - Ramal</div><h3>Diálogo de Exemplo:</h3><p><strong>Receptionist:</strong> Good morning, Lear Corporation. This is Ana speaking. How may I help you?<br><strong>Caller:</strong> Hello, this is John Smith from AutoParts. Could I speak to Mr. Carlos, please?<br><strong>Receptionist:</strong> One moment, please. I'll transfer you... I'm sorry, his line is busy. Can I take a message?<br><strong>Caller:</strong> Yes, please. Could you ask him to call me back at 555-1234?<br><strong>Receptionist:</strong> Certainly. I'll give him the message.</p>` },
+            { id: 6, title: "Meetings and Appointments", content: `<h2>🇬🇧 Lesson 6: Meetings and Appointments</h2><h3>Reuniões e Compromissos</h3><p>Aprenda a agendar reuniões, confirmar presença e participar de encontros profissionais.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Frases para Agendar:</strong><br>• "Would you be available on [day] at [time]?"<br>• "Let's schedule a meeting for..."<br>• "I'd like to confirm our appointment."<br>• "I'm afraid I have a conflict. Can we reschedule?"</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Durante a Reunião:</strong><br>• Agenda - Pauta<br>• Minutes of the meeting - Ata da reunião<br>• Action items - Tarefas a serem realizadas<br>• I'd like to add an item to the agenda.<br>• Let's move on to the next point.</div><h3>Exemplo de Confirmação:</h3><p>"I would like to confirm our meeting scheduled for <strong>Friday, March 20th, at 2 PM</strong> in the main conference room. The agenda will include the quality report and production targets."</p>` },
+            { id: 7, title: "Small Talk in Business", content: `<h2>🇬🇧 Lesson 7: Small Talk in Business</h2><h3>Conversas Informais nos Negócios</h3><p>Small talk é uma habilidade importante para construir relacionamentos profissionais.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Tópicos Seguros para Small Talk:</strong><br>• Weather - Clima<br>• Travel - Viagens<br>• Weekend plans - Planos para o fim de semana<br>• Food and restaurants - Comida e restaurantes<br>• Hobbies - Hobbies</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Frases Comuns:</strong><br>• "How was your weekend?" - Como foi seu fim de semana?<br>• "Beautiful day, isn't it?" - Lindo dia, não é?<br>• "Have you tried the new restaurant downtown?"<br>• "What do you think about the new project?"</div><h3>Diálogo de Exemplo:</h3><p><strong>Colleague 1:</strong> Good morning! How was your weekend?<br><strong>Colleague 2:</strong> It was great! I went to the beach with my family. How about you?<br><strong>Colleague 1:</strong> I stayed home and watched some movies. Have you seen the new film?<br><strong>Colleague 2:</strong> Not yet! I heard it's really good.<br><strong>Colleague 1:</strong> Yes, I recommend it. Well, let's get ready for the meeting.</p>` },
+            { id: 8, title: "Requests and Offers", content: `<h2>🇬🇧 Lesson 8: Making Requests and Offers</h2><h3>Fazendo Pedidos e Oferecendo Ajuda</h3><p>Aprenda a fazer solicitações educadamente e a oferecer ajuda aos colegas.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Formas de Fazer Pedidos:</strong><br>• "Could you please...?" - Você poderia por favor...?<br>• "Would you mind...?" - Você se importaria de...?<br>• "I would appreciate it if you could..."</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Oferecendo Ajuda:</strong><br>• "Can I help you with that?" - Posso ajudar com isso?<br>• "Would you like me to...?" - Gostaria que eu...?<br>• "Let me know if you need anything."</div><h3>Diálogo de Exemplo:</h3><p><strong>Manager:</strong> Could you please prepare the sales report by Friday?<br><strong>Employee:</strong> Sure, I'll have it ready by Thursday afternoon.<br><strong>Manager:</strong> Thank you. Would you mind checking the budget figures as well?<br><strong>Employee:</strong> Not at all. Would you like me to create a presentation too?<br><strong>Manager:</strong> That would be great! I appreciate your help.</p>` },
+            { id: 9, title: "Giving Opinions and Suggestions", content: `<h2>🇬🇧 Lesson 9: Giving Opinions and Suggestions</h2><h3>Dando Opiniões e Sugestões</h3><p>Saber expressar opiniões e fazer sugestões de forma profissional é essencial em reuniões.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Expressando Opiniões:</strong><br>• "In my opinion..." - Na minha opinião...<br>• "I believe that..." - Eu acredito que...<br>• "From my perspective..." - Do meu ponto de vista...<br>• "I agree/disagree because..." - Concordo/discordo porque...</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Fazendo Sugestões:</strong><br>• "I suggest that we..." - Eu sugiro que nós...<br>• "What if we tried...?" - E se tentássemos...?<br>• "Perhaps we could..." - Talvez pudéssemos...<br>• "Have you considered...?" - Você considerou...?</div><h3>Exemplo em Reunião:</h3><p><strong>Team Member:</strong> In my opinion, we should focus on improving the assembly line efficiency.<br><strong>Manager:</strong> I agree. What if we tried implementing a new training program?<br><strong>Team Member:</strong> That's an excellent suggestion. Perhaps we could start with a pilot group next month.<br><strong>Manager:</strong> I believe that would work well. Let's move forward with that plan.</p>` },
+            { id: 10, title: "Closing Conversations", content: `<h2>🇬🇧 Lesson 10: Closing Conversations</h2><h3>Encerrando Conversas</h3><p>Aprenda a finalizar conversas, reuniões e e-mails de forma educada e profissional.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Frases para Encerrar Conversas:</strong><br>• "It was nice talking to you." - Foi bom conversar com você.<br>• "I should get going now." - Preciso ir agora.<br>• "Let's keep in touch." - Vamos manter contato.<br>• "Thank you for your time." - Obrigado pelo seu tempo.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Encerrando E-mails:</strong><br>• "I look forward to hearing from you."<br>• "Please let me know if you have any questions."<br>• "Thank you for your consideration."<br>• "Have a great day!"</div><h3>Exemplo de Encerramento:</h3><p>"It was a pleasure meeting with you today. Thank you for your valuable insights. I look forward to our next discussion. If you have any questions, please don't hesitate to contact me. Have a great day!"</p>` }
+        ];
+        
+        // CURSO 2: METODOLOGIA 5S (5 AULAS COMPLETAS)
+        const course2Lessons = [
+            { id: 1, title: "Seiri - Senso de Utilização", content: `<h2>🧹 Seiri - Senso de Utilização</h2><h3>Descartar o que não é necessário</h3><p>O primeiro S significa separar o útil do inútil, descartando itens não utilizados.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Separar ferramentas quebradas, documentos antigos e equipamentos obsoletos.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Mais espaço disponível<br>• Menos tempo procurando itens<br>• Ambiente mais organizado</div>` },
+            { id: 2, title: "Seiton - Senso de Ordem", content: `<h2>🧹 Seiton - Senso de Ordem</h2><h3>Organizar o que foi selecionado</h3><p>Um lugar para cada coisa e cada coisa em seu lugar.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Ferramentas organizadas por frequência de uso, etiquetadas e de fácil acesso.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Redução de tempo de busca<br>• Facilidade para identificar faltas<br>• Fluxo de trabalho mais eficiente</div>` },
+            { id: 3, title: "Seiso - Senso de Limpeza", content: `<h2>🧹 Seiso - Senso de Limpeza</h2><h3>Manter o ambiente limpo</h3><p>A limpeza deve ser parte da rotina de trabalho, não uma atividade extraordinária.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Limpar equipamentos diariamente, identificar vazamentos e sujeiras.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Equipamentos mais duráveis<br>• Ambiente saudável<br>• Identificação precoce de problemas</div>` },
+            { id: 4, title: "Seiketsu - Senso de Saúde", content: `<h2>🧹 Seiketsu - Senso de Saúde</h2><h3>Padronizar e manter os 3 primeiros S</h3><p>Criar rotinas e checklists para manter a organização e limpeza.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Criar checklist diário de 5S, definir responsáveis por área.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Padronização de processos<br>• Facilidade para treinar novos funcionários<br>• Sustentabilidade das melhorias</div>` },
+            { id: 5, title: "Shitsuke - Senso de Disciplina", content: `<h2>🧹 Shitsuke - Senso de Disciplina</h2><h3>Transformar em hábito</h3><p>A disciplina é o que garante a continuidade do programa 5S.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Auditorias regulares, reconhecimento das equipes, treinamentos contínuos.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Cultura organizacional forte<br>• Melhoria contínua<br>• Comprometimento das equipes</div>` }
+        ];
+        
+        // CURSO 3: EXCEL (6 AULAS COMPLETAS)
+        const course3Lessons = [
+            { id: 1, title: "Introdução ao Excel", content: `<h2>📊 Introdução ao Excel</h2><h3>Conhecendo a interface</h3><p>O Excel é a ferramenta mais poderosa para análise de dados.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Elementos da Interface:</strong><br>• Faixa de opções (Ribbon)<br>• Barra de fórmulas<br>• Planilhas e células</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Conceitos básicos:</strong><br>• Célula: interseção de linha e coluna<br>• Linhas: números (1,2,3...)<br>• Colunas: letras (A,B,C...)</div>` },
+            { id: 2, title: "Fórmulas Essenciais", content: `<h2>📊 Fórmulas Essenciais</h2><h3>SOMA, MÉDIA, CONT.SE</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Fórmulas Básicas:</strong><br>• =SOMA(A1:A10) - Soma valores<br>• =MÉDIA(B1:B10) - Calcula média<br>• =CONT.SE(C1:C10;">10") - Conta células que atendem critério</div>` },
+            { id: 3, title: "Funções Lógicas", content: `<h2>📊 Funções Lógicas</h2><h3>SE, E, OU</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplos:</strong><br>• =SE(A1>10;"Aprovado";"Reprovado")<br>• =SE(E(A1>10;B1>5);"OK";"NOK")</div>` },
+            { id: 4, title: "PROCV e PROCH", content: `<h2>📊 PROCV e PROCH</h2><h3>Busca de dados</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Sintaxe PROCV:</strong><br>=PROCV(Valor procurado;Tabela;Coluna retorno;0)<br><strong>Exemplo:</strong> =PROCV(A2;D:E;2;0)</div>` },
+            { id: 5, title: "Tabelas Dinâmicas", content: `<h2>📊 Tabelas Dinâmicas</h2><h3>Análise de dados</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Como criar:</strong><br>Selecione os dados > Inserir > Tabela Dinâmica<br>Arraste campos para linhas, colunas e valores</div>` },
+            { id: 6, title: "Gráficos e Dashboards", content: `<h2>📊 Gráficos</h2><h3>Visualização de dados</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Tipos de Gráficos:</strong><br>• Barras - Comparação<br>• Linhas - Tendência<br>• Pizza - Proporção<br>• Dashboard: conjunto de gráficos</div>` }
+        ];
+
         const coursesData = {
-            1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, lessons: Array(10).fill().map((_, i) => ({ id: i+1, title: `Lesson ${i+1}`, content: `<h2>🇬🇧 Lesson ${i+1}</h2><p>Conteúdo da aula.</p><div style="background:#fef3c7; padding:12px; border-radius:10px;"><strong>Exemplo:</strong> This is an example.</div>` })), quiz: Array(10).fill().map((_, i) => ({ q: `Pergunta ${i+1}?`, options: ["A", "B", "C", "D"], correct: 0 })) },
-            2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, lessons: Array(5).fill().map((_, i) => ({ id: i+1, title: `Senso ${i+1}`, content: `<h2>🧹 Aula ${i+1}</h2><p>Conteúdo do 5S.</p>` })), quiz: Array(10).fill().map((_, i) => ({ q: `Pergunta ${i+1}?`, options: ["A", "B", "C", "D"], correct: 0 })) },
-            3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, lessons: Array(6).fill().map((_, i) => ({ id: i+1, title: `Módulo ${i+1}`, content: `<h2>📊 Aula ${i+1}</h2><p>Conteúdo de Excel.</p>` })), quiz: Array(10).fill().map((_, i) => ({ q: `Pergunta ${i+1}?`, options: ["A", "B", "C", "D"], correct: 0 })) }
+            1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, lessons: course1Lessons,
+                quiz: [
+                    { q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 },
+                    { q: "Qual é a saudação formal para um e-mail comercial?", options: ["Hey", "Hi there", "Dear Sir/Madam", "What's up"], correct: 2 },
+                    { q: "Como se escreve '10 de maio de 2025' em inglês?", options: ["10 May 2025", "May 10, 2025", "Both A and B", "10 of May"], correct: 2 },
+                    { q: "O que significa 'Nice to meet you'?", options: ["Tchau", "Prazer em conhecê-lo", "Como você está?", "Bom dia"], correct: 1 },
+                    { q: "Como perguntar 'Que horas são?' em inglês?", options: ["What time is it?", "How many hours?", "What's the clock?", "Time please?"], correct: 0 },
+                    { q: "Qual frase é usada para pedir ajuda educadamente?", options: ["Do it now", "Could you please help me?", "Help me!", "You need to help"], correct: 1 },
+                    { q: "O que significa 'I look forward to hearing from you'?", options: ["Não quero resposta", "Aguardo seu retorno", "Encerro aqui", "Fiquei triste"], correct: 1 },
+                    { q: "Como se diz 'Estou ligando sobre o pedido'?", options: ["I'm calling about the order", "I call about order", "Calling order", "Order call me"], correct: 0 },
+                    { q: "Qual frase é usada para dar uma opinião?", options: ["In my opinion...", "Do it!", "Maybe not", "I don't know"], correct: 0 },
+                    { q: "Como encerrar uma conversa profissionalmente?", options: ["Bye bye", "It was nice talking to you", "Goodbye forever", "See you later"], correct: 1 }
+                ] },
+            2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, lessons: course2Lessons,
+                quiz: [
+                    { q: "O que significa Seiri?", options: ["Senso de Ordem", "Senso de Utilização", "Senso de Limpeza", "Senso de Disciplina"], correct: 1 },
+                    { q: "Qual S significa 'Um lugar para cada coisa'?", options: ["Seiri", "Seiton", "Seiso", "Seiketsu"], correct: 1 },
+                    { q: "Seiso é o senso de:", options: ["Limpeza", "Saúde", "Disciplina", "Utilização"], correct: 0 },
+                    { q: "Seiketsu está relacionado a:", options: ["Padronização", "Organização", "Limpeza", "Disciplina"], correct: 0 },
+                    { q: "Shitsuke significa:", options: ["Saúde", "Disciplina", "Limpeza", "Ordem"], correct: 1 },
+                    { q: "Qual o primeiro passo do 5S?", options: ["Organizar", "Limpar", "Separar", "Padronizar"], correct: 2 },
+                    { q: "O 5S é uma ferramenta da:", options: ["Qualidade", "Segurança", "Produção", "RH"], correct: 0 },
+                    { q: "Auditorias regulares fazem parte de qual S?", options: ["Seiketsu", "Shitsuke", "Seiso", "Seiton"], correct: 1 },
+                    { q: "Checklists são ferramentas do:", options: ["Seiketsu", "Shitsuke", "Seiri", "Seiton"], correct: 0 },
+                    { q: "O objetivo principal do 5S é:", options: ["Limpeza", "Organização", "Melhoria contínua", "Redução de custos"], correct: 2 }
+                ] },
+            3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, lessons: course3Lessons,
+                quiz: [
+                    { q: "Qual fórmula soma valores de A1 a A10?", options: ["=SOMA(A1;A10)", "=SOMA(A1:A10)", "=SOMAR(A1:A10)", "=TOTAL(A1:A10)"], correct: 1 },
+                    { q: "Para que serve a função SE?", options: ["Somar", "Condicional", "Buscar", "Média"], correct: 1 },
+                    { q: "O que significa PROCV?", options: ["Procura Vertical", "Procura Horizontal", "Programa Vertical", "Processo Vertical"], correct: 0 },
+                    { q: "Tabela Dinâmica serve para:", options: ["Formatar", "Analisar dados", "Imprimir", "Proteger planilha"], correct: 1 },
+                    { q: "Qual gráfico é melhor para tendências?", options: ["Pizza", "Linha", "Barra", "Coluna"], correct: 1 },
+                    { q: "Atalho para salvar arquivo:", options: ["Ctrl+C", "Ctrl+V", "Ctrl+S", "Ctrl+Z"], correct: 2 },
+                    { q: "=MÉDIA(B1:B10) calcula:", options: ["Soma", "Média", "Contagem", "Máximo"], correct: 1 },
+                    { q: "O que é uma célula no Excel?", options: ["Interseção linha/coluna", "Uma planilha", "Um gráfico", "Uma fórmula"], correct: 0 },
+                    { q: "Para filtrar dados, qual menu usar?", options: ["Inserir", "Dados", "Fórmulas", "Exibição"], correct: 1 },
+                    { q: "Gráfico de Pizza mostra:", options: ["Tendência", "Comparação", "Proporção", "Correlação"], correct: 2 }
+                ] }
         };
 
+        // Dados dos usuários
         let users = JSON.parse(localStorage.getItem('learn_users')) || [
             { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", department: "Produção", email: "", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {} },
             { id: 2, name: "admin.learn", password: "admin123", role: "admin", department: "TI", email: "", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {} }
@@ -303,24 +373,43 @@
         let notifications = JSON.parse(localStorage.getItem('learn_notifications')) || [{ id: 1, text: "🎉 Bem-vindo à plataforma LEARN!", read: false, date: new Date() }];
         let currentUser = null;
         let currentLanguage = localStorage.getItem('learn_language') || 'pt';
+        let currentQuizAnswers = {};
 
-        const translations = { pt: { home: "Início", courses: "Cursos", certificates: "Certificados", forum: "Fórum", admin: "Admin", ranking: "Ranking", points: "Pontos", completed: "Cursos", level: "Nível", progress: "Progresso", featured: "Cursos em Destaque", viewAll: "Ver todos", badgesTitle: "Suas Conquistas", nextSteps: "Próximos Passos", allCourses: "Todos os Cursos", myCertificates: "Meus Certificados", forumTitle: "Fórum", adminPanel: "Painel Admin", welcome: "Bem-vindo(a)", heroText: "Continue sua jornada de aprendizado." },
-            en: { home: "Home", courses: "Courses", certificates: "Certificates", forum: "Forum", admin: "Admin", ranking: "Ranking", points: "Points", completed: "Courses", level: "Level", progress: "Progress", featured: "Featured Courses", viewAll: "View all", badgesTitle: "Achievements", nextSteps: "Next Steps", allCourses: "All Courses", myCertificates: "My Certificates", forumTitle: "Forum", adminPanel: "Admin Panel", welcome: "Welcome", heroText: "Continue your learning journey." },
-            es: { home: "Inicio", courses: "Cursos", certificates: "Certificados", forum: "Foro", admin: "Admin", ranking: "Ranking", points: "Puntos", completed: "Cursos", level: "Nivel", progress: "Progreso", featured: "Cursos Destacados", viewAll: "Ver todos", badgesTitle: "Logros", nextSteps: "Próximos Pasos", allCourses: "Todos los Cursos", myCertificates: "Mis Certificados", forumTitle: "Foro", adminPanel: "Panel Admin", welcome: "Bienvenido", heroText: "Continúa tu viaje de aprendizaje." }
-        };
-
-        function updateLanguage() { document.querySelectorAll('[data-key]').forEach(el => { const key = el.getAttribute('data-key'); if (translations[currentLanguage][key]) el.innerText = translations[currentLanguage][key]; }); localStorage.setItem('learn_language', currentLanguage); }
-        function changeLanguage(lang) { currentLanguage = lang; updateLanguage(); }
+        function changeLanguage(lang) { currentLanguage = lang; localStorage.setItem('learn_language', currentLanguage); }
         function getLevel(points) { if (points >= 500) return "💎 Platina"; if (points >= 300) return "🥇 Ouro"; if (points >= 150) return "🥈 Prata"; return "🥉 Bronze"; }
-        function updateBadges() { document.getElementById('levelStat').innerHTML = getLevel(currentUser?.points || 0); const badges = []; if (currentUser?.completedCourses?.length >= 1) badges.push({ icon: "🎓", name: "Primeiro Curso" }); if (currentUser?.completedCourses?.length >= 3) badges.push({ icon: "🏆", name: "Mestre" }); if ((currentUser?.points || 0) >= 100) badges.push({ icon: "⭐", name: "100 Pontos" }); document.getElementById('badgesContainer').innerHTML = badges.length ? badges.map(b => `<div class="badge-item"><span class="badge-icon">${b.icon}</span><span>${b.name}</span></div>`).join('') : '<p>Complete cursos para ganhar conquistas!</p>'; }
+        
+        function updateBadges() {
+            document.getElementById('levelStat').innerHTML = getLevel(currentUser?.points || 0);
+            const badges = [];
+            if (currentUser?.completedCourses?.length >= 1) badges.push({ icon: "🎓", name: "Primeiro Curso" });
+            if (currentUser?.completedCourses?.length >= 3) badges.push({ icon: "🏆", name: "Mestre" });
+            if ((currentUser?.points || 0) >= 100) badges.push({ icon: "⭐", name: "100 Pontos" });
+            document.getElementById('badgesContainer').innerHTML = badges.length ? badges.map(b => `<div class="badge-item"><span class="badge-icon">${b.icon}</span><span>${b.name}</span></div>`).join('') : '<p>Complete cursos para ganhar conquistas!</p>';
+        }
+        
         function addNotification(text) { notifications.unshift({ id: Date.now(), text, read: false, date: new Date() }); localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); }
         function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
         function toggleNotifications() { const panel = document.getElementById('notificationPanel'); if (panel.style.display === 'block') panel.style.display = 'none'; else { panel.innerHTML = notifications.map(n => `<div class="notification-item ${!n.read ? 'unread' : ''}" onclick="markNotificationRead(${n.id})">${n.text}<br><small>${new Date(n.date).toLocaleString()}</small></div>`).join(''); panel.style.display = 'block'; } }
         function markNotificationRead(id) { const n = notifications.find(n => n.id === id); if (n) n.read = true; localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); toggleNotifications(); }
-        function updateStats() { const total = Object.keys(coursesData).length; const completed = currentUser?.completedCourses?.length || 0; const percent = Math.round((completed / total) * 100); document.getElementById('globalProgress').style.width = percent + '%'; document.getElementById('progressText').innerHTML = `${percent}% concluído (${completed}/${total})`; document.getElementById('userPointsStat').innerText = currentUser?.points || 0; document.getElementById('completedCountStat').innerText = completed; document.getElementById('adminTotalUsers').innerText = users.length; document.getElementById('adminTotalPoints').innerText = users.reduce((s, u) => s + (u.points || 0), 0); updateBadges(); }
+        
+        function updateStats() {
+            const total = Object.keys(coursesData).length;
+            const completed = currentUser?.completedCourses?.length || 0;
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('globalProgress').style.width = percent + '%';
+            document.getElementById('progressText').innerHTML = `${percent}% concluído (${completed}/${total})`;
+            document.getElementById('userPointsStat').innerText = currentUser?.points || 0;
+            document.getElementById('completedCountStat').innerText = completed;
+            document.getElementById('adminTotalUsers').innerText = users.length;
+            document.getElementById('adminTotalPoints').innerText = users.reduce((s, u) => s + (u.points || 0), 0);
+            updateBadges();
+        }
+        
         function saveUser() { const idx = users.findIndex(u => u.id === currentUser.id); if (idx !== -1) users[idx] = currentUser; localStorage.setItem('learn_users', JSON.stringify(users)); localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); }
+        
         function rateCourse(courseId, rating) { if (!currentUser.ratings) currentUser.ratings = {}; currentUser.ratings[courseId] = rating; saveUser(); loadCourses(); }
         function renderStars(courseId) { const rating = currentUser?.ratings?.[courseId] || 0; let stars = ''; for (let i = 1; i <= 5; i++) stars += `<span class="star ${i <= rating ? 'active' : ''}" onclick="event.stopPropagation(); rateCourse(${courseId}, ${i})">★</span>`; return stars; }
+        
         function loadCourses() {
             const coursesArray = Object.values(coursesData);
             document.getElementById('featuredCourses').innerHTML = coursesArray.slice(0, 3).map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}<div class="quiz-badge">+${c.points} pts</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div><div class="rating-stars">${renderStars(c.id)}</div>${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed">✅ Concluído</div>' : ''}</div></div>`).join('');
@@ -331,20 +420,39 @@
             document.getElementById('certificatesList').innerHTML = completed.length ? `<div class="courses-grid">${completed.map(id => { const c = coursesData[id]; return c ? `<div class="course-card"><div class="course-image">${c.icon}</div><div class="course-info"><h3>${c.title}</h3><p>Certificado - ${c.hours}</p><button class="btn-sm" onclick="showCertificatePreview(${c.id})">📄 Ver</button></div></div>` : ''; }).join('')}</div>` : '<div style="text-align:center; padding:30px;">📜 Nenhum certificado.</div>';
             if (currentUser?.role === 'admin') document.getElementById('adminUsersList').innerHTML = users.map(u => `<div style="background:var(--card-hover); border-radius:14px; padding:10px; margin-bottom:8px;"><strong>${u.name}</strong> ${u.role === 'admin' ? '<span style="background:#D82A28; color:white; padding:2px 6px; border-radius:10px; font-size:9px;">Admin</span>' : ''}<br><small>${u.department || '-'} | ${u.completedCourses?.length || 0} cursos | ${u.points || 0} pts</small></div>`).join('');
         }
-        function openCourse(courseId) { const course = coursesData[courseId]; if (!course) return; if (!currentUser.courseProgress) currentUser.courseProgress = {}; if (!currentUser.courseProgress[courseId]) currentUser.courseProgress[courseId] = course.lessons.map(l => ({ id: l.id, completed: false })); const progress = currentUser.courseProgress[courseId]; const completedCount = progress.filter(p => p.completed).length; const percent = (completedCount / course.lessons.length) * 100; const quizSubmitted = currentUser.quizSubmitted?.[courseId] || false; let lessonsHtml = '<div class="lessons-grid">'; course.lessons.forEach(l => { const isComp = progress.find(p => p.id === l.id)?.completed || false; lessonsHtml += `<div class="lesson-card ${isComp ? 'completed' : ''}" onclick="openLesson(${courseId}, ${l.id})"><div class="lesson-number">Aula ${l.id}</div><h3>${l.title}</h3>${isComp ? '<span style="color:#10b981;">✅</span>' : ''}</div>`; }); lessonsHtml += '</div>'; let quizHtml = ''; if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:#f8fafc; border-radius:16px; padding:16px; margin-top:15px;"><h3 style="color:#D82A28;">📝 Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})">✅ Finalizar</button></div>`; else if (quizSubmitted) quizHtml = `<div style="background:#ecfdf5; border-radius:16px; padding:16px; text-align:center;"><i class="fas fa-certificate" style="font-size:36px; color:#10b981;"></i><h3>Curso concluído!</h3><button class="complete-btn" onclick="showCertificatePreview(${courseId})">📄 Ver Certificado</button></div>`; document.getElementById('modalContent').innerHTML = `<div style="text-align:center;"><h2 style="color:#D82A28;">${course.icon} ${course.title}</h2><p>${course.lessons.length} aulas</p><div class="progress-container"><div class="progress-fill" style="width:${percent}%;"></div></div><p>${completedCount}/${course.lessons.length}</p></div>${lessonsHtml}${quizHtml}`; document.getElementById('courseModal').style.display = 'flex'; if (completedCount === course.lessons.length && !quizSubmitted) loadQuiz(courseId); }
+        
+        function openCourse(courseId) {
+            const course = coursesData[courseId];
+            if (!course) return;
+            if (!currentUser.courseProgress) currentUser.courseProgress = {};
+            if (!currentUser.courseProgress[courseId]) currentUser.courseProgress[courseId] = course.lessons.map(l => ({ id: l.id, completed: false }));
+            const progress = currentUser.courseProgress[courseId];
+            const completedCount = progress.filter(p => p.completed).length;
+            const percent = (completedCount / course.lessons.length) * 100;
+            const quizSubmitted = currentUser.quizSubmitted?.[courseId] || false;
+            let lessonsHtml = '<div class="lessons-grid">';
+            course.lessons.forEach(l => { const isComp = progress.find(p => p.id === l.id)?.completed || false; lessonsHtml += `<div class="lesson-card ${isComp ? 'completed' : ''}" onclick="openLesson(${courseId}, ${l.id})"><div class="lesson-number">Aula ${l.id}</div><h3>${l.title}</h3>${isComp ? '<span style="color:#10b981;">✅</span>' : ''}</div>`; });
+            lessonsHtml += '</div>';
+            let quizHtml = '';
+            if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:#f8fafc; border-radius:16px; padding:16px; margin-top:15px;"><h3 style="color:#D82A28;">📝 Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})">✅ Finalizar</button></div>`;
+            else if (quizSubmitted) quizHtml = `<div style="background:#ecfdf5; border-radius:16px; padding:16px; text-align:center;"><i class="fas fa-certificate" style="font-size:36px; color:#10b981;"></i><h3>Curso concluído!</h3><button class="complete-btn" onclick="showCertificatePreview(${courseId})">📄 Ver Certificado</button></div>`;
+            document.getElementById('modalContent').innerHTML = `<div style="text-align:center;"><h2 style="color:#D82A28;">${course.icon} ${course.title}</h2><p>${course.lessons.length} aulas</p><div class="progress-container"><div class="progress-fill" style="width:${percent}%;"></div></div><p>${completedCount}/${course.lessons.length}</p></div>${lessonsHtml}${quizHtml}`;
+            document.getElementById('courseModal').style.display = 'flex';
+            if (completedCount === course.lessons.length && !quizSubmitted) loadQuiz(courseId);
+        }
+        
         function loadQuiz(courseId) { const course = coursesData[courseId]; const container = document.getElementById('quizQuestions'); if (!container) return; currentQuizAnswers = JSON.parse(localStorage.getItem(`quiz_${currentUser.id}_${courseId}`)) || {}; container.innerHTML = ''; course.quiz.forEach((q, idx) => { container.innerHTML += `<div class="quiz-question"><p><strong>${idx+1}. ${q.q}</strong></p>${q.options.map((opt, optIdx) => `<div class="quiz-option ${currentQuizAnswers[idx] === optIdx ? 'selected' : ''}" onclick="selectQuizAnswer(${courseId}, ${idx}, ${optIdx})">${String.fromCharCode(65+optIdx)}. ${opt}</div>`).join('')}</div>`; }); }
         function selectQuizAnswer(courseId, qIdx, optIdx) { currentQuizAnswers[qIdx] = optIdx; localStorage.setItem(`quiz_${currentUser.id}_${courseId}`, JSON.stringify(currentQuizAnswers)); loadQuiz(courseId); }
         function submitQuiz(courseId) { const course = coursesData[courseId]; let score = 0; course.quiz.forEach((q, idx) => { if (currentQuizAnswers[idx] === q.correct) score++; }); if (Object.keys(currentQuizAnswers).length < course.quiz.length) { alert(`Responda todas!`); return; } if (score >= 7) { if (!currentUser.quizSubmitted) currentUser.quizSubmitted = {}; currentUser.quizSubmitted[courseId] = true; if (!currentUser.completedCourses.includes(courseId)) { currentUser.completedCourses.push(courseId); currentUser.points = (currentUser.points || 0) + course.points; } saveUser(); updateStats(); loadCourses(); addNotification(`🎉 "${course.title}" concluído!`); alert(`🎉 Parabéns! ${score}/10 acertos!`); openCourse(courseId); } else alert(`❌ ${score}/10 acertos. Precisa de pelo menos 7!`); }
         function openLesson(courseId, lessonId) { const course = coursesData[courseId]; const lesson = course.lessons.find(l => l.id === lessonId); const isComp = currentUser.courseProgress[courseId]?.find(p => p.id === lessonId)?.completed || false; document.getElementById('lessonModalContent').innerHTML = `<div>${lesson.content}${!isComp ? `<button class="complete-btn" onclick="completeLesson(${courseId}, ${lessonId})" style="margin-top:15px;">✅ Marcar Concluída</button>` : '<div style="background:#ecfdf5; padding:12px; border-radius:12px; text-align:center;">✅ Aula concluída!</div>'}</div>`; document.getElementById('lessonModal').style.display = 'flex'; }
         function completeLesson(courseId, lessonId) { const idx = currentUser.courseProgress[courseId].findIndex(p => p.id === lessonId); if (idx !== -1 && !currentUser.courseProgress[courseId][idx].completed) { currentUser.courseProgress[courseId][idx].completed = true; saveUser(); updateStats(); addNotification(`📖 Aula ${lessonId} concluída!`); alert(`Aula ${lessonId} concluída!`); closeLessonModal(); openCourse(courseId); } }
-        function showCertificatePreview(courseId) { const course = coursesData[courseId]; document.getElementById('certPreviewContent').innerHTML = `<div class="certificate-preview"><div class="cert-border"><div class="logo-text">LEARN</div><div class="cert-title">CERTIFICADO DE CONCLUSÃO</div><div class="student-name">${currentUser.name}</div><div class="course-name">${course.title}</div><div class="details">Carga: ${course.hours} | Data: ${new Date().toLocaleDateString()}</div><div class="signatures"><div class="signature"><div class="signature-line"></div>Luiz Carlos<br><span style="font-size:9px;">Gerente LEARN</span></div><div class="signature"><div class="signature-line"></div>[Diretoria]<br><span style="font-size:9px;">Diretoria LEARN</span></div></div><div class="cert-number">Nº: LEARN-${courseId}-${Date.now()}</div></div></div>`; document.getElementById('certPreviewModal').style.display = 'flex'; }
+        function showCertificatePreview(courseId) { const course = coursesData[courseId]; document.getElementById('certPreviewContent').innerHTML = `<div class="certificate-preview"><div class="cert-border"><div class="logo-text">LEARN</div><div class="cert-title">CERTIFICADO</div><div class="student-name">${currentUser.name}</div><div class="course-name">${course.title}</div><div class="details">Carga: ${course.hours} | Data: ${new Date().toLocaleDateString()}</div><div class="signatures"><div class="signature"><div class="signature-line"></div>Luiz Carlos</div><div class="signature"><div class="signature-line"></div>Diretoria</div></div><div>Nº: LEARN-${courseId}-${Date.now()}</div></div></div>`; document.getElementById('certPreviewModal').style.display = 'flex'; }
         async function generatePdfFromPreview() { const el = document.querySelector('#certPreviewContent .certificate-preview'); if (el) { await html2pdf().set({ margin: 0.5, filename: 'Certificado.pdf' }).from(el).save(); alert('PDF gerado!'); } }
         function showRanking() { const sorted = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)); document.getElementById('rankingList').innerHTML = sorted.map((u, i) => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #e2e8f0;"><span><strong>${i+1}º</strong> ${u.name}</span><span><strong>${u.points || 0}</strong> pts</span><span>${getLevel(u.points)}</span></div>`).join(''); document.getElementById('rankingModal').style.display = 'flex'; }
         function showProfile() { document.getElementById('profileModalContent').innerHTML = `<h2 style="color:#D82A28;">👤 Meu Perfil</h2><div><label>Nome</label><input type="text" id="profileName" value="${currentUser.name}" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><label>E-mail</label><input type="email" id="profileEmail" value="${currentUser.email || ''}" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><label>Departamento</label><select id="profileDept" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option></select><label>Nova Senha</label><input type="password" id="profilePassword" placeholder="Deixe em branco" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><button class="complete-btn" onclick="saveProfile()" style="width:100%;">Salvar</button></div>`; document.getElementById('profileModal').style.display = 'flex'; }
         function saveProfile() { const newName = document.getElementById('profileName').value; const newEmail = document.getElementById('profileEmail').value; const newPass = document.getElementById('profilePassword').value; if (newName) currentUser.name = newName; if (newEmail) currentUser.email = newEmail; if (newPass) currentUser.password = newPass; saveUser(); document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase(); addNotification('Perfil atualizado!'); closeProfileModal(); }
         function exportBackup() { const data = { users, courses: coursesData, forum: forumPosts }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_backup.json`; link.click(); addNotification('Backup exportado!'); }
         function exportUsersCSV() { let csv = "Nome,Email,Departamento,Role,Cursos,Pontos\n"; users.forEach(u => { csv += `${u.name},${u.email || ''},${u.department || ''},${u.role},${u.completedCourses?.length || 0},${u.points || 0}\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `usuarios_learn.csv`; link.click(); addNotification('CSV exportado!'); }
-        async function syncToCloud() { alert('✅ Sincronização manual concluída!'); }
         function loadForum() { document.getElementById('forumList').innerHTML = forumPosts.length ? forumPosts.map(p => `<div class="forum-post"><h3>${p.title}</h3><p>${p.content}</p><small>👤 ${p.author} | ${p.date}</small></div>`).join('') : '<div style="text-align:center; padding:30px;">💬 Nenhuma pergunta.</div>'; }
         function showNewPostModal() { document.getElementById('newPostModal').style.display = 'flex'; }
         function closeNewPostModal() { document.getElementById('newPostModal').style.display = 'none'; }
@@ -357,12 +465,14 @@
         function doLogout() { localStorage.removeItem('learn_currentUser'); currentUser = null; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('appContainer').style.display = 'none'; }
         function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('learn_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
         function loadTheme() { if (localStorage.getItem('learn_theme') === 'dark') document.body.classList.add('dark'); }
+        
         function closeModal() { document.getElementById('courseModal').style.display = 'none'; }
         function closeLessonModal() { document.getElementById('lessonModal').style.display = 'none'; }
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
         function closeCertPreview() { document.getElementById('certPreviewModal').style.display = 'none'; }
         function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; }
-        function init() { loadTheme(); currentLanguage = localStorage.getItem('learn_language') || 'pt'; updateLanguage(); document.getElementById('appLanguageSelect').value = currentLanguage; if (currentUser) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); } }
+        
+        function init() { loadTheme(); if (currentUser) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); } }
         window.onclick = (e) => { if (e.target.classList.contains('modal')) closeModal(); };
         init();
     </script>
