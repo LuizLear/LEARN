@@ -4,734 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>LEARN | Plataforma Corporativa EAD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #f0f4fc 0%, #e8edf5 100%);
-            color: #1a2c3e;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: rgba(26, 44, 62, 0.95);
-            backdrop-filter: blur(12px);
-            color: white;
-            padding: 16px 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff 0%, #D82A28 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .logo small {
-            font-size: 12px;
-            font-weight: 400;
-            color: rgba(255,255,255,0.6);
-            background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-        }
-
-        .points-badge {
-            background: linear-gradient(135deg, #D82A28, #ff6b6b);
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav {
-            display: flex;
-            gap: 32px;
-        }
-
-        .nav a {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.2s;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .nav a:hover {
-            color: #D82A28;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-avatar {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, #D82A28, #b0201e);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 16px;
-            box-shadow: 0 4px 12px rgba(216,42,40,0.3);
-        }
-
-        .logout-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .logout-btn:hover {
-            background: #D82A28;
-            border-color: #D82A28;
-        }
-
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%);
-        }
-
-        .login-card {
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(10px);
-            padding: 48px 40px;
-            border-radius: 32px;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .login-icon {
-            font-size: 56px;
-            margin-bottom: 20px;
-        }
-
-        .login-card h2 {
-            font-size: 32px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1a2c3e, #D82A28);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 8px;
-        }
-
-        .login-card input {
-            width: 100%;
-            padding: 14px 16px;
-            margin: 10px 0;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 20px;
-            font-size: 15px;
-            transition: 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .login-card input:focus {
-            outline: none;
-            border-color: #D82A28;
-            box-shadow: 0 0 0 3px rgba(216,42,40,0.1);
-        }
-
-        .login-card button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #1a2c3e, #D82A28);
-            color: white;
-            border: none;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 16px;
-            transition: transform 0.2s;
-        }
-
-        .login-card button:hover {
-            transform: scale(1.02);
-        }
-
-        .demo-credentials {
-            margin-top: 24px;
-            font-size: 12px;
-            color: #64748b;
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 16px;
-        }
-
-        .app-container {
-            display: none;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%);
-            color: white;
-            padding: 60px 48px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 60%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(216,42,40,0.15) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, #D82A28, #ff6b6b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .stats-row {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 32px;
-            flex-wrap: wrap;
-        }
-
-        .stat-card-mini {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 16px 24px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .stat-number-large {
-            font-size: 32px;
-            font-weight: 700;
-            color: #D82A28;
-        }
-
-        .progress-dashboard {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 24px;
-            margin-top: 32px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .progress-bar-container {
-            background: rgba(255,255,255,0.2);
-            border-radius: 100px;
-            height: 8px;
-            overflow: hidden;
-            margin: 12px 0;
-        }
-
-        .progress-bar-fill {
-            background: linear-gradient(90deg, #D82A28, #ff6b6b);
-            height: 100%;
-            width: 0%;
-            transition: width 0.6s ease;
-            border-radius: 100px;
-        }
-
-        .section {
-            padding: 56px 48px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .section-header h2 {
-            font-size: 28px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #1a2c3e, #D82A28);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 28px;
-        }
-
-        .course-card {
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-
-        .course-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 25px 35px -12px rgba(0,0,0,0.15);
-        }
-
-        .course-image {
-            background: linear-gradient(135deg, #1a2c3e 0%, #2c4a6e 100%);
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            position: relative;
-        }
-
-        .quiz-badge {
-            position: absolute;
-            bottom: -12px;
-            right: 16px;
-            background: #D82A28;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .course-info {
-            padding: 24px;
-        }
-
-        .course-info h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a2c3e;
-        }
-
-        .course-info p {
-            color: #64748b;
-            font-size: 13px;
-            line-height: 1.5;
-            margin-bottom: 16px;
-        }
-
-        .course-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .course-badge {
-            background: #f1f5f9;
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 11px;
-            font-weight: 500;
-            color: #1a2c3e;
-        }
-
-        .course-hours {
-            color: #D82A28;
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        .course-status {
-            margin-top: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-completed {
-            color: #10b981;
-        }
-
-        .status-pending {
-            color: #D82A28;
-        }
-
-        .quiz-points {
-            margin-top: 10px;
-            font-size: 11px;
-            color: #f59e0b;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            width: 90%;
-            max-width: 750px;
-            max-height: 85vh;
-            border-radius: 32px;
-            overflow-y: auto;
-            padding: 32px;
-            position: relative;
-            animation: modalFadeIn 0.3s ease;
-        }
-
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #94a3b8;
-            transition: 0.2s;
-        }
-
-        .modal-close:hover {
-            color: #D82A28;
-        }
-
-        .lesson-content {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 24px;
-            margin: 20px 0;
-        }
-
-        .lesson-content h3 {
-            color: #D82A28;
-            margin-bottom: 16px;
-            font-size: 18px;
-        }
-
-        .example-box {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 16px 0;
-            border-left: 4px solid #f59e0b;
-        }
-
-        .quiz-question {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin: 16px 0;
-            border: 1px solid #e2e8f0;
-        }
-
-        .quiz-option {
-            display: block;
-            padding: 12px;
-            margin: 8px 0;
-            background: #f8fafc;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #e2e8f0;
-        }
-
-        .quiz-option:hover {
-            background: #e2e8f0;
-            transform: translateX(4px);
-        }
-
-        .quiz-option.selected {
-            background: #D82A28;
-            color: white;
-            border-color: #D82A28;
-        }
-
-        .quiz-option.correct {
-            background: #10b981;
-            color: white;
-        }
-
-        .quiz-option.wrong {
-            background: #ef4444;
-            color: white;
-        }
-
-        .complete-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-
-        .complete-btn:hover {
-            transform: scale(1.02);
-        }
-
-        .complete-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .footer {
-            background: #1a2c3e;
-            color: rgba(255,255,255,0.7);
-            text-align: center;
-            padding: 32px;
-            margin-top: 40px;
-            font-size: 13px;
-        }
-
-        /* Estilo do Certificado para PDF - VISÍVEL NO MODAL */
-        .certificate-preview {
-            background: white;
-            padding: 40px;
-            max-width: 800px;
-            margin: 0 auto;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .certificate-preview .cert-border {
-            border: 15px solid #D82A28;
-            padding: 40px;
-            position: relative;
-        }
-
-        .certificate-preview .cert-border::before {
-            content: "";
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            border: 1px solid #1B2F47;
-            pointer-events: none;
-        }
-
-        .certificate-preview .logo-text {
-            text-align: center;
-            font-size: 32px;
-            font-weight: 700;
-            color: #1B2F47;
-            margin-bottom: 20px;
-        }
-
-        .certificate-preview .logo-text span {
-            color: #D82A28;
-        }
-
-        .certificate-preview .cert-title {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 600;
-            color: #1B2F47;
-            margin: 20px 0;
-        }
-
-        .certificate-preview .cert-subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #666;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .certificate-preview .certifies {
-            text-align: center;
-            font-size: 16px;
-            margin: 30px 0 20px;
-        }
-
-        .certificate-preview .student-name {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 700;
-            color: #D82A28;
-            margin: 20px 0;
-            text-transform: uppercase;
-        }
-
-        .certificate-preview .course-name {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 600;
-            color: #1B2F47;
-            background: #f5f5f5;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 10px;
-        }
-
-        .certificate-preview .details {
-            text-align: center;
-            font-size: 14px;
-            color: #555;
-            margin: 20px 0;
-        }
-
-        .certificate-preview .signatures {
-            display: flex;
-            justify-content: space-between;
-            margin: 50px 30px 20px;
-        }
-
-        .certificate-preview .signature {
-            text-align: center;
-            width: 200px;
-        }
-
-        .certificate-preview .signature-line {
-            border-top: 1px solid #333;
-            margin-bottom: 8px;
-            width: 100%;
-        }
-
-        .certificate-preview .cert-number {
-            text-align: center;
-            font-size: 10px;
-            color: #999;
-            margin-top: 30px;
-        }
-
-        /* Modal do Certificado */
-        .cert-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cert-modal-content {
-            background: white;
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            border-radius: 24px;
-            overflow-y: auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        .cert-modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #999;
-            z-index: 10;
-        }
-
-        .cert-modal-close:hover {
-            color: #D82A28;
-        }
-
-        .cert-actions {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid #e2e8f0;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-                flex-direction: column;
-                gap: 12px;
-            }
-            .hero h1 {
-                font-size: 32px;
-            }
-            .section {
-                padding: 32px 20px;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #f0f4fc 0%, #e8edf5 100%); color: #1a2c3e; min-height: 100vh; }
+        body.dark { background: #0f172a; color: #f1f5f9; }
+        body.dark .card, body.dark .course-card, body.dark .stat-card, body.dark .chart-container,
+        body.dark .modal-content, body.dark .cert-modal-content, body.dark .ranking-content,
+        body.dark .login-card, body.dark .quiz-area, body.dark .lesson-card { background: #1e293b; color: #f1f5f9; }
+        body.dark .course-badge, body.dark .lesson-badge { background: #334155; color: #f1f5f9; }
+        body.dark .quiz-option { background: #1e293b; border-color: #334155; }
+        
+        .header { background: rgba(26, 44, 62, 0.95); backdrop-filter: blur(12px); color: white; padding: 16px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #fff 0%, #D82A28 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .logo small { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.6); }
+        .nav { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+        .nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 500; cursor: pointer; font-size: 14px; }
+        .nav a:hover { color: #D82A28; }
+        .lang-select { background: rgba(255,255,255,0.15); border: none; color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; }
+        .theme-toggle, .notification-btn { background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 12px; border-radius: 40px; cursor: pointer; position: relative; }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { width: 42px; height: 42px; background: linear-gradient(135deg, #D82A28, #b0201e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; cursor: pointer; }
+        .logout-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 16px; border-radius: 40px; cursor: pointer; }
+        .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%); }
+        .login-card { background: white; padding: 48px 40px; border-radius: 32px; width: 100%; max-width: 420px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); }
+        .login-card h2 { font-size: 32px; font-weight: 700; background: linear-gradient(135deg, #1a2c3e, #D82A28); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .login-card input, .login-card select { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #e2e8f0; border-radius: 20px; font-size: 15px; }
+        .login-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #1a2c3e, #D82A28); color: white; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .app-container { display: none; }
+        .hero { background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%); color: white; padding: 60px 48px; text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 60%; height: 200%; background: radial-gradient(circle, rgba(216,42,40,0.15) 0%, transparent 70%); pointer-events: none; }
+        .hero h1 { font-size: 48px; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; }
+        .hero h1 span { background: linear-gradient(135deg, #D82A28, #ff6b6b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .stats-row { display: flex; justify-content: center; gap: 30px; margin-top: 30px; flex-wrap: wrap; }
+        .stat-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 16px 24px; border-radius: 20px; text-align: center; }
+        .stat-number { font-size: 32px; font-weight: 700; color: #D82A28; }
+        .progress-dashboard { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border-radius: 24px; padding: 24px; margin-top: 30px; max-width: 500px; margin-left: auto; margin-right: auto; border: 1px solid rgba(255,255,255,0.1); }
+        .progress-bar-container { background: rgba(255,255,255,0.2); border-radius: 100px; height: 8px; overflow: hidden; margin: 12px 0; }
+        .progress-bar-fill { background: linear-gradient(90deg, #D82A28, #ff6b6b); height: 100%; width: 0%; transition: width 0.6s ease; border-radius: 100px; }
+        .section { padding: 56px 48px; max-width: 1400px; margin: 0 auto; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .section-header h2 { font-size: 28px; font-weight: 600; border-left: 5px solid #D82A28; padding-left: 20px; color: #1a2c3e; }
+        body.dark .section-header h2 { color: #f1f5f9; }
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px; }
+        .course-card { background: white; border-radius: 24px; overflow: hidden; cursor: pointer; transition: all 0.3s; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .course-card:hover { transform: translateY(-6px); box-shadow: 0 25px 35px -12px rgba(0,0,0,0.15); }
+        .course-image { background: linear-gradient(135deg, #1a2c3e 0%, #2c4a6e 100%); height: 100px; display: flex; align-items: center; justify-content: center; font-size: 48px; position: relative; }
+        .quiz-badge { position: absolute; bottom: -12px; right: 16px; background: #D82A28; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .course-info { padding: 24px; }
+        .course-info h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .course-info p { color: #64748b; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+        body.dark .course-info p { color: #94a3b8; }
+        .course-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .course-badge { background: #f1f5f9; padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 500; color: #1a2c3e; }
+        .course-hours { color: #D82A28; font-weight: 600; font-size: 12px; }
+        .course-status { margin-top: 12px; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .status-completed { color: #10b981; }
+        .status-pending { color: #D82A28; }
+        .badges-container { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .badge-item { background: white; border-radius: 50px; padding: 8px 16px; display: flex; align-items: center; gap: 10px; border: 1px solid #e2e8f0; }
+        body.dark .badge-item { background: #1e293b; border-color: #334155; }
+        .badge-icon { font-size: 24px; }
+        .rating-stars { display: flex; gap: 5px; margin-top: 10px; }
+        .star { color: #ddd; cursor: pointer; font-size: 18px; }
+        .star.active { color: #f59e0b; }
+        .notification-panel { position: absolute; top: 60px; right: 20px; background: white; border-radius: 16px; width: 300px; max-height: 400px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 200; display: none; }
+        body.dark .notification-panel { background: #1e293b; }
+        .notification-item { padding: 12px; border-bottom: 1px solid #e2e8f0; cursor: pointer; }
+        .notification-item.unread { background: rgba(216,42,40,0.1); }
+        .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 16px; margin-top: 20px; }
+        .lesson-card { background: #f8fafc; border-radius: 16px; padding: 16px; cursor: pointer; transition: all 0.3s; border: 1px solid #e2e8f0; }
+        .lesson-card:hover { transform: translateY(-3px); }
+        .lesson-card.completed { border-left: 4px solid #10b981; background: #f0fdf4; }
+        body.dark .lesson-card { background: #1e293b; border-color: #334155; }
+        .lesson-number { background: linear-gradient(135deg, #1a2c3e, #2c4a6e); color: white; padding: 4px 12px; border-radius: 20px; display: inline-block; font-size: 11px; margin-bottom: 10px; }
+        .progress-container { background: #e2e8f0; border-radius: 10px; height: 8px; margin: 15px 0; }
+        .progress-fill { background: #D82A28; border-radius: 10px; height: 100%; width: 0%; transition: width 0.5s; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; width: 90%; max-width: 750px; max-height: 85vh; border-radius: 32px; overflow-y: auto; padding: 32px; position: relative; }
+        .modal-close { position: absolute; top: 20px; right: 24px; font-size: 28px; cursor: pointer; }
+        .quiz-question { background: #f8fafc; border-radius: 16px; padding: 20px; margin: 16px 0; border: 1px solid #e2e8f0; }
+        .quiz-option { display: block; padding: 12px; margin: 8px 0; background: white; border-radius: 12px; cursor: pointer; border: 1px solid #e2e8f0; }
+        .quiz-option.selected { background: #D82A28; color: white; }
+        .complete-btn { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 12px 28px; border-radius: 40px; cursor: pointer; font-weight: 600; }
+        .btn-sm { background: #D82A28; color: white; border: none; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; }
+        .forum-post { background: #f8fafc; border-radius: 16px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #D82A28; }
+        body.dark .forum-post { background: #1e293b; }
+        .certificate-preview { background: white; padding: 40px; max-width: 800px; margin: 0 auto; font-family: 'Inter', sans-serif; }
+        .certificate-preview .cert-border { border: 15px solid #D82A28; padding: 40px; position: relative; }
+        .certificate-preview .cert-border::before { content: ""; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 1px solid #1B2F47; pointer-events: none; }
+        .certificate-preview .logo-text { text-align: center; font-size: 32px; font-weight: 700; color: #1B2F47; margin-bottom: 20px; }
+        .certificate-preview .cert-title { text-align: center; font-size: 28px; font-weight: 600; color: #1B2F47; margin: 20px 0; }
+        .certificate-preview .student-name { text-align: center; font-size: 36px; font-weight: 700; color: #D82A28; margin: 20px 0; text-transform: uppercase; }
+        .certificate-preview .course-name { text-align: center; font-size: 24px; font-weight: 600; color: #1B2F47; background: #f5f5f5; padding: 15px; margin: 20px 0; border-radius: 10px; }
+        .certificate-preview .signatures { display: flex; justify-content: space-between; margin: 50px 30px 20px; }
+        .certificate-preview .signature { text-align: center; width: 200px; }
+        .certificate-preview .signature-line { border-top: 1px solid #333; margin-bottom: 8px; width: 100%; }
+        .footer { background: #1a2c3e; color: rgba(255,255,255,0.7); text-align: center; padding: 30px; margin-top: 40px; font-size: 13px; }
+        @media (max-width: 768px) { .header { padding: 16px 20px; flex-direction: column; gap: 15px; } .section { padding: 30px 20px; } .hero h1 { font-size: 32px; } }
     </style>
 </head>
 <body>
@@ -739,65 +112,106 @@
     <!-- TELA DE LOGIN -->
     <div id="loginScreen" class="login-container">
         <div class="login-card">
-            <div class="login-icon">🎓</div>
+            <div style="font-size: 48px; margin-bottom: 20px;">🎓</div>
             <h2>LEARN</h2>
-            <p style="color: #64748b; margin-bottom: 24px;">Plataforma EAD Corporativa</p>
-            <input type="text" id="username" placeholder="Usuário" value="aluno.learn">
-            <input type="password" id="password" placeholder="Senha" value="learn123">
-            <button onclick="doLogin()">Entrar na Plataforma</button>
-            <div class="demo-credentials">
-                <i class="fas fa-info-circle"></i> Credenciais de demonstração<br>
-                <strong>aluno.learn</strong> / <strong>learn123</strong>
+            <p style="color: #64748b;">Plataforma EAD Corporativa</p>
+            <select id="languageSelect">
+                <option value="pt">🇧🇷 Português</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇪🇸 Español</option>
+            </select>
+            <input type="text" id="username" placeholder="Usuário" value="admin.learn">
+            <input type="password" id="password" placeholder="Senha" value="admin123">
+            <button onclick="doLogin()">Entrar</button>
+            <div style="margin-top: 20px; font-size: 12px; background: #f8fafc; padding: 12px; border-radius: 16px;">
+                <strong>🔐 Credenciais:</strong><br>
+                👑 Admin: admin.learn / admin123<br>
+                👨‍🎓 Aluno: aluno.learn / learn123
             </div>
+            <button onclick="showRegister()" style="background: #64748b; margin-top: 10px;">📝 Criar conta</button>
         </div>
     </div>
 
-    <!-- APLICATIVO PRINCIPAL -->
+    <!-- REGISTRO -->
+    <div id="registerScreen" class="login-container" style="display: none;">
+        <div class="login-card">
+            <div style="font-size: 48px;">📝</div>
+            <h2>Criar Conta</h2>
+            <input type="text" id="regName" placeholder="Nome completo">
+            <input type="email" id="regEmail" placeholder="E-mail">
+            <select id="regDepartment">
+                <option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option><option>Administrativo</option>
+            </select>
+            <input type="text" id="regUsername" placeholder="Usuário">
+            <input type="password" id="regPassword" placeholder="Senha">
+            <button onclick="doRegister()">Criar Conta</button>
+            <button onclick="showLogin()" style="background: #64748b;">← Voltar</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
     <div id="appContainer" class="app-container">
         <div class="header">
             <div class="logo">LEARN <small>| Plataforma EAD</small></div>
             <div class="nav">
-                <a onclick="showSection('home')"><i class="fas fa-home"></i> Início</a>
-                <a onclick="showSection('courses')"><i class="fas fa-book-open"></i> Cursos</a>
-                <a onclick="showSection('certificates')"><i class="fas fa-certificate"></i> Certificados</a>
+                <a onclick="showSection('home')"><i class="fas fa-home"></i> <span data-key="home">Início</span></a>
+                <a onclick="showSection('courses')"><i class="fas fa-book-open"></i> <span data-key="courses">Cursos</span></a>
+                <a onclick="showSection('certificates')"><i class="fas fa-certificate"></i> <span data-key="certificates">Certificados</span></a>
+                <a onclick="showSection('forum')"><i class="fas fa-comments"></i> <span data-key="forum">Fórum</span></a>
+                <a onclick="showRanking()"><i class="fas fa-trophy"></i> <span data-key="ranking">Ranking</span></a>
+                <a onclick="showProfile()"><i class="fas fa-user"></i> <span data-key="profile">Perfil</span></a>
+                <a onclick="showSection('admin')" id="adminNav" style="display: none;"><i class="fas fa-users"></i> <span data-key="admin">Admin</span></a>
+                <select class="lang-select" id="appLanguageSelect" onchange="changeLanguage(this.value)">
+                    <option value="pt">🇧🇷 PT</option><option value="en">🇺🇸 EN</option><option value="es">🇪🇸 ES</option>
+                </select>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+                <div style="position: relative;">
+                    <button class="notification-btn" onclick="toggleNotifications()"><i class="fas fa-bell"></i> <span id="notificationBadge" style="position: absolute; top: -5px; right: -5px; background: #D82A28; border-radius: 50%; padding: 2px 6px; font-size: 10px;">0</span></button>
+                    <div id="notificationPanel" class="notification-panel"></div>
+                </div>
             </div>
             <div class="user-info">
-                <div class="points-badge"><i class="fas fa-star"></i> <span id="userPoints">0</span> pts</div>
-                <div class="user-avatar" id="userAvatar">A</div>
-                <span id="userName" style="font-weight: 500;">Aluno</span>
+                <div class="user-avatar" id="userAvatar" onclick="showProfile()">A</div>
+                <span id="userName">Admin</span>
+                <span class="role-badge" id="userRole" style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px;">Admin</span>
                 <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
             </div>
         </div>
 
         <div id="homeSection">
             <div class="hero">
-                <h1>Bem-vindo(a), <span id="welcomeName">Aluno</span>!</h1>
-                <p style="opacity: 0.9;">Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!</p>
+                <h1><span data-key="welcome">Bem-vindo(a)</span>, <span id="welcomeName">Aluno</span>!</h1>
+                <p data-key="heroText">Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!</p>
                 <div class="stats-row">
-                    <div class="stat-card-mini"><div class="stat-number-large" id="totalPointsDisplay">0</div><div>Pontos Totais</div></div>
-                    <div class="stat-card-mini"><div class="stat-number-large" id="completedCoursesDisplay">0</div><div>Cursos Concluídos</div></div>
-                    <div class="stat-card-mini"><div class="stat-number-large" id="quizPointsDisplay">0</div><div>Pontos de Quiz</div></div>
+                    <div class="stat-card"><div class="stat-number" id="userPointsStat">0</div><div data-key="points">Pontos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="completedCountStat">0</div><div data-key="completed">Cursos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="levelStat">🥉 Bronze</div><div data-key="level">Nível</div></div>
                 </div>
                 <div class="progress-dashboard">
-                    <p><strong>📊 Progresso Geral</strong></p>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar-fill" id="globalProgress"></div>
-                    </div>
+                    <p><strong data-key="progress">📊 Progresso Geral</strong></p>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="globalProgress"></div></div>
                     <p id="progressText" style="font-size: 14px; margin-top: 8px;">0% concluído</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <h2>🎯 Cursos em Destaque</h2>
-                    <a onclick="showSection('courses')" style="color: #D82A28; cursor: pointer; font-weight: 500;">Ver todos →</a>
+                    <h2 data-key="featured">🎯 Cursos em Destaque</h2>
+                    <a onclick="showSection('courses')" style="color: #D82A28; cursor: pointer;" data-key="viewAll">Ver todos →</a>
                 </div>
                 <div class="courses-grid" id="featuredCourses"></div>
             </div>
 
             <div class="section">
                 <div class="section-header">
-                    <h2>📌 Próximos Passos</h2>
+                    <h2 data-key="badgesTitle">🏆 Suas Conquistas</h2>
+                </div>
+                <div class="badges-container" id="badgesContainer"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 data-key="nextSteps">📌 Próximos Passos</h2>
                 </div>
                 <div class="courses-grid" id="nextSteps"></div>
             </div>
@@ -806,8 +220,7 @@
         <div id="coursesSection" style="display: none;">
             <div class="section">
                 <div class="section-header">
-                    <h2>📚 Todos os Cursos</h2>
-                    <span style="color: #64748b; font-size: 14px;">29 cursos disponíveis</span>
+                    <h2 data-key="allCourses">📚 Todos os Cursos</h2>
                 </div>
                 <div class="courses-grid" id="allCourses"></div>
             </div>
@@ -815,568 +228,324 @@
 
         <div id="certificatesSection" style="display: none;">
             <div class="section">
-                <div class="section-header">
-                    <h2>🏆 Meus Certificados</h2>
-                </div>
+                <div class="section-header"><h2 data-key="myCertificates">🏆 Meus Certificados</h2></div>
                 <div id="certificatesList"></div>
+            </div>
+        </div>
+
+        <div id="forumSection" style="display: none;">
+            <div class="section">
+                <div class="section-header">
+                    <h2 data-key="forumTitle">💬 Fórum de Dúvidas</h2>
+                    <button class="btn-sm" onclick="showNewPostModal()">+ Nova Pergunta</button>
+                </div>
+                <div id="forumList"></div>
+            </div>
+        </div>
+
+        <div id="adminSection" style="display: none;">
+            <div class="section">
+                <div class="section-header"><h2 data-key="adminPanel">👑 Painel Administrativo</h2></div>
+                <div class="stats-row">
+                    <div class="stat-card"><div class="stat-number" id="adminTotalUsers">0</div><div>Usuários</div></div>
+                    <div class="stat-card"><div class="stat-number" id="adminTotalCourses">3</div><div>Cursos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="adminTotalPoints">0</div><div>Pontos</div></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <button class="btn-sm" onclick="exportBackup()" style="background: #10b981;">💾 Backup JSON</button>
+                    <button class="btn-sm" onclick="exportUsersCSV()" style="background: #1a2c3e; margin-left: 10px;">📊 Exportar CSV</button>
+                </div>
+                <h3>👥 Usuários</h3>
+                <div id="adminUsersList"></div>
             </div>
         </div>
 
         <div class="footer">
             <p>LEARN - Plataforma EAD para Desenvolvimento de Pessoas</p>
-            <p style="margin-top: 8px;">Luiz Carlos Correa Junior | (47) 99290-4926 | luizcarloscjunior99@icloud.com</p>
+            <p>Luiz Carlos Correa Junior | (47) 99290-4926 | luizcarloscjunior99@icloud.com</p>
         </div>
     </div>
 
-    <!-- MODAL DO CURSO -->
-    <div id="courseModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
-    <!-- MODAL DE PRÉ-VISUALIZAÇÃO DO CERTIFICADO -->
-    <div id="certPreviewModal" class="cert-modal">
-        <div class="cert-modal-content">
-            <span class="cert-modal-close" onclick="closeCertPreview()">&times;</span>
-            <div id="certPreviewContent"></div>
-            <div class="cert-actions">
-                <button class="complete-btn" id="downloadPdfBtn" onclick="generatePdfFromPreview()" style="background: linear-gradient(135deg, #D82A28, #b0201e);">📄 Baixar PDF</button>
-                <button class="logout-btn" onclick="closeCertPreview()" style="margin-left: 15px; background: #64748b; color: white; border: none;">Fechar</button>
-            </div>
-        </div>
-    </div>
+    <!-- MODAIS -->
+    <div id="courseModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal()">&times;</span><div id="modalContent"></div></div></div>
+    <div id="lessonModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeLessonModal()">&times;</span><div id="lessonModalContent"></div></div></div>
+    <div id="profileModal" class="modal"><div class="modal-content" style="max-width: 500px;"><span class="modal-close" onclick="closeProfileModal()">&times;</span><div id="profileModalContent"></div></div></div>
+    <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()">&times;</span><div id="certPreviewContent"></div><div style="text-align:center; padding-top:20px;"><button class="complete-btn" onclick="generatePdfFromPreview()">📄 Baixar PDF</button></div></div></div>
+    <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()">&times;</span><h2 style="color:#D82A28;"><i class="fas fa-trophy"></i> Ranking Geral</h2><div id="rankingList"></div></div></div>
+    <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()">&times;</span><h3 style="color:#D82A28;">➕ Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título" style="width:100%; padding:12px; margin:10px 0; border-radius:12px;"><textarea id="postContent" placeholder="Sua dúvida..." style="width:100%; padding:12px; margin:10px 0; border-radius:12px;" rows="4"></textarea><button class="complete-btn" onclick="createNewPost()">Publicar</button></div></div>
 
     <script>
-        // Cursos com exemplos e quizzes (4 perguntas cada)
-        const allCourses = [
-            { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100,
-              content: "Este curso aborda saudações formais e informais em inglês, apresentação pessoal e profissional, números, datas e horas, e-mails comerciais simples.",
-              example: "📧 Exemplo: 'Dear Mr. Smith, I am writing to confirm the meeting on Friday at 10 AM. Best regards, John.'",
-              quiz: [
-                  { q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 },
-                  { q: "Qual destas é uma saudação formal para e-mail?", options: ["Hey", "Hi there", "Dear Sir/Madam", "What's up"], correct: 2 },
-                  { q: "Como se escreve '10 de maio' em inglês?", options: ["10 May", "May 10", "10 of May", "May the 10"], correct: 1 },
-                  { q: "Como se diz 'Obrigado' em inglês?", options: ["Please", "Sorry", "Thank you", "You're welcome"], correct: 2 }
-              ] },
-            { id: 2, title: "Excel Básico", category: "📊 Excel/Office", hours: "10h", icon: "📊", points: 100,
-              content: "Navegação no Excel, inserção e formatação de dados, somas e subtrações simples, filtros e classificação.",
-              example: "📊 Exemplo: =SOMA(A1:A10) - soma os valores das células A1 até A10. =MÉDIA(B1:B5) - calcula a média.",
-              quiz: [
-                  { q: "Qual fórmula soma os valores de B1 a B10?", options: ["=SOMA(B1:B10)", "=TOTAL(B1:B10)", "=B1+B10", "=SOMASE(B1:B10)"], correct: 0 },
-                  { q: "O que faz a fórmula =MÉDIA(C1:C5)?", options: ["Soma", "Conta", "Calcula a média", "Encontra o maior"], correct: 2 },
-                  { q: "Para filtrar dados, qual menu usar?", options: ["Dados > Filtro", "Inserir > Filtro", "Fórmulas > Filtro", "Exibição > Filtro"], correct: 0 },
-                  { q: "Qual tecla de atalho para salvar um arquivo?", options: ["Ctrl+C", "Ctrl+V", "Ctrl+S", "Ctrl+Z"], correct: 2 }
-              ] },
-            { id: 3, title: "Inteligência Emocional", category: "🧠 Desenv. Pessoal", hours: "12h", icon: "🧠", points: 100,
-              content: "Controle de impulsos, desenvolvimento de resiliência, autoconhecimento e gestão do estresse.",
-              example: "🧠 Exemplo: Técnica dos 5 segundos - ao sentir raiva ou frustração, respire fundo por 5 segundos antes de reagir.",
-              quiz: [
-                  { q: "O que é resiliência?", options: ["Capacidade de ignorar problemas", "Capacidade de se recuperar de adversidades", "Evitar situações difíceis", "Ser sempre positivo"], correct: 1 },
-                  { q: "Qual técnica ajuda no controle da raiva?", options: ["Gritar", "Ignorar", "Respiração profunda", "Se isolar permanentemente"], correct: 2 },
-                  { q: "Inteligência emocional envolve:", options: ["Apenas sentir emoções", "Reconhecer e gerenciar emoções", "Esconder sentimentos", "Ser frio e calculista"], correct: 1 },
-                  { q: "O que é empatia?", options: ["Sentir pena", "Se colocar no lugar do outro", "Ignorar os sentimentos alheios", "Ser indiferente"], correct: 1 }
-              ] },
-            { id: 4, title: "Liderança de Pequenos Grupos", category: "👥 Liderança", hours: "15h", icon: "👥", points: 100,
-              content: "Motivação de equipe, delegação eficiente, liderança pelo exemplo e comunicação clara.",
-              example: "👥 Exemplo: Ao delegar uma tarefa, seja específico: 'João, você pode revisar o relatório de produção até quinta-feira às 14h?'",
-              quiz: [
-                  { q: "O que é delegar?", options: ["Fazer tudo sozinho", "Transferir responsabilidades com clareza", "Ignorar tarefas", "Apenas supervisionar"], correct: 1 },
-                  { q: "Um bom líder deve:", options: ["Dar ordens sem explicação", "Dar o exemplo", "Fazer tudo pelos outros", "Evitar feedback"], correct: 1 },
-                  { q: "Como motivar a equipe?", options: ["Reconhecer bons resultados", "Apenas criticar", "Ignorar o esforço", "Só cobrar resultados"], correct: 0 },
-                  { q: "O que é feedback construtivo?", options: ["Apenas elogios", "Críticas destrutivas", "Opinião para melhoria", "Ignorar o desempenho"], correct: 2 }
-              ] }
+        // ============================================
+        // 3 CURSOS COMPLETOS
+        // ============================================
+        
+        // Curso 1: Business English Nível 1 (10 aulas)
+        const course1Lessons = [
+            { id: 1, title: "Greetings and Introductions", content: `<h2>🇬🇧 Lesson 1: Greetings and Introductions</h2><h3>Saudações e Apresentações</h3><p>No ambiente de negócios, as primeiras impressões são fundamentais.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Exemplos:</strong><br>• "Good morning" - Bom dia<br>• "Good afternoon" - Boa tarde<br>• "Hello" / "Hi" - Olá</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Vocabulário:</strong><br>• Nice to meet you - Prazer em conhecê-lo<br>• How are you? - Como você está?<br>• My name is... - Meu nome é...</div>` },
+            { id: 2, title: "Introducing Yourself", content: `<h2>🇬🇧 Lesson 2: Introducing Yourself</h2><h3>Apresentando-se</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Frases:</strong><br>• "Allow me to introduce myself..."<br>• "I work as a [profession]"<br>• "I'm responsible for..."</div>` },
+            { id: 3, title: "Numbers and Dates", content: `<h2>🇬🇧 Lesson 3: Numbers and Dates</h2><h3>Números e Datas</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Números 1-20:</strong><br>1-One, 2-Two, 3-Three, 4-Four, 5-Five, 6-Six, 7-Seven, 8-Eight, 9-Nine, 10-Ten</div>` },
+            { id: 4, title: "Emails and Messages", content: `<h2>🇬🇧 Lesson 4: Emails</h2><h3>E-mails Corporativos</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Estrutura:</strong><br>Subject, Greeting, Body, Closing<br>"I am writing to..."<br>"Please find attached..."</div>` },
+            { id: 5, title: "Telephone Calls", content: `<h2>🇬🇧 Lesson 5: Telephone Calls</h2><h3>Ligações Telefônicas</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Frases:</strong><br>"Hello, this is [Name] from [Company]"<br>"Could I speak to [Name]?"<br>"Can I take a message?"</div>` },
+            { id: 6, title: "Meetings and Appointments", content: `<h2>🇬🇧 Lesson 6: Meetings</h2><h3>Reuniões</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Frases:</strong><br>"Would you be available on [day]?"<br>"Let's schedule a meeting"</div>` },
+            { id: 7, title: "Small Talk", content: `<h2>🇬🇧 Lesson 7: Small Talk</h2><h3>Conversas Informais</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Tópicos:</strong><br>Weather, Travel, Weekend plans<br>"How was your weekend?"</div>` },
+            { id: 8, title: "Requests and Offers", content: `<h2>🇬🇧 Lesson 8: Requests</h2><h3>Pedidos e Oferecimentos</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Frases:</strong><br>"Could you please...?"<br>"Would you mind...?"<br>"Can I help you?"</div>` },
+            { id: 9, title: "Giving Opinions", content: `<h2>🇬🇧 Lesson 9: Opinions</h2><h3>Opiniões</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Frases:</strong><br>"In my opinion..."<br>"I believe that..."<br>"I agree/disagree because..."</div>` },
+            { id: 10, title: "Closing Conversations", content: `<h2>🇬🇧 Lesson 10: Closing</h2><h3>Encerrando Conversas</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Frases:</strong><br>"It was nice talking to you"<br>"Thank you for your time"<br>"I look forward to hearing from you"</div>` }
         ];
 
-        // Adicionar mais cursos para chegar a 29
-        for (let i = 5; i <= 29; i++) {
-            allCourses.push({
-                id: i, title: `Curso ${i} - Desenvolvimento Profissional`, category: "📚 Geral", hours: "10h", icon: "📖", points: 100,
-                content: "Conteúdo didático completo sobre o tema abordado neste curso profissionalizante.",
-                example: "📖 Exemplo prático: Aplique os conceitos aprendidos em situações reais do dia a dia profissional.",
+        // Curso 2: Metodologia 5S (5 aulas)
+        const course2Lessons = [
+            { id: 1, title: "Seiri - Senso de Utilização", content: `<h2>🧹 Seiri - Senso de Utilização</h2><p>Separar o útil do inútil, descartando itens não utilizados.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Exemplo:</strong> Separar ferramentas quebradas, documentos antigos.</div>` },
+            { id: 2, title: "Seiton - Senso de Ordem", content: `<h2>🧹 Seiton - Senso de Ordem</h2><p>Um lugar para cada coisa e cada coisa em seu lugar.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Exemplo:</strong> Ferramentas organizadas por frequência de uso.</div>` },
+            { id: 3, title: "Seiso - Senso de Limpeza", content: `<h2>🧹 Seiso - Senso de Limpeza</h2><p>A limpeza deve ser parte da rotina de trabalho.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Exemplo:</strong> Limpar equipamentos diariamente.</div>` },
+            { id: 4, title: "Seiketsu - Senso de Saúde", content: `<h2>🧹 Seiketsu - Senso de Saúde</h2><p>Criar rotinas e checklists para manter a organização.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Exemplo:</strong> Criar checklist diário de 5S.</div>` },
+            { id: 5, title: "Shitsuke - Senso de Disciplina", content: `<h2>🧹 Shitsuke - Senso de Disciplina</h2><p>Transformar em hábito as práticas do 5S.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Exemplo:</strong> Auditorias regulares e reconhecimento.</div>` }
+        ];
+
+        // Curso 3: Excel do Básico ao Avançado (6 aulas)
+        const course3Lessons = [
+            { id: 1, title: "Introdução ao Excel", content: `<h2>📊 Introdução ao Excel</h2><p>Conhecendo a interface do Excel.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Elementos:</strong> Faixa de opções, Barra de fórmulas, Planilhas.</div>` },
+            { id: 2, title: "Fórmulas Essenciais", content: `<h2>📊 Fórmulas Essenciais</h2><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Fórmulas:</strong><br>=SOMA(A1:A10)<br>=MÉDIA(B1:B10)<br>=CONT.SE(C1:C10;">10")</div>` },
+            { id: 3, title: "Funções Lógicas", content: `<h2>📊 Funções Lógicas</h2><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Exemplos:</strong><br>=SE(A1>10;"Aprovado";"Reprovado")</div>` },
+            { id: 4, title: "PROCV e PROCH", content: `<h2>📊 PROCV</h2><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Sintaxe:</strong><br>=PROCV(Valor;Tabela;Coluna;0)</div>` },
+            { id: 5, title: "Tabelas Dinâmicas", content: `<h2>📊 Tabelas Dinâmicas</h2><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Como criar:</strong> Selecionar dados > Inserir > Tabela Dinâmica</div>` },
+            { id: 6, title: "Gráficos e Dashboards", content: `<h2>📊 Gráficos</h2><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;"><strong>📌 Tipos:</strong> Barras, Linhas, Pizza, Dashboard.</div>` }
+        ];
+
+        const coursesData = {
+            1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, lessons: course1Lessons,
                 quiz: [
-                    { q: "Qual é o primeiro passo para resolver um problema?", options: ["Identificar a causa", "Ignorar o problema", "Pedir ajuda imediatamente", "Desistir"], correct: 0 },
-                    { q: "O que significa trabalhar em equipe?", options: ["Fazer tudo sozinho", "Competir com os colegas", "Colaborar para um objetivo comum", "Delegar tudo para os outros"], correct: 2 },
-                    { q: "Qual destas é uma soft skill importante?", options: ["Digitação", "Comunicação", "Excel avançado", "Programação"], correct: 1 },
-                    { q: "O que é proatividade?", options: ["Aguardar ordens", "Antecipar-se às necessidades", "Fazer apenas o mínimo", "Reclamar das tarefas"], correct: 1 }
-                ]
-            });
-        }
+                    { q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 },
+                    { q: "Saudação formal para e-mail?", options: ["Hey", "Hi there", "Dear Sir/Madam", "What's up"], correct: 2 },
+                    { q: "Nice to meet you significa?", options: ["Tchau", "Prazer em conhecê-lo", "Como está?", "Bom dia"], correct: 1 },
+                    { q: "What time is it? significa?", options: ["Que horas são?", "Quantas horas?", "Que horas?", "Horário?"], correct: 0 },
+                    { q: "Could you please help me? significa?", options: ["Faça agora", "Você poderia me ajudar?", "Ajude-me", "Você precisa ajudar"], correct: 1 },
+                    { q: "I look forward to hearing from you significa?", options: ["Não quero resposta", "Aguardo seu retorno", "Encerro aqui", "Fiquei triste"], correct: 1 },
+                    { q: "In my opinion significa?", options: ["Na minha opinião", "Faça isso", "Talvez não", "Não sei"], correct: 0 },
+                    { q: "It was nice talking to you significa?", options: ["Tchau", "Foi bom conversar com você", "Adeus", "Até logo"], correct: 1 },
+                    { q: "How are you? significa?", options: ["Como você está?", "Quem é você?", "Onde está?", "Por quê?"], correct: 0 },
+                    { q: "Thank you significa?", options: ["Por favor", "Obrigado", "Desculpe", "De nada"], correct: 1 }
+                ] },
+            2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, lessons: course2Lessons,
+                quiz: [
+                    { q: "O que significa Seiri?", options: ["Senso de Ordem", "Senso de Utilização", "Senso de Limpeza", "Senso de Disciplina"], correct: 1 },
+                    { q: "Qual S significa 'Um lugar para cada coisa'?", options: ["Seiri", "Seiton", "Seiso", "Seiketsu"], correct: 1 },
+                    { q: "Seiso é o senso de:", options: ["Limpeza", "Saúde", "Disciplina", "Utilização"], correct: 0 },
+                    { q: "Shitsuke significa:", options: ["Saúde", "Disciplina", "Limpeza", "Ordem"], correct: 1 },
+                    { q: "Qual o primeiro passo do 5S?", options: ["Organizar", "Limpar", "Separar", "Padronizar"], correct: 2 },
+                    { q: "O 5S é uma ferramenta da:", options: ["Qualidade", "Segurança", "Produção", "RH"], correct: 0 },
+                    { q: "Auditorias regulares fazem parte de qual S?", options: ["Seiketsu", "Shitsuke", "Seiso", "Seiton"], correct: 1 },
+                    { q: "O objetivo principal do 5S é:", options: ["Limpeza", "Organização", "Melhoria contínua", "Redução de custos"], correct: 2 },
+                    { q: "Seiketsu está relacionado a:", options: ["Padronização", "Organização", "Limpeza", "Disciplina"], correct: 0 },
+                    { q: "O 5S surgiu em qual país?", options: ["Brasil", "EUA", "Japão", "Alemanha"], correct: 2 }
+                ] },
+            3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, lessons: course3Lessons,
+                quiz: [
+                    { q: "Qual fórmula soma valores de A1 a A10?", options: ["=SOMA(A1;A10)", "=SOMA(A1:A10)", "=SOMAR(A1:A10)", "=TOTAL(A1:A10)"], correct: 1 },
+                    { q: "Para que serve a função SE?", options: ["Somar", "Condicional", "Buscar", "Média"], correct: 1 },
+                    { q: "O que significa PROCV?", options: ["Procura Vertical", "Procura Horizontal", "Programa Vertical", "Processo Vertical"], correct: 0 },
+                    { q: "Tabela Dinâmica serve para:", options: ["Formatar", "Analisar dados", "Imprimir", "Proteger planilha"], correct: 1 },
+                    { q: "Qual gráfico é melhor para tendências?", options: ["Pizza", "Linha", "Barra", "Coluna"], correct: 1 },
+                    { q: "Atalho para salvar arquivo:", options: ["Ctrl+C", "Ctrl+V", "Ctrl+S", "Ctrl+Z"], correct: 2 },
+                    { q: "=MÉDIA(B1:B10) calcula:", options: ["Soma", "Média", "Contagem", "Máximo"], correct: 1 },
+                    { q: "O que é uma célula no Excel?", options: ["Interseção linha/coluna", "Uma planilha", "Um gráfico", "Uma fórmula"], correct: 0 },
+                    { q: "Para filtrar dados, qual menu usar?", options: ["Inserir", "Dados", "Fórmulas", "Exibição"], correct: 1 },
+                    { q: "O que faz o símbolo $ em uma fórmula?", options: ["Referência absoluta", "Referência relativa", "Referência mista", "Nada"], correct: 0 }
+                ] }
+        };
 
-        let completedCourses = JSON.parse(localStorage.getItem('completedCourses_learn')) || [];
-        let userPoints = JSON.parse(localStorage.getItem('userPoints_learn')) || 0;
-        let quizPoints = JSON.parse(localStorage.getItem('quizPoints_learn')) || {};
-        let currentUser = JSON.parse(localStorage.getItem('currentUser_learn')) || null;
+        // Dados iniciais
+        let users = JSON.parse(localStorage.getItem('learn_users')) || [
+            { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", department: "Produção", email: "aluno@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, activityLog: [] },
+            { id: 2, name: "admin.learn", password: "admin123", role: "admin", department: "TI", email: "admin@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, activityLog: [] }
+        ];
+
+        let notifications = JSON.parse(localStorage.getItem('learn_notifications')) || [
+            { id: 1, text: "🎉 Bem-vindo à plataforma LEARN!", read: false, date: new Date() }
+        ];
+
+        let forumPosts = JSON.parse(localStorage.getItem('learn_forum')) || [];
+        let currentUser = null;
+        let currentLanguage = localStorage.getItem('learn_language') || 'pt';
         let currentCourseSelections = {};
-        let currentCertificateHtml = '';
+        let currentQuizAnswers = {};
 
-        function updatePointsDisplay() {
-            document.getElementById('userPoints').innerText = userPoints;
-            document.getElementById('totalPointsDisplay').innerText = userPoints;
-            document.getElementById('completedCoursesDisplay').innerText = completedCourses.length;
-            let totalQuizPoints = Object.values(quizPoints).reduce((a, b) => a + b, 0);
-            document.getElementById('quizPointsDisplay').innerText = totalQuizPoints;
+        const translations = { pt: { home: "Início", courses: "Cursos", certificates: "Certificados", forum: "Fórum", admin: "Admin", ranking: "Ranking", profile: "Perfil", points: "Pontos", completed: "Cursos", level: "Nível", progress: "Progresso", featured: "Cursos em Destaque", viewAll: "Ver todos", badgesTitle: "Suas Conquistas", nextSteps: "Próximos Passos", allCourses: "Todos os Cursos", myCertificates: "Meus Certificados", forumTitle: "Fórum de Dúvidas", adminPanel: "Painel Admin", welcome: "Bem-vindo(a)", heroText: "Continue sua jornada de aprendizado." },
+            en: { home: "Home", courses: "Courses", certificates: "Certificates", forum: "Forum", admin: "Admin", ranking: "Ranking", profile: "Profile", points: "Points", completed: "Courses", level: "Level", progress: "Progress", featured: "Featured Courses", viewAll: "View all", badgesTitle: "Your Achievements", nextSteps: "Next Steps", allCourses: "All Courses", myCertificates: "My Certificates", forumTitle: "Forum", adminPanel: "Admin Panel", welcome: "Welcome", heroText: "Continue your learning journey." },
+            es: { home: "Inicio", courses: "Cursos", certificates: "Certificados", forum: "Foro", admin: "Admin", ranking: "Ranking", profile: "Perfil", points: "Puntos", completed: "Cursos", level: "Nivel", progress: "Progreso", featured: "Cursos Destacados", viewAll: "Ver todos", badgesTitle: "Tus Logros", nextSteps: "Próximos Pasos", allCourses: "Todos los Cursos", myCertificates: "Mis Certificados", forumTitle: "Foro", adminPanel: "Panel Admin", welcome: "Bienvenido", heroText: "Continúa tu viaje de aprendizaje." }
+        };
+
+        function updateLanguage() { document.querySelectorAll('[data-key]').forEach(el => { const key = el.getAttribute('data-key'); if (translations[currentLanguage][key]) el.innerText = translations[currentLanguage][key]; }); localStorage.setItem('learn_language', currentLanguage); }
+        function changeLanguage(lang) { currentLanguage = lang; updateLanguage(); }
+
+        function getLevel(points) { if (points >= 500) return { name: "💎 Platina", color: "#e5e4e2" }; if (points >= 300) return { name: "🥇 Ouro", color: "#ffd700" }; if (points >= 150) return { name: "🥈 Prata", color: "#c0c0c0" }; return { name: "🥉 Bronze", color: "#cd7f32" }; }
+
+        function updateBadges() {
+            const points = currentUser?.points || 0;
+            const level = getLevel(points);
+            document.getElementById('levelStat').innerHTML = level.name;
+            const badgesContainer = document.getElementById('badgesContainer');
+            if (badgesContainer) {
+                let badges = [];
+                if (currentUser?.completedCourses?.length >= 1) badges.push({ icon: "🎓", name: "Primeiro Curso" });
+                if (currentUser?.completedCourses?.length >= 3) badges.push({ icon: "🏆", name: "Mestre dos Cursos" });
+                if (points >= 100) badges.push({ icon: "⭐", name: "100 Pontos" });
+                if (points >= 300) badges.push({ icon: "💎", name: "300 Pontos" });
+                badgesContainer.innerHTML = badges.length ? badges.map(b => `<div class="badge-item"><span class="badge-icon">${b.icon}</span><span>${b.name}</span></div>`).join('') : '<p>Complete cursos para ganhar conquistas!</p>';
+            }
         }
 
-        function updateProgress() {
-            const total = allCourses.length;
-            const completed = completedCourses.length;
+        function addNotification(text) { notifications.unshift({ id: Date.now(), text, read: false, date: new Date() }); localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); }
+        function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
+        function toggleNotifications() { const panel = document.getElementById('notificationPanel'); if (panel.style.display === 'block') panel.style.display = 'none'; else { panel.innerHTML = notifications.map(n => `<div class="notification-item ${!n.read ? 'unread' : ''}" onclick="markNotificationRead(${n.id})">${n.text}<br><small>${new Date(n.date).toLocaleString()}</small></div>`).join(''); panel.style.display = 'block'; } }
+        function markNotificationRead(id) { const n = notifications.find(n => n.id === id); if (n) n.read = true; localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); toggleNotifications(); }
+
+        function updateStats() {
+            const total = Object.keys(coursesData).length;
+            const completed = currentUser?.completedCourses?.length || 0;
             const percent = Math.round((completed / total) * 100);
-            const progressBar = document.getElementById('globalProgress');
-            const progressText = document.getElementById('progressText');
-            if (progressBar) progressBar.style.width = percent + '%';
-            if (progressText) progressText.innerText = percent + '% concluído (' + completed + '/' + total + ' cursos)';
-            updatePointsDisplay();
-            return percent;
+            document.getElementById('globalProgress').style.width = percent + '%';
+            document.getElementById('progressText').innerHTML = `${percent}% concluído (${completed}/${total} cursos)`;
+            document.getElementById('userPointsStat').innerText = currentUser?.points || 0;
+            document.getElementById('completedCountStat').innerText = completed;
+            document.getElementById('adminTotalUsers').innerText = users.length;
+            document.getElementById('adminTotalPoints').innerText = users.reduce((s, u) => s + (u.points || 0), 0);
+            updateBadges();
         }
 
-        function loadFeaturedCourses() {
-            const featured = allCourses.slice(0, 6);
-            const container = document.getElementById('featuredCourses');
-            if (!container) return;
-            container.innerHTML = '';
-            featured.forEach(course => {
-                const isCompleted = completedCourses.includes(course.id);
-                const hasQuizPoints = quizPoints[course.id] || 0;
-                container.innerHTML += `
-                    <div class="course-card" onclick="openCourse(${course.id})">
-                        <div class="course-image">${course.icon}<div class="quiz-badge"><i class="fas fa-question-circle"></i> Quiz +${course.points} pts</div></div>
-                        <div class="course-info">
-                            <h3>${course.title}</h3>
-                            <p>${course.content.substring(0, 85)}...</p>
-                            <div class="course-meta">
-                                <span class="course-badge">${course.category}</span>
-                                <span class="course-hours">${course.hours}</span>
-                            </div>
-                            ${hasQuizPoints > 0 ? `<div class="quiz-points"><i class="fas fa-check-circle"></i> Quiz concluído: +${hasQuizPoints} pts</div>` : ''}
-                            ${isCompleted ? '<div class="course-status status-completed"><i class="fas fa-check-circle"></i> Concluído</div>' : '<div class="course-status status-pending"><i class="fas fa-clock"></i> Em andamento</div>'}
-                        </div>
-                    </div>
-                `;
-            });
-        }
+        function saveUser() { const idx = users.findIndex(u => u.id === currentUser.id); if (idx !== -1) users[idx] = currentUser; localStorage.setItem('learn_users', JSON.stringify(users)); localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); }
 
-        function loadNextSteps() {
-            const pending = allCourses.filter(c => !completedCourses.includes(c.id)).slice(0, 6);
-            const container = document.getElementById('nextSteps');
-            if (!container) return;
-            container.innerHTML = '';
-            if (pending.length === 0) {
-                container.innerHTML = '<div style="background: linear-gradient(135deg, #10b98120, #05966920); border-radius: 24px; padding: 48px; text-align: center;"><i class="fas fa-trophy" style="font-size: 48px; color: #10b981;"></i><h3 style="margin-top: 16px;">Parabéns!</h3><p>Você concluiu todos os cursos disponíveis!</p></div>';
-                return;
+        function rateCourse(courseId, rating) { if (!currentUser.ratings) currentUser.ratings = {}; currentUser.ratings[courseId] = rating; saveUser(); loadCourses(); addNotification(`⭐ Você avaliou o curso com ${rating} estrelas!`); }
+
+        function renderStars(courseId) { const rating = currentUser?.ratings?.[courseId] || 0; let stars = ''; for (let i = 1; i <= 5; i++) stars += `<span class="star ${i <= rating ? 'active' : ''}" onclick="event.stopPropagation(); rateCourse(${courseId}, ${i})">★</span>`; return stars; }
+
+        function loadCourses() {
+            const coursesArray = Object.values(coursesData);
+            const featured = document.getElementById('featuredCourses');
+            if (featured) featured.innerHTML = coursesArray.slice(0, 3).map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}<div class="quiz-badge">+${c.points} pts</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div><div class="rating-stars">${renderStars(c.id)}</div>${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed">✅ Concluído</div>' : ''}</div></div>`).join('');
+            const allC = document.getElementById('allCourses');
+            if (allC) allC.innerHTML = coursesArray.map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}</div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div>${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed">✅ Concluído</div>' : ''}</div></div>`).join('');
+            const pending = coursesArray.filter(c => !currentUser?.completedCourses?.includes(c.id)).slice(0, 3);
+            const next = document.getElementById('nextSteps');
+            if (next) next.innerHTML = pending.length ? pending.map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}<div class="quiz-badge">Iniciar</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div></div></div>`).join('') : '<div style="text-align:center; padding:40px;">🎉 Todos os cursos concluídos!</div>';
+            const certs = document.getElementById('certificatesList');
+            if (certs) {
+                const completed = currentUser?.completedCourses || [];
+                certs.innerHTML = completed.length ? `<div class="courses-grid">${completed.map(id => { const c = coursesData[id]; return c ? `<div class="course-card"><div class="course-image">${c.icon}</div><div class="course-info"><h3>${c.title}</h3><p>Certificado - ${c.hours}</p><button class="btn-sm" onclick="showCertificatePreview(${c.id})">📄 Ver Certificado</button></div></div>` : ''; }).join('')}</div>` : '<div style="text-align:center; padding:40px;">📜 Nenhum certificado ainda.</div>';
             }
-            pending.forEach(course => {
-                const hasQuizPoints = quizPoints[course.id] || 0;
-                container.innerHTML += `
-                    <div class="course-card" onclick="openCourse(${course.id})">
-                        <div class="course-image">${course.icon}<div class="quiz-badge"><i class="fas fa-star"></i> +${course.points} pts</div></div>
-                        <div class="course-info">
-                            <h3>${course.title}</h3>
-                            <p>${course.content.substring(0, 85)}...</p>
-                            <div class="course-meta">
-                                <span class="course-badge">${course.category}</span>
-                                <span class="course-hours">${course.hours}</span>
-                            </div>
-                            ${hasQuizPoints > 0 ? `<div class="quiz-points"><i class="fas fa-check-circle"></i> Quiz: +${hasQuizPoints} pts</div>` : '<div class="quiz-points"><i class="fas fa-clock"></i> Quiz disponível</div>'}
-                        </div>
-                    </div>
-                `;
-            });
+            const adminList = document.getElementById('adminUsersList');
+            if (adminList && currentUser?.role === 'admin') adminList.innerHTML = users.map(u => `<div style="background:var(--card-hover); border-radius:16px; padding:12px; margin-bottom:8px;"><strong>${u.name}</strong> ${u.role === 'admin' ? '<span style="background:#D82A28; color:white; padding:2px 8px; border-radius:12px; font-size:10px;">Admin</span>' : ''}<br><small>${u.department || '-'} | ${u.completedCourses?.length || 0} cursos | ${u.points || 0} pts</small></div>`).join('');
         }
 
-        function loadAllCourses() {
-            const container = document.getElementById('allCourses');
+        function openCourse(courseId) {
+            currentOpenCourse = courseId;
+            const course = coursesData[courseId];
+            if (!course) return;
+            if (!currentUser.courseProgress) currentUser.courseProgress = {};
+            if (!currentUser.courseProgress[courseId]) currentUser.courseProgress[courseId] = course.lessons.map(l => ({ id: l.id, completed: false }));
+            const progress = currentUser.courseProgress[courseId];
+            const completedCount = progress.filter(p => p.completed).length;
+            const percent = (completedCount / course.lessons.length) * 100;
+            const quizSubmitted = currentUser.quizSubmitted?.[courseId] || false;
+            let lessonsHtml = '<div class="lessons-grid">';
+            course.lessons.forEach(l => { const isComp = progress.find(p => p.id === l.id)?.completed || false; lessonsHtml += `<div class="lesson-card ${isComp ? 'completed' : ''}" onclick="openLesson(${courseId}, ${l.id})"><div class="lesson-number">Aula ${l.id}</div><h3>${l.title}</h3><span class="lesson-badge">📖 ${l.id}/${course.lessons.length}</span>${isComp ? '<span style="color:#10b981; margin-left:8px;">✅</span>' : ''}</div>`; });
+            lessonsHtml += '</div>';
+            let quizHtml = '';
+            if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:#f8fafc; border-radius:20px; padding:20px; margin-top:20px;"><h3 style="color:#D82A28;">📝 Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})">✅ Finalizar Quiz</button></div>`;
+            else if (quizSubmitted) quizHtml = `<div style="background:#ecfdf5; border-radius:20px; padding:20px; text-align:center;"><i class="fas fa-certificate" style="font-size:48px; color:#10b981;"></i><h3>Curso concluído!</h3><button class="complete-btn" onclick="showCertificatePreview(${courseId})">📄 Ver Certificado</button></div>`;
+            document.getElementById('modalContent').innerHTML = `<div style="text-align:center;"><h2 style="color:#D82A28;">${course.icon} ${course.title}</h2><p>${course.lessons.length} aulas - ${course.hours}</p><div class="progress-container"><div class="progress-fill" style="width:${percent}%;"></div></div><p>${completedCount}/${course.lessons.length} aulas</p></div>${lessonsHtml}${quizHtml}`;
+            document.getElementById('courseModal').style.display = 'flex';
+            if (completedCount === course.lessons.length && !quizSubmitted) loadQuiz(courseId);
+        }
+
+        function loadQuiz(courseId) {
+            const course = coursesData[courseId];
+            const container = document.getElementById('quizQuestions');
             if (!container) return;
+            currentQuizAnswers = JSON.parse(localStorage.getItem(`quiz_${currentUser.id}_${courseId}`)) || {};
             container.innerHTML = '';
-            allCourses.forEach(course => {
-                const isCompleted = completedCourses.includes(course.id);
-                const hasQuizPoints = quizPoints[course.id] || 0;
-                container.innerHTML += `
-                    <div class="course-card" onclick="openCourse(${course.id})">
-                        <div class="course-image">${course.icon}<div class="quiz-badge"><i class="fas fa-question-circle"></i> Quiz</div></div>
-                        <div class="course-info">
-                            <h3>${course.title}</h3>
-                            <p>${course.content.substring(0, 85)}...</p>
-                            <div class="course-meta">
-                                <span class="course-badge">${course.category}</span>
-                                <span class="course-hours">${course.hours}</span>
-                            </div>
-                            ${hasQuizPoints > 0 ? `<div class="quiz-points"><i class="fas fa-check-circle"></i> +${hasQuizPoints} pts</div>` : ''}
-                            ${isCompleted ? '<div class="course-status status-completed"><i class="fas fa-check-circle"></i> Concluído</div>' : '<div class="course-status status-pending"><i class="fas fa-clock"></i> Pendente</div>'}
-                        </div>
-                    </div>
-                `;
-            });
+            course.quiz.forEach((q, idx) => { container.innerHTML += `<div class="quiz-question"><p><strong>${idx+1}. ${q.q}</strong></p>${q.options.map((opt, optIdx) => `<div class="quiz-option ${currentQuizAnswers[idx] === optIdx ? 'selected' : ''}" onclick="selectQuizAnswer(${courseId}, ${idx}, ${optIdx})">${String.fromCharCode(65+optIdx)}. ${opt}</div>`).join('')}</div>`; });
         }
 
-        function selectAnswer(courseId, qIdx, optIdx) {
-            if (quizPoints[courseId]) return;
-            
-            if (!currentCourseSelections[courseId]) {
-                currentCourseSelections[courseId] = {};
-            }
-            currentCourseSelections[courseId][qIdx] = optIdx;
-            
-            openCourse(courseId);
-        }
+        function selectQuizAnswer(courseId, qIdx, optIdx) { currentQuizAnswers[qIdx] = optIdx; localStorage.setItem(`quiz_${currentUser.id}_${courseId}`, JSON.stringify(currentQuizAnswers)); loadQuiz(courseId); }
 
         function submitQuiz(courseId) {
-            const course = allCourses.find(c => c.id === courseId);
-            if (!course) return;
-            
-            if (quizPoints[courseId]) {
-                alert('Você já completou este quiz!');
-                return;
-            }
-            
-            const selections = currentCourseSelections[courseId] || {};
+            const course = coursesData[courseId];
             let score = 0;
-            
-            course.quiz.forEach((q, idx) => {
-                if (selections[idx] !== undefined && selections[idx] === q.correct) {
-                    score++;
-                }
-            });
-            
-            const unanswered = course.quiz.length - Object.keys(selections).length;
-            if (unanswered > 0) {
-                alert(`Você deixou ${unanswered} pergunta(s) sem responder. Responda todas as 4 perguntas para finalizar!`);
-                return;
-            }
-            
-            const percentage = (score / course.quiz.length) * 100;
-            
-            if (score >= 3) {
-                const earnedPoints = course.points;
-                quizPoints[courseId] = earnedPoints;
-                userPoints += earnedPoints;
-                localStorage.setItem('quizPoints_learn', JSON.stringify(quizPoints));
-                localStorage.setItem('userPoints_learn', JSON.stringify(userPoints));
-                updateProgress();
-                updatePointsDisplay();
-                alert(`🎉 PARABÉNS! Você acertou ${score}/4 perguntas (${Math.round(percentage)}%)!\n🏆 Ganhou ${earnedPoints} pontos!`);
+            course.quiz.forEach((q, idx) => { if (currentQuizAnswers[idx] === q.correct) score++; });
+            if (Object.keys(currentQuizAnswers).length < course.quiz.length) { alert(`Responda todas as perguntas!`); return; }
+            if (score >= 7) {
+                if (!currentUser.quizSubmitted) currentUser.quizSubmitted = {};
+                currentUser.quizSubmitted[courseId] = true;
+                if (!currentUser.completedCourses.includes(courseId)) { currentUser.completedCourses.push(courseId); currentUser.points = (currentUser.points || 0) + course.points; }
+                saveUser(); updateStats(); loadCourses(); addNotification(`🎉 Curso "${course.title}" concluído! +${course.points} pontos`);
+                alert(`🎉 PARABÉNS! ${score}/${course.quiz.length} acertos! +${course.points} pontos!`);
                 openCourse(courseId);
-            } else {
-                alert(`❌ Você acertou apenas ${score}/4 perguntas (${Math.round(percentage)}%).\n\nPara ser aprovado você precisa acertar pelo menos 3 perguntas (75%).\n\nTente novamente!`);
-                delete currentCourseSelections[courseId];
+            } else alert(`❌ ${score}/${course.quiz.length} acertos. Precisa de pelo menos 7!`);
+        }
+
+        function openLesson(courseId, lessonId) {
+            const course = coursesData[courseId];
+            const lesson = course.lessons.find(l => l.id === lessonId);
+            const isComp = currentUser.courseProgress[courseId]?.find(p => p.id === lessonId)?.completed || false;
+            document.getElementById('lessonModalContent').innerHTML = `<div class="lesson-content">${lesson.content}${!isComp ? `<button class="complete-btn" onclick="completeLesson(${courseId}, ${lessonId})" style="margin-top:20px;">✅ Marcar como Concluída</button>` : '<div style="background:#ecfdf5; padding:15px; border-radius:12px; text-align:center;">✅ Aula já concluída!</div>'}</div>`;
+            document.getElementById('lessonModal').style.display = 'flex';
+        }
+
+        function completeLesson(courseId, lessonId) {
+            const idx = currentUser.courseProgress[courseId].findIndex(p => p.id === lessonId);
+            if (idx !== -1 && !currentUser.courseProgress[courseId][idx].completed) {
+                currentUser.courseProgress[courseId][idx].completed = true;
+                saveUser(); updateStats(); addNotification(`📖 Aula ${lessonId} do curso ${coursesData[courseId].title} concluída!`);
+                alert(`Aula ${lessonId} concluída! Continue assim!`);
+                closeLessonModal();
                 openCourse(courseId);
             }
         }
 
         function showCertificatePreview(courseId) {
-            const course = allCourses.find(c => c.id === courseId);
-            if (!course) return;
-            
-            const userName = currentUser?.name || 'Aluno';
-            const date = new Date().toLocaleDateString('pt-BR');
-            const certNumber = `LEARN-${courseId}-${Date.now()}`;
-            const quizPointsValue = quizPoints[courseId] || 0;
-            
-            currentCertificateHtml = `
-                <div class="certificate-preview">
-                    <div class="cert-border">
-                        <div class="logo-text">LEARN <span>|</span> Plataforma EAD</div>
-                        <div class="cert-title">CERTIFICADO DE CONCLUSÃO</div>
-                        <div class="cert-subtitle">Plataforma de Desenvolvimento Profissional</div>
-                        
-                        <div class="certifies">Certificamos que</div>
-                        <div class="student-name">${userName}</div>
-                        <div class="certifies">concluiu com aproveitamento o curso</div>
-                        <div class="course-name">${course.title}</div>
-                        <div class="details">Carga horária: ${course.hours} | Data: ${date}</div>
-                        <div class="details">Pontuação no Quiz: ${quizPointsValue} pontos</div>
-                        
-                        <div class="signatures">
-                            <div class="signature">
-                                <div class="signature-line"></div>
-                                <div>Luiz Carlos Correa Junior</div>
-                                <div style="font-size: 10px; color: #666;">Gerente do Projeto LEARN</div>
-                            </div>
-                            <div class="signature">
-                                <div class="signature-line"></div>
-                                <div>[Nome do Diretor]</div>
-                                <div style="font-size: 10px; color: #666;">Diretoria LEARN</div>
-                            </div>
-                        </div>
-                        
-                        <div class="cert-number">Certificado nº: ${certNumber}</div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('certPreviewContent').innerHTML = currentCertificateHtml;
+            const course = coursesData[courseId];
+            document.getElementById('certPreviewContent').innerHTML = `<div class="certificate-preview"><div class="cert-border"><div class="logo-text">LEARN | Plataforma EAD</div><div class="cert-title">CERTIFICADO DE CONCLUSÃO</div><div class="certifies">Certificamos que</div><div class="student-name">${currentUser.name}</div><div class="certifies">concluiu o curso</div><div class="course-name">${course.title}</div><div class="details">Carga horária: ${course.hours} | Data: ${new Date().toLocaleDateString()}</div><div class="signatures"><div class="signature"><div class="signature-line"></div><div>Luiz Carlos</div><div style="font-size:10px;">Gerente LEARN</div></div><div class="signature"><div class="signature-line"></div><div>[Diretoria]</div><div style="font-size:10px;">Diretoria LEARN</div></div></div><div class="cert-number">Certificado nº: LEARN-${courseId}-${Date.now()}</div></div></div>`;
             document.getElementById('certPreviewModal').style.display = 'flex';
         }
 
-        async function generatePdfFromPreview() {
-            const element = document.querySelector('#certPreviewContent .certificate-preview');
-            if (!element) {
-                alert('Erro ao gerar PDF. Tente novamente.');
-                return;
-            }
-            
-            try {
-                const opt = {
-                    margin: [0.5, 0.5, 0.5, 0.5],
-                    filename: `Certificado_LEARN.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, letterRendering: true, useCORS: true, logging: false },
-                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-                };
-                await html2pdf().set(opt).from(element).save();
-            } catch (error) {
-                console.error('Erro ao gerar PDF:', error);
-                alert('Erro ao gerar PDF. Tente novamente.');
-            }
-        }
+        async function generatePdfFromPreview() { const el = document.querySelector('#certPreviewContent .certificate-preview'); if (el) { await html2pdf().set({ margin: 0.5, filename: 'Certificado_LEARN.pdf' }).from(el).save(); alert('PDF gerado!'); } }
 
-        function closeCertPreview() {
-            document.getElementById('certPreviewModal').style.display = 'none';
-            document.getElementById('certPreviewContent').innerHTML = '';
-        }
+        function showRanking() { const sorted = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)); document.getElementById('rankingList').innerHTML = sorted.map((u, i) => `<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border-color);"><span><strong>${i+1}º</strong> ${u.name}</span><span><strong>${u.points || 0}</strong> pts</span><span>${getLevel(u.points).name}</span></div>`).join(''); document.getElementById('rankingModal').style.display = 'flex'; }
+        function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; }
 
-        function openCourse(courseId) {
-            const course = allCourses.find(c => c.id === courseId);
-            if (!course) return;
-            
-            const isCompleted = completedCourses.includes(courseId);
-            const hasQuizPoints = quizPoints[courseId];
-            const selections = currentCourseSelections[courseId] || {};
-            
-            const modal = document.getElementById('courseModal');
-            const modalContent = document.getElementById('modalContent');
-            
-            let quizHtml = '<h3><i class="fas fa-question-circle"></i> Quiz Rápido (4 perguntas - mínimo 3 acertos para aprovação)</h3>';
-            
-            course.quiz.forEach((q, idx) => {
-                const selectedOpt = selections[idx];
-                quizHtml += `
-                    <div class="quiz-question">
-                        <p><strong>${idx + 1}. ${q.q}</strong></p>
-                `;
-                q.options.forEach((opt, optIdx) => {
-                    let extraClass = '';
-                    let isSelected = (selectedOpt === optIdx);
-                    if (isSelected) extraClass = ' selected';
-                    
-                    quizHtml += `
-                        <div class="quiz-option${extraClass}" onclick="selectAnswer(${course.id}, ${idx}, ${optIdx})">
-                            ${String.fromCharCode(65+optIdx)}. ${opt}
-                        </div>
-                    `;
-                });
-                if (selectedOpt !== undefined) {
-                    const isCorrect = (selectedOpt === q.correct);
-                    if (isCorrect) {
-                        quizHtml += `<p style="color: #10b981; font-size: 12px; margin-top: 8px;"><i class="fas fa-check-circle"></i> Resposta correta!</p>`;
-                    } else {
-                        const correctLetter = String.fromCharCode(65 + q.correct);
-                        const correctText = q.options[q.correct];
-                        quizHtml += `<p style="color: #ef4444; font-size: 12px; margin-top: 8px;"><i class="fas fa-times-circle"></i> Resposta incorreta. A correta é: ${correctLetter}. ${correctText}</p>`;
-                    }
-                }
-                quizHtml += `</div>`;
-            });
-            
-            const allAnswered = Object.keys(selections).length === course.quiz.length;
-            const currentScore = Object.keys(selections).length;
-            
-            if (hasQuizPoints) {
-                quizHtml += `<div style="background: #ecfdf5; border-radius: 16px; padding: 16px; text-align: center; margin-top: 16px;">
-                    <i class="fas fa-trophy" style="color: #10b981; font-size: 24px;"></i>
-                    <p>✅ Você já completou este quiz e ganhou ${course.points} pontos!</p>
-                </div>`;
-            } else if (allAnswered) {
-                let tempScore = 0;
-                course.quiz.forEach((q, idx) => {
-                    if (selections[idx] === q.correct) tempScore++;
-                });
-                const tempPercent = Math.round((tempScore / course.quiz.length) * 100);
-                const isApproved = tempScore >= 3;
-                quizHtml += `<div style="background: #f8fafc; border-radius: 16px; padding: 16px; text-align: center; margin-top: 16px;">
-                    <p><strong>✅ Você respondeu todas as perguntas!</strong></p>
-                    <p>Pontuação atual: ${tempScore}/4 (${tempPercent}%)</p>
-                    ${isApproved ? '<p style="color: #10b981;">🎉 Você atingiu a nota mínima de 75%! Finalize para ganhar os pontos.</p>' : '<p style="color: #ef4444;">⚠️ Você precisa de pelo menos 3 acertos (75%) para ser aprovado. Reveja suas respostas!</p>'}
-                    <button class="complete-btn" onclick="submitQuiz(${course.id})" style="margin-top: 12px;"><i class="fas fa-check"></i> Finalizar Quiz e Ganhar ${course.points} Pontos</button>
-                </div>`;
-            } else {
-                quizHtml += `<div style="background: #fef3c7; border-radius: 16px; padding: 16px; text-align: center; margin-top: 16px;">
-                    <p><i class="fas fa-info-circle"></i> Respondidas: ${currentScore}/${course.quiz.length}</p>
-                    <p>Responda todas as 4 perguntas para finalizar o quiz!</p>
-                </div>`;
-            }
-            
-            let contentHtml = `
-                <h2 style="color: #1a2c3e; font-size: 24px;">${course.icon} ${course.title}</h2>
-                <div class="course-meta" style="margin: 16px 0;">
-                    <span class="course-badge">${course.category}</span>
-                    <span class="course-hours">${course.hours}</span>
-                    ${hasQuizPoints ? `<span class="course-badge" style="background:#10b98120; color:#10b981;"><i class="fas fa-check"></i> Quiz concluído +${course.points} pts</span>` : `<span class="course-badge" style="background:#D82A2820; color:#D82A28;"><i class="fas fa-star"></i> Quiz disponível +${course.points} pts</span>`}
-                </div>
-                <div class="lesson-content">
-                    <h3><i class="fas fa-book-open"></i> Conteúdo da Matéria</h3>
-                    <p>${course.content}</p>
-                </div>
-                <div class="example-box">
-                    <h3><i class="fas fa-lightbulb"></i> Exemplo Rápido</h3>
-                    <p>${course.example}</p>
-                </div>
-                <div class="lesson-content">
-                    ${quizHtml}
-                </div>
-            `;
-            
-            if (!isCompleted && hasQuizPoints) {
-                contentHtml += `
-                    <div style="background: #ecfdf5; text-align: center; padding: 16px; border-radius: 16px; margin-top: 16px;">
-                        <i class="fas fa-check-circle" style="color: #10b981;"></i>
-                        <p>Você já completou o quiz! Marque o curso como concluído para gerar seu certificado.</p>
-                        <button class="complete-btn" onclick="completeCourse(${course.id})" style="margin-top: 12px;">📄 Gerar Certificado</button>
-                    </div>
-                `;
-            } else if (!isCompleted && !hasQuizPoints) {
-                contentHtml += `
-                    <div style="background: #fef3c7; text-align: center; padding: 16px; border-radius: 16px; margin-top: 16px;">
-                        <i class="fas fa-lock" style="color: #f59e0b;"></i>
-                        <p>Complete o quiz acima para desbloquear o certificado!</p>
-                    </div>
-                `;
-            } else if (isCompleted) {
-                contentHtml += `
-                    <div style="background: #ecfdf5; text-align: center; padding: 16px; border-radius: 16px; margin-top: 16px;">
-                        <i class="fas fa-certificate" style="color: #10b981; font-size: 24px;"></i>
-                        <p><strong>Curso concluído!</strong> Seu certificado está disponível.</p>
-                        <button class="complete-btn" onclick="showCertificatePreview(${course.id})" style="margin-top: 12px;">📄 Visualizar e Baixar Certificado PDF</button>
-                    </div>
-                `;
-            }
-            
-            modalContent.innerHTML = contentHtml;
-            modal.style.display = 'flex';
-        }
+        function showProfile() { document.getElementById('profileModalContent').innerHTML = `<h2 style="color:#D82A28;">👤 Meu Perfil</h2><div><label>Nome</label><input type="text" id="profileName" value="${currentUser.name}" style="width:100%; padding:12px; margin:10px 0; border-radius:12px;"><label>E-mail</label><input type="email" id="profileEmail" value="${currentUser.email || ''}" style="width:100%; padding:12px; margin:10px 0; border-radius:12px;"><label>Departamento</label><select id="profileDept" style="width:100%; padding:12px; margin:10px 0; border-radius:12px;"><option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option></select><label>Nova Senha</label><input type="password" id="profilePassword" placeholder="Deixe em branco" style="width:100%; padding:12px; margin:10px 0; border-radius:12px;"><button class="complete-btn" onclick="saveProfile()" style="width:100%;">Salvar</button><button class="logout-btn" onclick="exportUserData()" style="width:100%; margin-top:10px;">📥 Exportar Meus Dados</button></div>`; document.getElementById('profileModal').style.display = 'flex'; }
+        function saveProfile() { const newName = document.getElementById('profileName').value; const newEmail = document.getElementById('profileEmail').value; const newPass = document.getElementById('profilePassword').value; if (newName) currentUser.name = newName; if (newEmail) currentUser.email = newEmail; if (newPass) currentUser.password = newPass; saveUser(); document.getElementById('userName').innerText = currentUser.name; document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase(); addNotification('Perfil atualizado!'); closeProfileModal(); }
+        function exportUserData() { const data = { user: currentUser, courses: coursesData }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_backup_${currentUser.name}.json`; link.click(); addNotification('Backup exportado!'); }
+        function exportBackup() { const data = { users, courses: coursesData, forum: forumPosts }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_full_backup.json`; link.click(); addNotification('Backup completo!'); }
+        function exportUsersCSV() { let csv = "Nome,Email,Departamento,Role,Cursos,Pontos\n"; users.forEach(u => { csv += `${u.name},${u.email || ''},${u.department || ''},${u.role},${u.completedCourses?.length || 0},${u.points || 0}\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `usuarios_learn.csv`; link.click(); addNotification('CSV exportado!'); }
 
-        function completeCourse(courseId) {
-            if (!completedCourses.includes(courseId)) {
-                if (!quizPoints[courseId]) {
-                    alert('Complete o quiz primeiro para obter o certificado!');
-                    return;
-                }
-                completedCourses.push(courseId);
-                localStorage.setItem('completedCourses_learn', JSON.stringify(completedCourses));
-                updateProgress();
-                loadFeaturedCourses();
-                loadNextSteps();
-                loadAllCourses();
-                closeModal();
-                alert(`🎉 PARABÉNS! Você concluiu o curso "${allCourses.find(c => c.id === courseId).title}"!\n\nSeu certificado já está disponível na aba "Certificados".`);
-            }
-        }
+        function loadForum() { const container = document.getElementById('forumList'); container.innerHTML = forumPosts.length ? forumPosts.map(p => `<div class="forum-post"><h3>${p.title}</h3><p>${p.content}</p><small>👤 ${p.author} | ${p.date}</small></div>`).join('') : '<div style="text-align:center; padding:40px;">💬 Nenhuma pergunta ainda.</div>'; }
+        function showNewPostModal() { document.getElementById('newPostModal').style.display = 'flex'; }
+        function closeNewPostModal() { document.getElementById('newPostModal').style.display = 'none'; }
+        function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); localStorage.setItem('learn_forum', JSON.stringify(forumPosts)); closeNewPostModal(); loadForum(); addNotification(`Nova pergunta: "${title}"`); } else alert('Preencha título e conteúdo'); }
 
-        function loadCertificates() {
-            const container = document.getElementById('certificatesList');
-            if (!container) return;
-            if (completedCourses.length === 0) {
-                container.innerHTML = '<div style="background: #f8fafc; border-radius: 24px; padding: 48px; text-align: center;"><i class="fas fa-certificate" style="font-size: 48px; color: #94a3b8;"></i><h3 style="margin-top: 16px;">Nenhum certificado ainda</h3><p>Conclua cursos para gerar seus certificados!</p></div>';
-                return;
-            }
-            container.innerHTML = '<div class="courses-grid">';
-            completedCourses.forEach(id => {
-                const course = allCourses.find(c => c.id === id);
-                if (course) {
-                    container.innerHTML += `
-                        <div class="course-card">
-                            <div class="course-image">${course.icon}</div>
-                            <div class="course-info">
-                                <h3>${course.title}</h3>
-                                <p>Certificado de conclusão - ${course.hours}</p>
-                                <div class="course-meta">
-                                    <span class="course-badge">${course.category}</span>
-                                    <span class="course-badge">Quiz: +${quizPoints[id] || 0} pts</span>
-                                </div>
-                                <button class="logout-btn" style="margin-top: 16px; background: #10b981; color: white; border: none; padding: 8px 20px; cursor: pointer;" onclick="showCertificatePreview(${course.id})">📄 Visualizar e Baixar PDF</button>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            container.innerHTML += '</div>';
-        }
+        function showSection(section) { document.querySelectorAll('#homeSection, #coursesSection, #certificatesSection, #forumSection, #adminSection').forEach(s => s.style.display = 'none'); if (section === 'home') document.getElementById('homeSection').style.display = 'block'; else if (section === 'courses') document.getElementById('coursesSection').style.display = 'block'; else if (section === 'certificates') document.getElementById('certificatesSection').style.display = 'block'; else if (section === 'forum') { document.getElementById('forumSection').style.display = 'block'; loadForum(); } else if (section === 'admin' && currentUser?.role === 'admin') document.getElementById('adminSection').style.display = 'block'; }
 
-        function closeModal() {
-            document.getElementById('courseModal').style.display = 'none';
-        }
+        function showRegister() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('registerScreen').style.display = 'flex'; }
+        function showLogin() { document.getElementById('registerScreen').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
 
-        function showSection(section) {
-            document.getElementById('homeSection').style.display = 'none';
-            document.getElementById('coursesSection').style.display = 'none';
-            document.getElementById('certificatesSection').style.display = 'none';
-            
-            if (section === 'home') {
-                document.getElementById('homeSection').style.display = 'block';
-                loadFeaturedCourses();
-                loadNextSteps();
-            } else if (section === 'courses') {
-                document.getElementById('coursesSection').style.display = 'block';
-                loadAllCourses();
-            } else if (section === 'certificates') {
-                document.getElementById('certificatesSection').style.display = 'block';
-                loadCertificates();
-            }
-        }
+        function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, activityLog: [] }); localStorage.setItem('learn_users', JSON.stringify(users)); alert('Conta criada! Faça login.'); showLogin(); } else alert('Preencha todos os campos'); }
 
-        function doLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (username && password) {
-                currentUser = { name: username, email: username + '@learn.com' };
-                localStorage.setItem('currentUser_learn', JSON.stringify(currentUser));
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'block';
-                document.getElementById('welcomeName').innerText = username;
-                document.getElementById('userName').innerText = username;
-                document.getElementById('userAvatar').innerText = username.charAt(0).toUpperCase();
-                updateProgress();
-                loadFeaturedCourses();
-                loadNextSteps();
-                showSection('home');
-            } else {
-                alert('Por favor, insira usuário e senha');
-            }
-        }
+        function doLogin() { const username = document.getElementById('username').value; const password = document.getElementById('password').value; const user = users.find(u => u.name === username && u.password === password); if (user) { currentUser = user; localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; document.getElementById('welcomeName').innerText = username; document.getElementById('userName').innerText = username; document.getElementById('userAvatar').innerText = username.charAt(0).toUpperCase(); document.getElementById('userRole').innerText = user.role === 'admin' ? 'Admin' : 'Aluno'; if (user.role === 'admin') document.getElementById('adminNav').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); addNotification(`Bem-vindo de volta, ${username}! 🎉`); } else alert('Usuário ou senha inválidos'); }
 
-        function doLogout() {
-            localStorage.removeItem('currentUser_learn');
-            currentUser = null;
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('appContainer').style.display = 'none';
-            document.getElementById('username').value = 'aluno.learn';
-            document.getElementById('password').value = 'learn123';
-        }
+        function doLogout() { localStorage.removeItem('learn_currentUser'); currentUser = null; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('appContainer').style.display = 'none'; }
 
-        function init() {
-            if (currentUser) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'block';
-                document.getElementById('welcomeName').innerText = currentUser.name;
-                document.getElementById('userName').innerText = currentUser.name;
-                document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
-                updateProgress();
-                showSection('home');
-            } else {
-                document.getElementById('loginScreen').style.display = 'flex';
-                document.getElementById('appContainer').style.display = 'none';
-            }
-        }
+        function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('learn_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+        function loadTheme() { if (localStorage.getItem('learn_theme') === 'dark') document.body.classList.add('dark'); }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('courseModal');
-            if (event.target === modal) closeModal();
-            const certModal = document.getElementById('certPreviewModal');
-            if (event.target === certModal) closeCertPreview();
-        }
+        function closeModal() { document.getElementById('courseModal').style.display = 'none'; }
+        function closeLessonModal() { document.getElementById('lessonModal').style.display = 'none'; }
+        function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+        function closeCertPreview() { document.getElementById('certPreviewModal').style.display = 'none'; }
 
+        function init() { loadTheme(); currentLanguage = localStorage.getItem('learn_language') || 'pt'; updateLanguage(); document.getElementById('appLanguageSelect').value = currentLanguage; if (currentUser) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); } }
+        window.onclick = (e) => { if (e.target.classList.contains('modal')) closeModal(); };
         init();
     </script>
 </body>
