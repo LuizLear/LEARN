@@ -88,6 +88,8 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; width: 90%; max-width: 700px; max-height: 85vh; border-radius: 28px; overflow-y: auto; padding: 28px; position: relative; }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; margin: 20px 0; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px; border: none; }
         .quiz-question { background: #f8fafc; border-radius: 14px; padding: 16px; margin: 12px 0; border: 1px solid #e2e8f0; }
         .quiz-option { display: block; padding: 10px; margin: 6px 0; background: white; border-radius: 10px; cursor: pointer; border: 1px solid #e2e8f0; font-size: 13px; }
         .quiz-option.selected { background: #D82A28; color: white; }
@@ -273,7 +275,44 @@
     <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()">&times;</span><h3 style="color:#D82A28;">➕ Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><textarea id="postContent" placeholder="Sua dúvida..." style="width:100%; padding:10px; margin:8px 0; border-radius:10px;" rows="3"></textarea><button class="complete-btn" onclick="createNewPost()">Publicar</button></div></div>
 
     <script>
-        // Firebase Config
+        // ============================================
+        // FUNÇÃO PARA EXTRAIR ID DO YOUTUBE AUTOMATICAMENTE
+        // ============================================
+        function extractYoutubeId(url) {
+            if (!url) return null;
+            // Suporta vários formatos:
+            // - https://www.youtube.com/watch?v=ABCD1234
+            // - https://youtu.be/ABCD1234
+            // - https://www.youtube.com/embed/ABCD1234
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=)([^&]+)/,
+                /(?:youtu\.be\/)([^?]+)/,
+                /(?:youtube\.com\/embed\/)([^?]+)/
+            ];
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        // Função para gerar o vídeo a partir do link
+        function getVideoFromUrl(videoUrl) {
+            if (!videoUrl) return '';
+            const videoId = extractYoutubeId(videoUrl);
+            if (!videoId) return '<p style="color: red; padding: 10px; background: #fee; border-radius: 8px;">❌ Link do YouTube inválido. Verifique o link e tente novamente.</p>';
+            return `<div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/${videoId}" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>`;
+        }
+
+        // ============================================
+        // CONFIGURAÇÃO DO FIREBASE
+        // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyB8Zvuwfx55elKk8B2ZNPiWk16y1NPowIA",
             authDomain: "learn-plataforma.firebaseapp.com",
@@ -282,72 +321,237 @@
             messagingSenderId: "177385285776",
             appId: "1:177385285776:web:f41879d6282558cc7f1015"
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log("Firebase inicializado");
+        } catch(e) { console.warn("Firebase já inicializado"); }
         
         // ============================================
-        // CURSOS COM AULAS COMPLETAS
+        // CURSO 1: BUSINESS ENGLISH (10 AULAS)
+        // COLE O LINK DO YOUTUBE AQUI 👇
         // ============================================
-        
-        // CURSO 1: BUSINESS ENGLISH (10 AULAS COMPLETAS)
         const course1Lessons = [
-            { id: 1, title: "Greetings and Introductions", content: `<h2>🇬🇧 Lesson 1: Greetings and Introductions</h2><h3>Saudações e Apresentações</h3><p>No ambiente de negócios, as primeiras impressões são fundamentais. Saber cumprimentar e se apresentar corretamente em inglês é essencial.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplos de Saudações:</strong><br>• "Good morning" - Bom dia (usado até 12h)<br>• "Good afternoon" - Boa tarde (12h às 18h)<br>• "Good evening" - Boa noite (após 18h)<br>• "Hello" / "Hi" - Olá / Oi (informal)</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Vocabulário Importante:</strong><br>• Nice to meet you - Prazer em conhecê-lo<br>• How are you? - Como você está?<br>• I'm fine, thank you - Estou bem, obrigado<br>• What's your name? - Qual é o seu nome?<br>• My name is... - Meu nome é...</div><h3>Diálogo de Exemplo:</h3><p><strong>A:</strong> Good morning! My name is John. What's your name?<br><strong>B:</strong> Hello, John. I'm Maria. Nice to meet you!<br><strong>A:</strong> Nice to meet you too, Maria. How are you?<br><strong>B:</strong> I'm fine, thank you. And you?<br><strong>A:</strong> Very well, thanks!</p>` },
-            { id: 2, title: "Introducing Yourself and Others", content: `<h2>🇬🇧 Lesson 2: Introducing Yourself and Others</h2><h3>Apresentando-se e Apresentando Outras Pessoas</h3><p>Aprenda a se apresentar formalmente e a apresentar colegas em reuniões e eventos.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Apresentação Pessoal Formal:</strong><br>• "Allow me to introduce myself..."<br>• "I would like to introduce..."<br>• "This is my colleague, [name]"</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Frases Úteis:</strong><br>• I work as a [profession] - Eu trabalho como [profissão]<br>• I'm responsible for... - Sou responsável por...<br>• Let me introduce you to... - Deixe-me apresentar-lhe...<br>• Have you met [name]? - Você já conheceu [nome]?</div><h3>Diálogo de Exemplo:</h3><p><strong>Maria:</strong> Hello everyone. Allow me to introduce myself. My name is Maria Silva, and I'm the Production Manager at Lear.<br><strong>John:</strong> Nice to meet you, Maria. I'm John, from the Quality Department.<br><strong>Maria:</strong> Have you met my colleague, Carlos? He's our Logistics Coordinator.<br><strong>John:</strong> Not yet. Nice to meet you, Carlos!</p>` },
-            { id: 3, title: "Numbers, Dates and Time", content: `<h2>🇬🇧 Lesson 3: Numbers, Dates and Time</h2><h3>Números, Datas e Horas</h3><p>Números são essenciais para falar sobre quantidades, prazos e horários no ambiente corporativo.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Números (1-20):</strong><br>1-One, 2-Two, 3-Three, 4-Four, 5-Five, 6-Six, 7-Seven, 8-Eight, 9-Nine, 10-Ten,<br>11-Eleven, 12-Twelve, 13-Thirteen, 14-Fourteen, 15-Fifteen, 16-Sixteen, 17-Seventeen, 18-Eighteen, 19-Nineteen, 20-Twenty</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Datas e Horários:</strong><br>• What time is it? - Que horas são?<br>• It's 3 o'clock - São 3 horas<br>• Half past - Meia hora (ex: half past two = 2:30)<br>• Quarter to/past - Quinze minutos para/após<br>• Dates: May 10th, 2025 - 10 de maio de 2025</div><h3>Exemplo de Uso:</h3><p>"The meeting is scheduled for <strong>Wednesday, June 15th, at half past nine (9:30 AM)</strong>. We have <strong>15 people</strong> confirmed."</p>` },
-            { id: 4, title: "Emails and Messages", content: `<h2>🇬🇧 Lesson 4: Emails and Messages</h2><h3>E-mails e Mensagens Corporativas</h3><p>A comunicação escrita é fundamental no ambiente de trabalho.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Estrutura de um E-mail Profissional:</strong><br><strong>Subject:</strong> Clear and objective<br><strong>Greeting:</strong> Dear Mr./Ms. [Last Name],<br><strong>Body:</strong> Purpose of the message<br><strong>Closing:</strong> Best regards / Sincerely</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Frases para E-mails:</strong><br>• I am writing to... - Estou escrevendo para...<br>• Could you please... - Você poderia por favor...<br>• Thank you for your prompt response - Obrigado pela resposta rápida<br>• Please find attached... - Segue anexo...</div><h3>E-mail de Exemplo:</h3><p><strong>Subject:</strong> Production Meeting - Wednesday 10 AM<br><br><strong>Dear Team,</strong><br><br>I am writing to confirm the production meeting scheduled for Wednesday at 10 AM in Conference Room B.<br><br>Best regards,<br>Maria Silva</p>` },
-            { id: 5, title: "Telephone Calls", content: `<h2>🇬🇧 Lesson 5: Telephone Calls</h2><h3>Atendimento Telefônico</h3><p>Atender e fazer chamadas telefônicas em inglês pode ser desafiador. Aprenda as frases essenciais.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Frases para Atender Chamadas:</strong><br>• "Hello, this is [Name] from [Company]. How may I help you?"<br>• "Could I speak to [Name], please?"<br>• "I'm calling about..." - Estou ligando sobre...<br>• "One moment, please. I'll transfer you."<br>• "Can I take a message?" - Posso anotar um recado?</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Vocabulário Telefônico:</strong><br>• Hang on / Hold on - Aguarde<br>• Call back - Retornar a ligação<br>• Wrong number - Número errado<br>• Extension - Ramal</div><h3>Diálogo de Exemplo:</h3><p><strong>Receptionist:</strong> Good morning, Lear Corporation. This is Ana speaking. How may I help you?<br><strong>Caller:</strong> Hello, this is John Smith from AutoParts. Could I speak to Mr. Carlos, please?<br><strong>Receptionist:</strong> One moment, please. I'll transfer you... I'm sorry, his line is busy. Can I take a message?<br><strong>Caller:</strong> Yes, please. Could you ask him to call me back at 555-1234?<br><strong>Receptionist:</strong> Certainly. I'll give him the message.</p>` },
-            { id: 6, title: "Meetings and Appointments", content: `<h2>🇬🇧 Lesson 6: Meetings and Appointments</h2><h3>Reuniões e Compromissos</h3><p>Aprenda a agendar reuniões, confirmar presença e participar de encontros profissionais.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Frases para Agendar:</strong><br>• "Would you be available on [day] at [time]?"<br>• "Let's schedule a meeting for..."<br>• "I'd like to confirm our appointment."<br>• "I'm afraid I have a conflict. Can we reschedule?"</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Durante a Reunião:</strong><br>• Agenda - Pauta<br>• Minutes of the meeting - Ata da reunião<br>• Action items - Tarefas a serem realizadas<br>• I'd like to add an item to the agenda.<br>• Let's move on to the next point.</div><h3>Exemplo de Confirmação:</h3><p>"I would like to confirm our meeting scheduled for <strong>Friday, March 20th, at 2 PM</strong> in the main conference room. The agenda will include the quality report and production targets."</p>` },
-            { id: 7, title: "Small Talk in Business", content: `<h2>🇬🇧 Lesson 7: Small Talk in Business</h2><h3>Conversas Informais nos Negócios</h3><p>Small talk é uma habilidade importante para construir relacionamentos profissionais.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Tópicos Seguros para Small Talk:</strong><br>• Weather - Clima<br>• Travel - Viagens<br>• Weekend plans - Planos para o fim de semana<br>• Food and restaurants - Comida e restaurantes<br>• Hobbies - Hobbies</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Frases Comuns:</strong><br>• "How was your weekend?" - Como foi seu fim de semana?<br>• "Beautiful day, isn't it?" - Lindo dia, não é?<br>• "Have you tried the new restaurant downtown?"<br>• "What do you think about the new project?"</div><h3>Diálogo de Exemplo:</h3><p><strong>Colleague 1:</strong> Good morning! How was your weekend?<br><strong>Colleague 2:</strong> It was great! I went to the beach with my family. How about you?<br><strong>Colleague 1:</strong> I stayed home and watched some movies. Have you seen the new film?<br><strong>Colleague 2:</strong> Not yet! I heard it's really good.<br><strong>Colleague 1:</strong> Yes, I recommend it. Well, let's get ready for the meeting.</p>` },
-            { id: 8, title: "Requests and Offers", content: `<h2>🇬🇧 Lesson 8: Making Requests and Offers</h2><h3>Fazendo Pedidos e Oferecendo Ajuda</h3><p>Aprenda a fazer solicitações educadamente e a oferecer ajuda aos colegas.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Formas de Fazer Pedidos:</strong><br>• "Could you please...?" - Você poderia por favor...?<br>• "Would you mind...?" - Você se importaria de...?<br>• "I would appreciate it if you could..."</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Oferecendo Ajuda:</strong><br>• "Can I help you with that?" - Posso ajudar com isso?<br>• "Would you like me to...?" - Gostaria que eu...?<br>• "Let me know if you need anything."</div><h3>Diálogo de Exemplo:</h3><p><strong>Manager:</strong> Could you please prepare the sales report by Friday?<br><strong>Employee:</strong> Sure, I'll have it ready by Thursday afternoon.<br><strong>Manager:</strong> Thank you. Would you mind checking the budget figures as well?<br><strong>Employee:</strong> Not at all. Would you like me to create a presentation too?<br><strong>Manager:</strong> That would be great! I appreciate your help.</p>` },
-            { id: 9, title: "Giving Opinions and Suggestions", content: `<h2>🇬🇧 Lesson 9: Giving Opinions and Suggestions</h2><h3>Dando Opiniões e Sugestões</h3><p>Saber expressar opiniões e fazer sugestões de forma profissional é essencial em reuniões.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Expressando Opiniões:</strong><br>• "In my opinion..." - Na minha opinião...<br>• "I believe that..." - Eu acredito que...<br>• "From my perspective..." - Do meu ponto de vista...<br>• "I agree/disagree because..." - Concordo/discordo porque...</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Fazendo Sugestões:</strong><br>• "I suggest that we..." - Eu sugiro que nós...<br>• "What if we tried...?" - E se tentássemos...?<br>• "Perhaps we could..." - Talvez pudéssemos...<br>• "Have you considered...?" - Você considerou...?</div><h3>Exemplo em Reunião:</h3><p><strong>Team Member:</strong> In my opinion, we should focus on improving the assembly line efficiency.<br><strong>Manager:</strong> I agree. What if we tried implementing a new training program?<br><strong>Team Member:</strong> That's an excellent suggestion. Perhaps we could start with a pilot group next month.<br><strong>Manager:</strong> I believe that would work well. Let's move forward with that plan.</p>` },
-            { id: 10, title: "Closing Conversations", content: `<h2>🇬🇧 Lesson 10: Closing Conversations</h2><h3>Encerrando Conversas</h3><p>Aprenda a finalizar conversas, reuniões e e-mails de forma educada e profissional.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Frases para Encerrar Conversas:</strong><br>• "It was nice talking to you." - Foi bom conversar com você.<br>• "I should get going now." - Preciso ir agora.<br>• "Let's keep in touch." - Vamos manter contato.<br>• "Thank you for your time." - Obrigado pelo seu tempo.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Encerrando E-mails:</strong><br>• "I look forward to hearing from you."<br>• "Please let me know if you have any questions."<br>• "Thank you for your consideration."<br>• "Have a great day!"</div><h3>Exemplo de Encerramento:</h3><p>"It was a pleasure meeting with you today. Thank you for your valuable insights. I look forward to our next discussion. If you have any questions, please don't hesitate to contact me. Have a great day!"</p>` }
+            { id: 1, title: "Greetings and Introductions", 
+              videoUrl: "https://www.youtube.com/watch?v=PyLcxWNao3E",
+              content: `<h2>🇬🇧 Lesson 1: Greetings and Introductions</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=PyLcxWNao3E")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Exemplos de Saudações:</strong><br>
+                            • "Good morning" - Bom dia<br>
+                            • "Good afternoon" - Boa tarde<br>
+                            • "Good evening" - Boa noite<br>
+                            • "Hello" / "Hi" - Olá
+                        </div>
+                        <div style="background:#e6f0ff; padding:15px; border-radius:12px;">
+                            <strong>📖 Vocabulário:</strong><br>
+                            • Nice to meet you - Prazer em conhecê-lo<br>
+                            • How are you? - Como você está?<br>
+                            • My name is... - Meu nome é...
+                        </div>` },
+            { id: 2, title: "Introducing Yourself", 
+              videoUrl: "https://www.youtube.com/watch?v=0rP5tyXvh50",
+              content: `<h2>🇬🇧 Lesson 2: Introducing Yourself</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=0rP5tyXvh50")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Frases para Apresentação:</strong><br>
+                            • "Allow me to introduce myself..."<br>
+                            • "I work as a [profession]"<br>
+                            • "I'm responsible for..."
+                        </div>` },
+            { id: 3, title: "Numbers, Dates and Time", 
+              videoUrl: "https://www.youtube.com/watch?v=X6FpW29FpYU",
+              content: `<h2>🇬🇧 Lesson 3: Numbers, Dates and Time</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=X6FpW29FpYU")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Números e Datas:</strong><br>
+                            • 1-One, 2-Two, 3-Three...<br>
+                            • What time is it? - Que horas são?<br>
+                            • May 10th, 2025 - 10 de maio de 2025
+                        </div>` },
+            { id: 4, title: "Emails and Messages", 
+              videoUrl: "https://www.youtube.com/watch?v=g0n4uP9csz0",
+              content: `<h2>🇬🇧 Lesson 4: Emails and Messages</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=g0n4uP9csz0")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Estrutura de E-mail:</strong><br>
+                            • Subject, Greeting, Body, Closing<br>
+                            • "I am writing to..."<br>
+                            • "Please find attached..."
+                        </div>` },
+            { id: 5, title: "Telephone Calls", 
+              videoUrl: "https://www.youtube.com/watch?v=WImCBd8HZ3Q",
+              content: `<h2>🇬🇧 Lesson 5: Telephone Calls</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=WImCBd8HZ3Q")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Frases Telefônicas:</strong><br>
+                            • "Hello, this is [Name] from [Company]"<br>
+                            • "Could I speak to [Name]?"<br>
+                            • "Can I take a message?"
+                        </div>` },
+            { id: 6, title: "Meetings and Appointments", 
+              videoUrl: "https://www.youtube.com/watch?v=XWetBEnWagY",
+              content: `<h2>🇬🇧 Lesson 6: Meetings and Appointments</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=XWetBEnWagY")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Frases para Reuniões:</strong><br>
+                            • "Would you be available on [day]?"<br>
+                            • "Let's schedule a meeting"<br>
+                            • "I'd like to confirm our appointment"
+                        </div>` },
+            { id: 7, title: "Small Talk in Business", 
+              videoUrl: "https://www.youtube.com/watch?v=lyP7CikH3Rc",
+              content: `<h2>🇬🇧 Lesson 7: Small Talk in Business</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=lyP7CikH3Rc")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Tópicos para Small Talk:</strong><br>
+                            • Weather, Travel, Weekend plans<br>
+                            • "How was your weekend?"<br>
+                            • "Beautiful day, isn't it?"
+                        </div>` },
+            { id: 8, title: "Requests and Offers", 
+              videoUrl: "https://www.youtube.com/watch?v=QPvmHxDV68U",
+              content: `<h2>🇬🇧 Lesson 8: Requests and Offers</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=QPvmHxDV68U")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Fazendo Pedidos:</strong><br>
+                            • "Could you please...?"<br>
+                            • "Would you mind...?"<br>
+                            • "Can I help you with that?"
+                        </div>` },
+            { id: 9, title: "Giving Opinions", 
+              videoUrl: "https://www.youtube.com/watch?v=OHlFptO7FrM",
+              content: `<h2>🇬🇧 Lesson 9: Giving Opinions</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=OHlFptO7FrM")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Expressando Opiniões:</strong><br>
+                            • "In my opinion..."<br>
+                            • "I believe that..."<br>
+                            • "I agree/disagree because..."
+                        </div>` },
+            { id: 10, title: "Closing Conversations", 
+              videoUrl: "https://www.youtube.com/watch?v=Bi_JlqOZt1I",
+              content: `<h2>🇬🇧 Lesson 10: Closing Conversations</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=Bi_JlqOZt1I")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Encerrando Conversas:</strong><br>
+                            • "It was nice talking to you"<br>
+                            • "Thank you for your time"<br>
+                            • "I look forward to hearing from you"
+                        </div>` }
         ];
         
-        // CURSO 2: METODOLOGIA 5S (5 AULAS COMPLETAS)
+        // CURSO 2: METODOLOGIA 5S (5 AULAS)
         const course2Lessons = [
-            { id: 1, title: "Seiri - Senso de Utilização", content: `<h2>🧹 Seiri - Senso de Utilização</h2><h3>Descartar o que não é necessário</h3><p>O primeiro S significa separar o útil do inútil, descartando itens não utilizados.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Separar ferramentas quebradas, documentos antigos e equipamentos obsoletos.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Mais espaço disponível<br>• Menos tempo procurando itens<br>• Ambiente mais organizado</div>` },
-            { id: 2, title: "Seiton - Senso de Ordem", content: `<h2>🧹 Seiton - Senso de Ordem</h2><h3>Organizar o que foi selecionado</h3><p>Um lugar para cada coisa e cada coisa em seu lugar.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Ferramentas organizadas por frequência de uso, etiquetadas e de fácil acesso.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Redução de tempo de busca<br>• Facilidade para identificar faltas<br>• Fluxo de trabalho mais eficiente</div>` },
-            { id: 3, title: "Seiso - Senso de Limpeza", content: `<h2>🧹 Seiso - Senso de Limpeza</h2><h3>Manter o ambiente limpo</h3><p>A limpeza deve ser parte da rotina de trabalho, não uma atividade extraordinária.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Limpar equipamentos diariamente, identificar vazamentos e sujeiras.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Equipamentos mais duráveis<br>• Ambiente saudável<br>• Identificação precoce de problemas</div>` },
-            { id: 4, title: "Seiketsu - Senso de Saúde", content: `<h2>🧹 Seiketsu - Senso de Saúde</h2><h3>Padronizar e manter os 3 primeiros S</h3><p>Criar rotinas e checklists para manter a organização e limpeza.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Criar checklist diário de 5S, definir responsáveis por área.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Padronização de processos<br>• Facilidade para treinar novos funcionários<br>• Sustentabilidade das melhorias</div>` },
-            { id: 5, title: "Shitsuke - Senso de Disciplina", content: `<h2>🧹 Shitsuke - Senso de Disciplina</h2><h3>Transformar em hábito</h3><p>A disciplina é o que garante a continuidade do programa 5S.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplo:</strong><br>Auditorias regulares, reconhecimento das equipes, treinamentos contínuos.</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Benefícios:</strong><br>• Cultura organizacional forte<br>• Melhoria contínua<br>• Comprometimento das equipes</div>` }
+            { id: 1, title: "Seiri - Senso de Utilização", 
+              videoUrl: "https://www.youtube.com/watch?v=lIiUzqmpbUQ",
+              content: `<h2>🧹 Seiri - Senso de Utilização</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=lIiUzqmpbUQ")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Exemplo:</strong><br>Separar ferramentas quebradas, documentos antigos e equipamentos obsoletos.
+                        </div>` },
+            { id: 2, title: "Seiton - Senso de Ordem", 
+              videoUrl: "https://www.youtube.com/watch?v=wzYh-b5l5yA",
+              content: `<h2>🧹 Seiton - Senso de Ordem</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=wzYh-b5l5yA")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Exemplo:</strong><br>Ferramentas organizadas por frequência de uso.
+                        </div>` },
+            { id: 3, title: "Seiso - Senso de Limpeza", 
+              videoUrl: "https://www.youtube.com/watch?v=4XxZHLpP5gY",
+              content: `<h2>🧹 Seiso - Senso de Limpeza</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=4XxZHLpP5gY")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Exemplo:</strong><br>Limpar equipamentos diariamente.
+                        </div>` },
+            { id: 4, title: "Seiketsu - Senso de Saúde", 
+              videoUrl: "https://www.youtube.com/watch?v=qI2T1cJ5p2k",
+              content: `<h2>🧹 Seiketsu - Senso de Saúde</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=qI2T1cJ5p2k")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Exemplo:</strong><br>Criar checklist diário de 5S.
+                        </div>` },
+            { id: 5, title: "Shitsuke - Senso de Disciplina", 
+              videoUrl: "https://www.youtube.com/watch?v=rJRfC8vX1-U",
+              content: `<h2>🧹 Shitsuke - Senso de Disciplina</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=rJRfC8vX1-U")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Exemplo:</strong><br>Auditorias regulares e reconhecimento.
+                        </div>` }
         ];
         
-        // CURSO 3: EXCEL (6 AULAS COMPLETAS)
+        // CURSO 3: EXCEL (6 AULAS)
         const course3Lessons = [
-            { id: 1, title: "Introdução ao Excel", content: `<h2>📊 Introdução ao Excel</h2><h3>Conhecendo a interface</h3><p>O Excel é a ferramenta mais poderosa para análise de dados.</p><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Elementos da Interface:</strong><br>• Faixa de opções (Ribbon)<br>• Barra de fórmulas<br>• Planilhas e células</div><div style="background:#e6f0ff; padding:15px; border-radius:12px;"><strong>📖 Conceitos básicos:</strong><br>• Célula: interseção de linha e coluna<br>• Linhas: números (1,2,3...)<br>• Colunas: letras (A,B,C...)</div>` },
-            { id: 2, title: "Fórmulas Essenciais", content: `<h2>📊 Fórmulas Essenciais</h2><h3>SOMA, MÉDIA, CONT.SE</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Fórmulas Básicas:</strong><br>• =SOMA(A1:A10) - Soma valores<br>• =MÉDIA(B1:B10) - Calcula média<br>• =CONT.SE(C1:C10;">10") - Conta células que atendem critério</div>` },
-            { id: 3, title: "Funções Lógicas", content: `<h2>📊 Funções Lógicas</h2><h3>SE, E, OU</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Exemplos:</strong><br>• =SE(A1>10;"Aprovado";"Reprovado")<br>• =SE(E(A1>10;B1>5);"OK";"NOK")</div>` },
-            { id: 4, title: "PROCV e PROCH", content: `<h2>📊 PROCV e PROCH</h2><h3>Busca de dados</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Sintaxe PROCV:</strong><br>=PROCV(Valor procurado;Tabela;Coluna retorno;0)<br><strong>Exemplo:</strong> =PROCV(A2;D:E;2;0)</div>` },
-            { id: 5, title: "Tabelas Dinâmicas", content: `<h2>📊 Tabelas Dinâmicas</h2><h3>Análise de dados</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Como criar:</strong><br>Selecione os dados > Inserir > Tabela Dinâmica<br>Arraste campos para linhas, colunas e valores</div>` },
-            { id: 6, title: "Gráficos e Dashboards", content: `<h2>📊 Gráficos</h2><h3>Visualização de dados</h3><div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px; margin:15px 0;"><strong>📌 Tipos de Gráficos:</strong><br>• Barras - Comparação<br>• Linhas - Tendência<br>• Pizza - Proporção<br>• Dashboard: conjunto de gráficos</div>` }
+            { id: 1, title: "Introdução ao Excel", 
+              videoUrl: "https://www.youtube.com/watch?v=rHsfj77qNQA",
+              content: `<h2>📊 Introdução ao Excel</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=rHsfj77qNQA")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Elementos da Interface:</strong><br>Faixa de opções, Barra de fórmulas, Planilhas
+                        </div>` },
+            { id: 2, title: "Fórmulas Essenciais", 
+              videoUrl: "https://www.youtube.com/watch?v=fWAFq_ZbS0o",
+              content: `<h2>📊 Fórmulas Essenciais</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=fWAFq_ZbS0o")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Fórmulas:</strong><br>=SOMA(A1:A10) - Soma<br>=MÉDIA(B1:B10) - Média
+                        </div>` },
+            { id: 3, title: "Funções Lógicas", 
+              videoUrl: "https://www.youtube.com/watch?v=oP4ZqvJY4oA",
+              content: `<h2>📊 Funções Lógicas</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=oP4ZqvJY4oA")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Exemplo:</strong><br>=SE(A1>10;"Aprovado";"Reprovado")
+                        </div>` },
+            { id: 4, title: "PROCV e PROCH", 
+              videoUrl: "https://www.youtube.com/watch?v=deTDUCunfAQ",
+              content: `<h2>📊 PROCV e PROCH</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=deTDUCunfAQ")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Sintaxe PROCV:</strong><br>=PROCV(Valor;Tabela;Coluna;0)
+                        </div>` },
+            { id: 5, title: "Tabelas Dinâmicas", 
+              videoUrl: "https://www.youtube.com/watch?v=R0IY8boJwWE",
+              content: `<h2>📊 Tabelas Dinâmicas</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=R0IY8boJwWE")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Como criar:</strong><br>Selecionar dados > Inserir > Tabela Dinâmica
+                        </div>` },
+            { id: 6, title: "Gráficos e Dashboards", 
+              videoUrl: "https://www.youtube.com/watch?v=e3_1F3jO0ns",
+              content: `<h2>📊 Gráficos e Dashboards</h2>
+                        ${getVideoFromUrl("https://www.youtube.com/watch?v=e3_1F3jO0ns")}
+                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
+                            <strong>📌 Tipos de Gráficos:</strong><br>Barras, Linhas, Pizza, Dashboard
+                        </div>` }
         ];
 
         const coursesData = {
             1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, lessons: course1Lessons,
                 quiz: [
                     { q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 },
-                    { q: "Qual é a saudação formal para um e-mail comercial?", options: ["Hey", "Hi there", "Dear Sir/Madam", "What's up"], correct: 2 },
-                    { q: "Como se escreve '10 de maio de 2025' em inglês?", options: ["10 May 2025", "May 10, 2025", "Both A and B", "10 of May"], correct: 2 },
-                    { q: "O que significa 'Nice to meet you'?", options: ["Tchau", "Prazer em conhecê-lo", "Como você está?", "Bom dia"], correct: 1 },
-                    { q: "Como perguntar 'Que horas são?' em inglês?", options: ["What time is it?", "How many hours?", "What's the clock?", "Time please?"], correct: 0 },
-                    { q: "Qual frase é usada para pedir ajuda educadamente?", options: ["Do it now", "Could you please help me?", "Help me!", "You need to help"], correct: 1 },
-                    { q: "O que significa 'I look forward to hearing from you'?", options: ["Não quero resposta", "Aguardo seu retorno", "Encerro aqui", "Fiquei triste"], correct: 1 },
-                    { q: "Como se diz 'Estou ligando sobre o pedido'?", options: ["I'm calling about the order", "I call about order", "Calling order", "Order call me"], correct: 0 },
-                    { q: "Qual frase é usada para dar uma opinião?", options: ["In my opinion...", "Do it!", "Maybe not", "I don't know"], correct: 0 },
-                    { q: "Como encerrar uma conversa profissionalmente?", options: ["Bye bye", "It was nice talking to you", "Goodbye forever", "See you later"], correct: 1 }
+                    { q: "Saudação formal para e-mail?", options: ["Hey", "Hi there", "Dear Sir/Madam", "What's up"], correct: 2 },
+                    { q: "Nice to meet you significa?", options: ["Tchau", "Prazer em conhecê-lo", "Como está?", "Bom dia"], correct: 1 },
+                    { q: "What time is it? significa?", options: ["Que horas são?", "Quantas horas?", "Que horas?", "Horário?"], correct: 0 },
+                    { q: "Could you please help me? significa?", options: ["Faça agora", "Você poderia me ajudar?", "Ajude-me", "Você precisa ajudar"], correct: 1 },
+                    { q: "I look forward to hearing from you significa?", options: ["Não quero resposta", "Aguardo seu retorno", "Encerro aqui", "Fiquei triste"], correct: 1 },
+                    { q: "In my opinion significa?", options: ["Na minha opinião", "Faça isso", "Talvez não", "Não sei"], correct: 0 },
+                    { q: "It was nice talking to you significa?", options: ["Tchau", "Foi bom conversar com você", "Adeus", "Até logo"], correct: 1 },
+                    { q: "How are you? significa?", options: ["Como você está?", "Quem é você?", "Onde está?", "Por quê?"], correct: 0 },
+                    { q: "Thank you significa?", options: ["Por favor", "Obrigado", "Desculpe", "De nada"], correct: 1 }
                 ] },
             2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, lessons: course2Lessons,
                 quiz: [
                     { q: "O que significa Seiri?", options: ["Senso de Ordem", "Senso de Utilização", "Senso de Limpeza", "Senso de Disciplina"], correct: 1 },
                     { q: "Qual S significa 'Um lugar para cada coisa'?", options: ["Seiri", "Seiton", "Seiso", "Seiketsu"], correct: 1 },
                     { q: "Seiso é o senso de:", options: ["Limpeza", "Saúde", "Disciplina", "Utilização"], correct: 0 },
-                    { q: "Seiketsu está relacionado a:", options: ["Padronização", "Organização", "Limpeza", "Disciplina"], correct: 0 },
                     { q: "Shitsuke significa:", options: ["Saúde", "Disciplina", "Limpeza", "Ordem"], correct: 1 },
                     { q: "Qual o primeiro passo do 5S?", options: ["Organizar", "Limpar", "Separar", "Padronizar"], correct: 2 },
                     { q: "O 5S é uma ferramenta da:", options: ["Qualidade", "Segurança", "Produção", "RH"], correct: 0 },
                     { q: "Auditorias regulares fazem parte de qual S?", options: ["Seiketsu", "Shitsuke", "Seiso", "Seiton"], correct: 1 },
-                    { q: "Checklists são ferramentas do:", options: ["Seiketsu", "Shitsuke", "Seiri", "Seiton"], correct: 0 },
-                    { q: "O objetivo principal do 5S é:", options: ["Limpeza", "Organização", "Melhoria contínua", "Redução de custos"], correct: 2 }
+                    { q: "O objetivo principal do 5S é:", options: ["Limpeza", "Organização", "Melhoria contínua", "Redução de custos"], correct: 2 },
+                    { q: "Seiketsu está relacionado a:", options: ["Padronização", "Organização", "Limpeza", "Disciplina"], correct: 0 },
+                    { q: "O 5S surgiu em qual país?", options: ["Brasil", "EUA", "Japão", "Alemanha"], correct: 2 }
                 ] },
             3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, lessons: course3Lessons,
                 quiz: [
@@ -472,7 +676,18 @@
         function closeCertPreview() { document.getElementById('certPreviewModal').style.display = 'none'; }
         function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; }
         
-        function init() { loadTheme(); if (currentUser) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); } }
+        function init() { 
+            loadTheme(); 
+            if (currentUser) { 
+                document.getElementById('loginScreen').style.display = 'none'; 
+                document.getElementById('appContainer').style.display = 'block'; 
+                updateStats(); 
+                loadCourses(); 
+                showSection('home'); 
+                updateNotificationBadge(); 
+            } 
+        }
+        
         window.onclick = (e) => { if (e.target.classList.contains('modal')) closeModal(); };
         init();
     </script>
