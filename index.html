@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
-    <!-- Firebase SDKs -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
@@ -18,15 +17,14 @@
         body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #f0f4fc 0%, #e8edf5 100%); color: #1a2c3e; min-height: 100vh; }
         body.dark { background: #0f172a; color: #f1f5f9; }
         body.dark .card, body.dark .course-card, body.dark .stat-card, body.dark .modal-content,
-        body.dark .login-card, body.dark .quiz-area, body.dark .lesson-card { background: #1e293b; color: #f1f5f9; }
-        body.dark .course-badge, body.dark .lesson-badge { background: #334155; color: #f1f5f9; }
+        body.dark .login-card, body.dark .quiz-area, body.dark .lesson-card, body.dark .dashboard-card,
+        body.dark .course-admin-card { background: #1e293b; color: #f1f5f9; }
         
         .header { background: rgba(26, 44, 62, 0.95); backdrop-filter: blur(12px); color: white; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo { font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #fff 0%, #D82A28 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .logo small { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.6); }
         .nav { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
         .nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 500; cursor: pointer; font-size: 13px; }
-        .nav a:hover { color: #D82A28; }
+        .nav a:hover, .nav a.active { color: #D82A28; }
         .lang-select { background: rgba(255,255,255,0.15); border: none; color: white; padding: 6px 10px; border-radius: 20px; cursor: pointer; font-size: 12px; }
         .theme-toggle, .notification-btn { background: rgba(255,255,255,0.15); border: none; color: white; padding: 6px 10px; border-radius: 40px; cursor: pointer; position: relative; }
         .user-info { display: flex; align-items: center; gap: 12px; }
@@ -38,16 +36,41 @@
         .login-card input, .login-card select { width: 100%; padding: 12px; margin: 8px 0; border: 1.5px solid #e2e8f0; border-radius: 20px; font-size: 14px; }
         .login-card button { width: 100%; padding: 12px; background: linear-gradient(135deg, #1a2c3e, #D82A28); color: white; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; margin-top: 8px; }
         .app-container { display: none; }
-        .hero { background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%); color: white; padding: 50px 40px; text-align: center; position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 60%; height: 200%; background: radial-gradient(circle, rgba(216,42,40,0.15) 0%, transparent 70%); pointer-events: none; }
-        .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 12px; letter-spacing: -1px; }
+        
+        /* Admin Panel */
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
+        .admin-tab { padding: 8px 20px; border-radius: 30px; cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-color); }
+        .admin-tab.active { background: #D82A28; color: white; border-color: #D82A28; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); }
+        .lesson-item, .quiz-item { background: var(--card-hover); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border-color); }
+        .lesson-header, .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .btn-icon { background: none; border: none; cursor: pointer; font-size: 18px; padding: 5px; color: var(--text-primary); }
+        .btn-add { background: #D82A28; color: white; border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 13px; margin-top: 10px; }
+        .btn-save { background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 40px; cursor: pointer; font-weight: 600; }
+        .btn-cancel { background: #64748b; color: white; border: none; padding: 12px 24px; border-radius: 40px; cursor: pointer; margin-left: 10px; }
+        .courses-admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+        .course-admin-card { background: white; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0; }
+        .course-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .course-actions button { padding: 5px 12px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; }
+        .btn-edit { background: #f59e0b; color: white; }
+        .btn-delete { background: #ef4444; color: white; }
+        .btn-preview { background: #1a2c3e; color: white; }
+        
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .dashboard-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 4px solid #D82A28; }
+        .dashboard-card .value { font-size: 32px; font-weight: 700; color: #D82A28; }
+        
+        .hero { background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%); color: white; padding: 50px 40px; text-align: center; }
+        .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 12px; }
         .hero h1 span { background: linear-gradient(135deg, #D82A28, #ff6b6b); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .stats-row { display: flex; justify-content: center; gap: 20px; margin-top: 25px; flex-wrap: wrap; }
         .stat-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 12px 20px; border-radius: 20px; text-align: center; }
         .stat-number { font-size: 28px; font-weight: 700; color: #D82A28; }
-        .progress-dashboard { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border-radius: 20px; padding: 20px; margin-top: 25px; max-width: 450px; margin-left: auto; margin-right: auto; border: 1px solid rgba(255,255,255,0.1); }
+        .progress-dashboard { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border-radius: 20px; padding: 20px; margin-top: 25px; max-width: 450px; margin-left: auto; margin-right: auto; }
         .progress-bar-container { background: rgba(255,255,255,0.2); border-radius: 100px; height: 6px; overflow: hidden; margin: 10px 0; }
-        .progress-bar-fill { background: linear-gradient(90deg, #D82A28, #ff6b6b); height: 100%; width: 0%; transition: width 0.6s ease; border-radius: 100px; }
+        .progress-bar-fill { background: linear-gradient(90deg, #D82A28, #ff6b6b); height: 100%; width: 0%; transition: width 0.6s ease; }
         .section { padding: 40px; max-width: 1400px; margin: 0 auto; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
         .section-header h2 { font-size: 24px; font-weight: 600; border-left: 4px solid #D82A28; padding-left: 15px; color: #1a2c3e; }
@@ -56,63 +79,55 @@
         .course-card { background: white; border-radius: 20px; overflow: hidden; cursor: pointer; transition: all 0.3s; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .course-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15); }
         .course-image { background: linear-gradient(135deg, #1a2c3e 0%, #2c4a6e 100%); height: 90px; display: flex; align-items: center; justify-content: center; font-size: 42px; position: relative; }
-        .quiz-badge { position: absolute; bottom: -10px; right: 12px; background: #D82A28; color: white; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+        .quiz-badge { position: absolute; bottom: -10px; right: 12px; background: #D82A28; color: white; padding: 3px 10px; border-radius: 20px; font-size: 10px; }
         .course-info { padding: 20px; }
         .course-info h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-        .course-info p { color: #64748b; font-size: 12px; line-height: 1.4; margin-bottom: 12px; }
-        body.dark .course-info p { color: #94a3b8; }
+        .course-info p { color: #64748b; font-size: 12px; margin-bottom: 12px; }
         .course-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-        .course-badge { background: #f1f5f9; padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 500; color: #1a2c3e; }
+        .course-badge { background: #f1f5f9; padding: 3px 10px; border-radius: 100px; font-size: 10px; color: #1a2c3e; }
         .course-hours { color: #D82A28; font-weight: 600; font-size: 11px; }
-        .course-status { margin-top: 10px; font-size: 11px; font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        .course-status { margin-top: 10px; font-size: 11px; }
         .status-completed { color: #10b981; }
-        .badges-container { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
-        .badge-item { background: white; border-radius: 50px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; }
-        body.dark .badge-item { background: #1e293b; border-color: #334155; }
-        .badge-icon { font-size: 20px; }
         .rating-stars { display: flex; gap: 4px; margin-top: 8px; }
         .star { color: #ddd; cursor: pointer; font-size: 14px; }
         .star.active { color: #f59e0b; }
+        .badges-container { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
+        .badge-item { background: white; border-radius: 50px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; }
         .notification-panel { position: absolute; top: 55px; right: 20px; background: white; border-radius: 16px; width: 280px; max-height: 350px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 200; display: none; }
-        body.dark .notification-panel { background: #1e293b; }
         .notification-item { padding: 10px; border-bottom: 1px solid #e2e8f0; cursor: pointer; font-size: 12px; }
         .notification-item.unread { background: rgba(216,42,40,0.1); }
         .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 15px; }
         .lesson-card { background: #f8fafc; border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.3s; border: 1px solid #e2e8f0; }
         .lesson-card:hover { transform: translateY(-2px); }
         .lesson-card.completed { border-left: 4px solid #10b981; background: #f0fdf4; }
-        body.dark .lesson-card { background: #1e293b; border-color: #334155; }
         .lesson-number { background: linear-gradient(135deg, #1a2c3e, #2c4a6e); color: white; padding: 3px 10px; border-radius: 20px; display: inline-block; font-size: 10px; margin-bottom: 8px; }
         .progress-container { background: #e2e8f0; border-radius: 10px; height: 6px; margin: 12px 0; }
         .progress-fill { background: #D82A28; border-radius: 10px; height: 100%; width: 0%; transition: width 0.5s; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; width: 90%; max-width: 700px; max-height: 85vh; border-radius: 28px; overflow-y: auto; padding: 28px; position: relative; }
+        .modal-content { background: white; width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto; border-radius: 28px; padding: 28px; position: relative; }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; margin: 20px 0; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px; border: none; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; margin: 20px 0; background: #000; border-radius: 12px; overflow: hidden; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .example-box { background: #fef3c7; padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid #f59e0b; }
         .quiz-question { background: #f8fafc; border-radius: 14px; padding: 16px; margin: 12px 0; border: 1px solid #e2e8f0; }
         .quiz-option { display: block; padding: 10px; margin: 6px 0; background: white; border-radius: 10px; cursor: pointer; border: 1px solid #e2e8f0; font-size: 13px; }
         .quiz-option.selected { background: #D82A28; color: white; }
-        .complete-btn { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .complete-btn { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 14px; margin-top: 15px; width: 100%; }
         .btn-sm { background: #D82A28; color: white; border: none; padding: 5px 14px; border-radius: 20px; cursor: pointer; font-size: 11px; }
         .forum-post { background: #f8fafc; border-radius: 14px; padding: 14px; margin-bottom: 10px; border-left: 4px solid #D82A28; }
-        body.dark .forum-post { background: #1e293b; }
-        .certificate-preview { background: white; padding: 30px; max-width: 700px; margin: 0 auto; font-family: 'Inter', sans-serif; }
+        .certificate-preview { background: white; padding: 30px; max-width: 700px; margin: 0 auto; }
         .certificate-preview .cert-border { border: 12px solid #D82A28; padding: 30px; position: relative; }
-        .certificate-preview .logo-text { text-align: center; font-size: 28px; font-weight: 700; color: #1B2F47; margin-bottom: 15px; }
-        .certificate-preview .cert-title { text-align: center; font-size: 24px; font-weight: 600; color: #1B2F47; margin: 15px 0; }
-        .certificate-preview .student-name { text-align: center; font-size: 32px; font-weight: 700; color: #D82A28; margin: 15px 0; text-transform: uppercase; }
-        .certificate-preview .course-name { text-align: center; font-size: 20px; font-weight: 600; color: #1B2F47; background: #f5f5f5; padding: 12px; margin: 15px 0; border-radius: 8px; }
-        .certificate-preview .signatures { display: flex; justify-content: space-between; margin: 40px 20px 15px; }
-        .certificate-preview .signature { text-align: center; width: 180px; }
-        .certificate-preview .signature-line { border-top: 1px solid #333; margin-bottom: 6px; width: 100%; }
+        .share-buttons { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+        .share-btn { padding: 8px 16px; border-radius: 40px; border: none; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; }
+        .share-whatsapp { background: #25D366; color: white; }
+        .share-linkedin { background: #0077B5; color: white; }
+        .share-email { background: #64748b; color: white; }
         .footer { background: #1a2c3e; color: rgba(255,255,255,0.7); text-align: center; padding: 25px; margin-top: 40px; font-size: 12px; }
         @media (max-width: 768px) { .header { padding: 12px 16px; flex-direction: column; gap: 10px; } .section { padding: 25px 15px; } .hero h1 { font-size: 28px; } .nav { justify-content: center; } }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
     <div id="loginScreen" class="login-container">
         <div class="login-card">
             <div style="font-size: 48px; margin-bottom: 15px;">🎓</div>
@@ -135,7 +150,6 @@
         </div>
     </div>
 
-    <!-- REGISTRO -->
     <div id="registerScreen" class="login-container" style="display: none;">
         <div class="login-card">
             <div style="font-size: 48px;">📝</div>
@@ -152,7 +166,6 @@
         </div>
     </div>
 
-    <!-- MAIN APP -->
     <div id="appContainer" class="app-container">
         <div class="header">
             <div class="logo">LEARN <small>| Plataforma EAD</small></div>
@@ -162,13 +175,13 @@
                 <a onclick="showSection('certificates')"><i class="fas fa-certificate"></i> Certificados</a>
                 <a onclick="showSection('forum')"><i class="fas fa-comments"></i> Fórum</a>
                 <a onclick="showRanking()"><i class="fas fa-trophy"></i> Ranking</a>
-                <a onclick="showSection('admin')" id="adminNav" style="display: none;"><i class="fas fa-users"></i> Admin</a>
+                <a onclick="showSection('admin')" id="adminNav"><i class="fas fa-users"></i> Admin</a>
                 <select class="lang-select" id="appLanguageSelect" onchange="changeLanguage(this.value)">
                     <option value="pt">🇧🇷 PT</option><option value="en">🇺🇸 EN</option><option value="es">🇪🇸 ES</option>
                 </select>
                 <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
                 <div style="position: relative;">
-                    <button class="notification-btn" onclick="toggleNotifications()"><i class="fas fa-bell"></i> <span id="notificationBadge" style="position: absolute; top: -5px; right: -5px; background: #D82A28; border-radius: 50%; padding: 2px 5px; font-size: 9px;">0</span></button>
+                    <button class="notification-btn" onclick="toggleNotifications()"><i class="fas fa-bell"></i> <span id="notificationBadge" class="notification-badge">0</span></button>
                     <div id="notificationPanel" class="notification-panel"></div>
                 </div>
             </div>
@@ -178,6 +191,7 @@
             </div>
         </div>
 
+        <!-- HOME SECTION -->
         <div id="homeSection">
             <div class="hero">
                 <h1>Bem-vindo(a), <span id="welcomeName">Aluno</span>!</h1>
@@ -195,37 +209,35 @@
             </div>
 
             <div class="section">
-                <div class="section-header">
-                    <h2>🎯 Cursos em Destaque</h2>
-                    <a onclick="showSection('courses')" style="color: #D82A28; cursor: pointer;">Ver todos →</a>
-                </div>
+                <div class="section-header"><h2>📊 Seu Dashboard</h2></div>
+                <div class="dashboard-grid" id="dashboardGrid"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><h2>🎯 Cursos em Destaque</h2><a onclick="showSection('courses')" style="color: #D82A28; cursor: pointer;">Ver todos →</a></div>
                 <div class="courses-grid" id="featuredCourses"></div>
             </div>
 
             <div class="section">
-                <div class="section-header">
-                    <h2>🏆 Suas Conquistas</h2>
-                </div>
+                <div class="section-header"><h2>🏆 Suas Conquistas</h2></div>
                 <div class="badges-container" id="badgesContainer"></div>
             </div>
 
             <div class="section">
-                <div class="section-header">
-                    <h2>📌 Próximos Passos</h2>
-                </div>
+                <div class="section-header"><h2>📌 Próximos Passos</h2></div>
                 <div class="courses-grid" id="nextSteps"></div>
             </div>
         </div>
 
+        <!-- COURSES SECTION -->
         <div id="coursesSection" style="display: none;">
             <div class="section">
-                <div class="section-header">
-                    <h2>📚 Todos os Cursos</h2>
-                </div>
+                <div class="section-header"><h2>📚 Todos os Cursos</h2></div>
                 <div class="courses-grid" id="allCourses"></div>
             </div>
         </div>
 
+        <!-- CERTIFICATES SECTION -->
         <div id="certificatesSection" style="display: none;">
             <div class="section">
                 <div class="section-header"><h2>🏆 Meus Certificados</h2></div>
@@ -233,36 +245,68 @@
             </div>
         </div>
 
+        <!-- FORUM SECTION -->
         <div id="forumSection" style="display: none;">
             <div class="section">
-                <div class="section-header">
-                    <h2>💬 Fórum de Dúvidas</h2>
-                    <button class="btn-sm" onclick="showNewPostModal()">+ Nova Pergunta</button>
-                </div>
+                <div class="section-header"><h2>💬 Fórum de Dúvidas</h2><button class="btn-sm" onclick="showNewPostModal()">+ Nova Pergunta</button></div>
                 <div id="forumList"></div>
             </div>
         </div>
 
+        <!-- ADMIN SECTION -->
         <div id="adminSection" style="display: none;">
             <div class="section">
                 <div class="section-header"><h2>👑 Painel Administrativo</h2></div>
-                <div class="stats-row">
-                    <div class="stat-card"><div class="stat-number" id="adminTotalUsers">0</div><div>Usuários</div></div>
-                    <div class="stat-card"><div class="stat-number" id="adminTotalCourses">3</div><div>Cursos</div></div>
-                    <div class="stat-card"><div class="stat-number" id="adminTotalPoints">0</div><div>Pontos</div></div>
+                
+                <div class="admin-tabs">
+                    <div class="admin-tab active" onclick="showAdminTab('courses')">📚 Gerenciar Cursos</div>
+                    <div class="admin-tab" onclick="showAdminTab('create')">➕ Criar Novo Curso</div>
+                    <div class="admin-tab" onclick="showAdminTab('stats')">📊 Estatísticas</div>
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <button class="btn-sm" onclick="exportBackup()" style="background: #10b981;">💾 Backup</button>
-                    <button class="btn-sm" onclick="exportUsersCSV()" style="background: #D82A28; margin-left: 8px;">📊 CSV</button>
+                
+                <div id="adminCoursesTab">
+                    <div class="courses-admin-grid" id="adminCoursesList"></div>
                 </div>
-                <h3>👥 Usuários</h3>
-                <div id="adminUsersList"></div>
+                
+                <div id="adminCreateTab" style="display: none;">
+                    <div style="background: var(--bg-card); border-radius: 24px; padding: 25px;">
+                        <h3 style="margin-bottom: 20px; color: #D82A28;">📝 Informações Básicas</h3>
+                        <div class="form-group"><label>Título do Curso *</label><input type="text" id="newCourseTitle" placeholder="Ex: Excel Avançado"></div>
+                        <div class="form-group"><label>Categoria</label><select id="newCourseCategory"><option>📚 Geral</option><option>🇬🇧 Inglês</option><option>📊 Excel/Office</option><option>💻 Informática</option><option>🧠 Desenv. Pessoal</option><option>👥 Liderança</option><option>🏭 Qualidade</option></select></div>
+                        <div class="form-group"><label>Carga Horária</label><input type="text" id="newCourseHours" placeholder="Ex: 20h"></div>
+                        <div class="form-group"><label>Ícone (emoji)</label><input type="text" id="newCourseIcon" placeholder="Ex: 📊" value="📚"></div>
+                        <div class="form-group"><label>Pontos ao Concluir</label><input type="number" id="newCoursePoints" value="100"></div>
+                        
+                        <h3 style="margin: 25px 0 15px;">📖 Aulas do Curso</h3>
+                        <div id="lessonsContainer"></div>
+                        <button class="btn-add" onclick="addLessonField()"><i class="fas fa-plus"></i> Adicionar Aula</button>
+                        
+                        <h3 style="margin: 25px 0 15px;">📝 Perguntas do Quiz</h3>
+                        <div id="quizContainer"></div>
+                        <button class="btn-add" onclick="addQuizField()"><i class="fas fa-plus"></i> Adicionar Pergunta</button>
+                        
+                        <div style="margin-top: 30px; text-align: center;">
+                            <button class="btn-save" onclick="saveNewCourse()"><i class="fas fa-save"></i> Salvar Curso</button>
+                            <button class="btn-cancel" onclick="clearCourseForm()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="adminStatsTab" style="display: none;">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card"><div class="value" id="statTotalCourses">0</div><div>Cursos Totais</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalLessons">0</div><div>Aulas Totais</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalUsers">0</div><div>Usuários</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalPoints">0</div><div>Pontos Distribuídos</div></div>
+                    </div>
+                    <canvas id="adminStatsChart"></canvas>
+                </div>
             </div>
         </div>
 
         <div class="footer">
             <p>LEARN - Plataforma EAD para Desenvolvimento de Pessoas</p>
-            <p>Luiz Carlos Correa Junior | (47) 99290-4926 | luizcarloscjunior99@icloud.com</p>
+            <p>Luiz Carlos Correa Junior | (47) 99290-4926</p>
         </div>
     </div>
 
@@ -270,317 +314,283 @@
     <div id="courseModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal()">&times;</span><div id="modalContent"></div></div></div>
     <div id="lessonModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeLessonModal()">&times;</span><div id="lessonModalContent"></div></div></div>
     <div id="profileModal" class="modal"><div class="modal-content" style="max-width: 450px;"><span class="modal-close" onclick="closeProfileModal()">&times;</span><div id="profileModalContent"></div></div></div>
-    <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()">&times;</span><div id="certPreviewContent"></div><div style="text-align:center; padding-top:15px;"><button class="complete-btn" onclick="generatePdfFromPreview()">📄 Baixar PDF</button></div></div></div>
+    <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()">&times;</span><div id="certPreviewContent"></div><div class="share-buttons"><button class="share-btn share-whatsapp" onclick="shareCertificate('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn share-linkedin" onclick="shareCertificate('linkedin')"><i class="fab fa-linkedin"></i> LinkedIn</button><button class="share-btn share-email" onclick="shareCertificate('email')"><i class="fas fa-envelope"></i> E-mail</button></div><div style="text-align:center; padding-top:15px;"><button class="complete-btn" onclick="generatePdfFromPreview()">📄 Baixar PDF</button></div></div></div>
     <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()">&times;</span><h2 style="color:#D82A28;"><i class="fas fa-trophy"></i> Ranking</h2><div id="rankingList"></div></div></div>
-    <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()">&times;</span><h3 style="color:#D82A28;">➕ Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><textarea id="postContent" placeholder="Sua dúvida..." style="width:100%; padding:10px; margin:8px 0; border-radius:10px;" rows="3"></textarea><button class="complete-btn" onclick="createNewPost()">Publicar</button></div></div>
+    <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()">&times;</span><h3 style="color:#D82A28;">➕ Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título"><textarea id="postContent" placeholder="Sua dúvida..." rows="3"></textarea><button class="complete-btn" onclick="createNewPost()">Publicar</button></div></div>
 
     <script>
+        // Firebase
+        const firebaseConfig = { apiKey: "AIzaSyB8Zvuwfx55elKk8B2ZNPiWk16y1NPowIA", authDomain: "learn-plataforma.firebaseapp.com", projectId: "learn-plataforma", storageBucket: "learn-plataforma.firebasestorage.app", messagingSenderId: "177385285776", appId: "1:177385285776:web:f41879d6282558cc7f1015" };
+        try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+        
         // ============================================
-        // FUNÇÃO PARA EXTRAIR ID DO YOUTUBE AUTOMATICAMENTE
+        // CURSOS INICIAIS
         // ============================================
-        function extractYoutubeId(url) {
-            if (!url) return null;
-            // Suporta vários formatos:
-            // - https://www.youtube.com/watch?v=ABCD1234
-            // - https://youtu.be/ABCD1234
-            // - https://www.youtube.com/embed/ABCD1234
-            const patterns = [
-                /(?:youtube\.com\/watch\?v=)([^&]+)/,
-                /(?:youtu\.be\/)([^?]+)/,
-                /(?:youtube\.com\/embed\/)([^?]+)/
-            ];
-            for (let pattern of patterns) {
-                const match = url.match(pattern);
-                if (match) return match[1];
-            }
-            return null;
-        }
-
-        // Função para gerar o vídeo a partir do link
-        function getVideoFromUrl(videoUrl) {
-            if (!videoUrl) return '';
-            const videoId = extractYoutubeId(videoUrl);
-            if (!videoId) return '<p style="color: red; padding: 10px; background: #fee; border-radius: 8px;">❌ Link do YouTube inválido. Verifique o link e tente novamente.</p>';
-            return `<div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/${videoId}" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>`;
-        }
-
-        // ============================================
-        // CONFIGURAÇÃO DO FIREBASE
-        // ============================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyB8Zvuwfx55elKk8B2ZNPiWk16y1NPowIA",
-            authDomain: "learn-plataforma.firebaseapp.com",
-            projectId: "learn-plataforma",
-            storageBucket: "learn-plataforma.firebasestorage.app",
-            messagingSenderId: "177385285776",
-            appId: "1:177385285776:web:f41879d6282558cc7f1015"
+        let coursesData = JSON.parse(localStorage.getItem('learn_courses')) || {
+            1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, 
+                lessons: [{ id: 1, title: "Greetings and Introductions", videoUrl: "https://www.youtube.com/watch?v=PyLcxWNao3E", content: "<h2>🇬🇧 Aula 1</h2><div class='example-box'>Aprenda saudações básicas: Good morning, Good afternoon, Good evening.</div>" }],
+                quiz: [{ q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 }] },
+            2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, 
+                lessons: [{ id: 1, title: "Seiri - Senso de Utilização", videoUrl: "", content: "<h2>🧹 Seiri</h2><div class='example-box'>Separar o útil do inútil, descartando itens não utilizados.</div>" }],
+                quiz: [{ q: "O que significa Seiri?", options: ["Organização", "Utilização", "Limpeza", "Disciplina"], correct: 1 }] },
+            3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, 
+                lessons: [{ id: 1, title: "Introdução ao Excel", videoUrl: "", content: "<h2>📊 Introdução</h2><div class='example-box'>Conhecendo a interface do Excel.</div>" }],
+                quiz: [{ q: "Qual fórmula soma valores?", options: ["=SOMA", "=MÉDIA", "=PROCV", "=SE"], correct: 0 }] }
         };
         
-        try {
-            firebase.initializeApp(firebaseConfig);
-            console.log("Firebase inicializado");
-        } catch(e) { console.warn("Firebase já inicializado"); }
-        
-        // ============================================
-        // CURSO 1: BUSINESS ENGLISH (10 AULAS)
-        // COLE O LINK DO YOUTUBE AQUI 👇
-        // ============================================
-        const course1Lessons = [
-            { id: 1, title: "Greetings and Introductions", 
-              videoUrl: "https://www.youtube.com/watch?v=PyLcxWNao3E",
-              content: `<h2>🇬🇧 Lesson 1: Greetings and Introductions</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=PyLcxWNao3E")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Exemplos de Saudações:</strong><br>
-                            • "Good morning" - Bom dia<br>
-                            • "Good afternoon" - Boa tarde<br>
-                            • "Good evening" - Boa noite<br>
-                            • "Hello" / "Hi" - Olá
-                        </div>
-                        <div style="background:#e6f0ff; padding:15px; border-radius:12px;">
-                            <strong>📖 Vocabulário:</strong><br>
-                            • Nice to meet you - Prazer em conhecê-lo<br>
-                            • How are you? - Como você está?<br>
-                            • My name is... - Meu nome é...
-                        </div>` },
-            { id: 2, title: "Introducing Yourself", 
-              videoUrl: "https://www.youtube.com/watch?v=0rP5tyXvh50",
-              content: `<h2>🇬🇧 Lesson 2: Introducing Yourself</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=0rP5tyXvh50")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Frases para Apresentação:</strong><br>
-                            • "Allow me to introduce myself..."<br>
-                            • "I work as a [profession]"<br>
-                            • "I'm responsible for..."
-                        </div>` },
-            { id: 3, title: "Numbers, Dates and Time", 
-              videoUrl: "https://www.youtube.com/watch?v=X6FpW29FpYU",
-              content: `<h2>🇬🇧 Lesson 3: Numbers, Dates and Time</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=X6FpW29FpYU")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Números e Datas:</strong><br>
-                            • 1-One, 2-Two, 3-Three...<br>
-                            • What time is it? - Que horas são?<br>
-                            • May 10th, 2025 - 10 de maio de 2025
-                        </div>` },
-            { id: 4, title: "Emails and Messages", 
-              videoUrl: "https://www.youtube.com/watch?v=g0n4uP9csz0",
-              content: `<h2>🇬🇧 Lesson 4: Emails and Messages</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=g0n4uP9csz0")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Estrutura de E-mail:</strong><br>
-                            • Subject, Greeting, Body, Closing<br>
-                            • "I am writing to..."<br>
-                            • "Please find attached..."
-                        </div>` },
-            { id: 5, title: "Telephone Calls", 
-              videoUrl: "https://www.youtube.com/watch?v=WImCBd8HZ3Q",
-              content: `<h2>🇬🇧 Lesson 5: Telephone Calls</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=WImCBd8HZ3Q")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Frases Telefônicas:</strong><br>
-                            • "Hello, this is [Name] from [Company]"<br>
-                            • "Could I speak to [Name]?"<br>
-                            • "Can I take a message?"
-                        </div>` },
-            { id: 6, title: "Meetings and Appointments", 
-              videoUrl: "https://www.youtube.com/watch?v=XWetBEnWagY",
-              content: `<h2>🇬🇧 Lesson 6: Meetings and Appointments</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=XWetBEnWagY")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Frases para Reuniões:</strong><br>
-                            • "Would you be available on [day]?"<br>
-                            • "Let's schedule a meeting"<br>
-                            • "I'd like to confirm our appointment"
-                        </div>` },
-            { id: 7, title: "Small Talk in Business", 
-              videoUrl: "https://www.youtube.com/watch?v=lyP7CikH3Rc",
-              content: `<h2>🇬🇧 Lesson 7: Small Talk in Business</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=lyP7CikH3Rc")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Tópicos para Small Talk:</strong><br>
-                            • Weather, Travel, Weekend plans<br>
-                            • "How was your weekend?"<br>
-                            • "Beautiful day, isn't it?"
-                        </div>` },
-            { id: 8, title: "Requests and Offers", 
-              videoUrl: "https://www.youtube.com/watch?v=QPvmHxDV68U",
-              content: `<h2>🇬🇧 Lesson 8: Requests and Offers</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=QPvmHxDV68U")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Fazendo Pedidos:</strong><br>
-                            • "Could you please...?"<br>
-                            • "Would you mind...?"<br>
-                            • "Can I help you with that?"
-                        </div>` },
-            { id: 9, title: "Giving Opinions", 
-              videoUrl: "https://www.youtube.com/watch?v=OHlFptO7FrM",
-              content: `<h2>🇬🇧 Lesson 9: Giving Opinions</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=OHlFptO7FrM")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Expressando Opiniões:</strong><br>
-                            • "In my opinion..."<br>
-                            • "I believe that..."<br>
-                            • "I agree/disagree because..."
-                        </div>` },
-            { id: 10, title: "Closing Conversations", 
-              videoUrl: "https://www.youtube.com/watch?v=Bi_JlqOZt1I",
-              content: `<h2>🇬🇧 Lesson 10: Closing Conversations</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=Bi_JlqOZt1I")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Encerrando Conversas:</strong><br>
-                            • "It was nice talking to you"<br>
-                            • "Thank you for your time"<br>
-                            • "I look forward to hearing from you"
-                        </div>` }
-        ];
-        
-        // CURSO 2: METODOLOGIA 5S (5 AULAS)
-        const course2Lessons = [
-            { id: 1, title: "Seiri - Senso de Utilização", 
-              videoUrl: "https://www.youtube.com/watch?v=lIiUzqmpbUQ",
-              content: `<h2>🧹 Seiri - Senso de Utilização</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=lIiUzqmpbUQ")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Exemplo:</strong><br>Separar ferramentas quebradas, documentos antigos e equipamentos obsoletos.
-                        </div>` },
-            { id: 2, title: "Seiton - Senso de Ordem", 
-              videoUrl: "https://www.youtube.com/watch?v=wzYh-b5l5yA",
-              content: `<h2>🧹 Seiton - Senso de Ordem</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=wzYh-b5l5yA")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Exemplo:</strong><br>Ferramentas organizadas por frequência de uso.
-                        </div>` },
-            { id: 3, title: "Seiso - Senso de Limpeza", 
-              videoUrl: "https://www.youtube.com/watch?v=4XxZHLpP5gY",
-              content: `<h2>🧹 Seiso - Senso de Limpeza</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=4XxZHLpP5gY")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Exemplo:</strong><br>Limpar equipamentos diariamente.
-                        </div>` },
-            { id: 4, title: "Seiketsu - Senso de Saúde", 
-              videoUrl: "https://www.youtube.com/watch?v=qI2T1cJ5p2k",
-              content: `<h2>🧹 Seiketsu - Senso de Saúde</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=qI2T1cJ5p2k")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Exemplo:</strong><br>Criar checklist diário de 5S.
-                        </div>` },
-            { id: 5, title: "Shitsuke - Senso de Disciplina", 
-              videoUrl: "https://www.youtube.com/watch?v=rJRfC8vX1-U",
-              content: `<h2>🧹 Shitsuke - Senso de Disciplina</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=rJRfC8vX1-U")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Exemplo:</strong><br>Auditorias regulares e reconhecimento.
-                        </div>` }
-        ];
-        
-        // CURSO 3: EXCEL (6 AULAS)
-        const course3Lessons = [
-            { id: 1, title: "Introdução ao Excel", 
-              videoUrl: "https://www.youtube.com/watch?v=rHsfj77qNQA",
-              content: `<h2>📊 Introdução ao Excel</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=rHsfj77qNQA")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Elementos da Interface:</strong><br>Faixa de opções, Barra de fórmulas, Planilhas
-                        </div>` },
-            { id: 2, title: "Fórmulas Essenciais", 
-              videoUrl: "https://www.youtube.com/watch?v=fWAFq_ZbS0o",
-              content: `<h2>📊 Fórmulas Essenciais</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=fWAFq_ZbS0o")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Fórmulas:</strong><br>=SOMA(A1:A10) - Soma<br>=MÉDIA(B1:B10) - Média
-                        </div>` },
-            { id: 3, title: "Funções Lógicas", 
-              videoUrl: "https://www.youtube.com/watch?v=oP4ZqvJY4oA",
-              content: `<h2>📊 Funções Lógicas</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=oP4ZqvJY4oA")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Exemplo:</strong><br>=SE(A1>10;"Aprovado";"Reprovado")
-                        </div>` },
-            { id: 4, title: "PROCV e PROCH", 
-              videoUrl: "https://www.youtube.com/watch?v=deTDUCunfAQ",
-              content: `<h2>📊 PROCV e PROCH</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=deTDUCunfAQ")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Sintaxe PROCV:</strong><br>=PROCV(Valor;Tabela;Coluna;0)
-                        </div>` },
-            { id: 5, title: "Tabelas Dinâmicas", 
-              videoUrl: "https://www.youtube.com/watch?v=R0IY8boJwWE",
-              content: `<h2>📊 Tabelas Dinâmicas</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=R0IY8boJwWE")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Como criar:</strong><br>Selecionar dados > Inserir > Tabela Dinâmica
-                        </div>` },
-            { id: 6, title: "Gráficos e Dashboards", 
-              videoUrl: "https://www.youtube.com/watch?v=e3_1F3jO0ns",
-              content: `<h2>📊 Gráficos e Dashboards</h2>
-                        ${getVideoFromUrl("https://www.youtube.com/watch?v=e3_1F3jO0ns")}
-                        <div class="example-box" style="background:#fef3c7; padding:15px; border-radius:12px;">
-                            <strong>📌 Tipos de Gráficos:</strong><br>Barras, Linhas, Pizza, Dashboard
-                        </div>` }
-        ];
-
-        const coursesData = {
-            1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, lessons: course1Lessons,
-                quiz: [
-                    { q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 },
-                    { q: "Saudação formal para e-mail?", options: ["Hey", "Hi there", "Dear Sir/Madam", "What's up"], correct: 2 },
-                    { q: "Nice to meet you significa?", options: ["Tchau", "Prazer em conhecê-lo", "Como está?", "Bom dia"], correct: 1 },
-                    { q: "What time is it? significa?", options: ["Que horas são?", "Quantas horas?", "Que horas?", "Horário?"], correct: 0 },
-                    { q: "Could you please help me? significa?", options: ["Faça agora", "Você poderia me ajudar?", "Ajude-me", "Você precisa ajudar"], correct: 1 },
-                    { q: "I look forward to hearing from you significa?", options: ["Não quero resposta", "Aguardo seu retorno", "Encerro aqui", "Fiquei triste"], correct: 1 },
-                    { q: "In my opinion significa?", options: ["Na minha opinião", "Faça isso", "Talvez não", "Não sei"], correct: 0 },
-                    { q: "It was nice talking to you significa?", options: ["Tchau", "Foi bom conversar com você", "Adeus", "Até logo"], correct: 1 },
-                    { q: "How are you? significa?", options: ["Como você está?", "Quem é você?", "Onde está?", "Por quê?"], correct: 0 },
-                    { q: "Thank you significa?", options: ["Por favor", "Obrigado", "Desculpe", "De nada"], correct: 1 }
-                ] },
-            2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, lessons: course2Lessons,
-                quiz: [
-                    { q: "O que significa Seiri?", options: ["Senso de Ordem", "Senso de Utilização", "Senso de Limpeza", "Senso de Disciplina"], correct: 1 },
-                    { q: "Qual S significa 'Um lugar para cada coisa'?", options: ["Seiri", "Seiton", "Seiso", "Seiketsu"], correct: 1 },
-                    { q: "Seiso é o senso de:", options: ["Limpeza", "Saúde", "Disciplina", "Utilização"], correct: 0 },
-                    { q: "Shitsuke significa:", options: ["Saúde", "Disciplina", "Limpeza", "Ordem"], correct: 1 },
-                    { q: "Qual o primeiro passo do 5S?", options: ["Organizar", "Limpar", "Separar", "Padronizar"], correct: 2 },
-                    { q: "O 5S é uma ferramenta da:", options: ["Qualidade", "Segurança", "Produção", "RH"], correct: 0 },
-                    { q: "Auditorias regulares fazem parte de qual S?", options: ["Seiketsu", "Shitsuke", "Seiso", "Seiton"], correct: 1 },
-                    { q: "O objetivo principal do 5S é:", options: ["Limpeza", "Organização", "Melhoria contínua", "Redução de custos"], correct: 2 },
-                    { q: "Seiketsu está relacionado a:", options: ["Padronização", "Organização", "Limpeza", "Disciplina"], correct: 0 },
-                    { q: "O 5S surgiu em qual país?", options: ["Brasil", "EUA", "Japão", "Alemanha"], correct: 2 }
-                ] },
-            3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, lessons: course3Lessons,
-                quiz: [
-                    { q: "Qual fórmula soma valores de A1 a A10?", options: ["=SOMA(A1;A10)", "=SOMA(A1:A10)", "=SOMAR(A1:A10)", "=TOTAL(A1:A10)"], correct: 1 },
-                    { q: "Para que serve a função SE?", options: ["Somar", "Condicional", "Buscar", "Média"], correct: 1 },
-                    { q: "O que significa PROCV?", options: ["Procura Vertical", "Procura Horizontal", "Programa Vertical", "Processo Vertical"], correct: 0 },
-                    { q: "Tabela Dinâmica serve para:", options: ["Formatar", "Analisar dados", "Imprimir", "Proteger planilha"], correct: 1 },
-                    { q: "Qual gráfico é melhor para tendências?", options: ["Pizza", "Linha", "Barra", "Coluna"], correct: 1 },
-                    { q: "Atalho para salvar arquivo:", options: ["Ctrl+C", "Ctrl+V", "Ctrl+S", "Ctrl+Z"], correct: 2 },
-                    { q: "=MÉDIA(B1:B10) calcula:", options: ["Soma", "Média", "Contagem", "Máximo"], correct: 1 },
-                    { q: "O que é uma célula no Excel?", options: ["Interseção linha/coluna", "Uma planilha", "Um gráfico", "Uma fórmula"], correct: 0 },
-                    { q: "Para filtrar dados, qual menu usar?", options: ["Inserir", "Dados", "Fórmulas", "Exibição"], correct: 1 },
-                    { q: "Gráfico de Pizza mostra:", options: ["Tendência", "Comparação", "Proporção", "Correlação"], correct: 2 }
-                ] }
-        };
-
-        // Dados dos usuários
         let users = JSON.parse(localStorage.getItem('learn_users')) || [
-            { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", department: "Produção", email: "", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {} },
-            { id: 2, name: "admin.learn", password: "admin123", role: "admin", department: "TI", email: "", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {} }
+            { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", email: "aluno@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] },
+            { id: 2, name: "admin.learn", password: "admin123", role: "admin", email: "admin@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }
         ];
+        
         let forumPosts = JSON.parse(localStorage.getItem('learn_forum')) || [];
         let notifications = JSON.parse(localStorage.getItem('learn_notifications')) || [{ id: 1, text: "🎉 Bem-vindo à plataforma LEARN!", read: false, date: new Date() }];
         let currentUser = null;
-        let currentLanguage = localStorage.getItem('learn_language') || 'pt';
         let currentQuizAnswers = {};
-
-        function changeLanguage(lang) { currentLanguage = lang; localStorage.setItem('learn_language', currentLanguage); }
+        let adminChart = null;
+        
+        // Variáveis para criação de curso
+        let tempLessons = [];
+        let tempQuiz = [];
+        let lessonCounter = 1;
+        let quizCounter = 1;
+        let editingCourseId = null;
+        
+        // ============================================
+        // FUNÇÕES ADMIN - CRUD DE CURSOS
+        // ============================================
+        
+        function showAdminTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'courses') {
+                document.querySelector('.admin-tab').classList.add('active');
+                document.getElementById('adminCoursesTab').style.display = 'block';
+                document.getElementById('adminCreateTab').style.display = 'none';
+                document.getElementById('adminStatsTab').style.display = 'none';
+                renderAdminCoursesList();
+            } else if (tab === 'create') {
+                document.querySelectorAll('.admin-tab')[1].classList.add('active');
+                document.getElementById('adminCoursesTab').style.display = 'none';
+                document.getElementById('adminCreateTab').style.display = 'block';
+                document.getElementById('adminStatsTab').style.display = 'none';
+            } else if (tab === 'stats') {
+                document.querySelectorAll('.admin-tab')[2].classList.add('active');
+                document.getElementById('adminCoursesTab').style.display = 'none';
+                document.getElementById('adminCreateTab').style.display = 'none';
+                document.getElementById('adminStatsTab').style.display = 'block';
+                updateAdminStats();
+            }
+        }
+        
+        function renderAdminCoursesList() {
+            const container = document.getElementById('adminCoursesList');
+            if (!container) return;
+            const coursesArray = Object.values(coursesData);
+            container.innerHTML = coursesArray.map(course => `
+                <div class="course-admin-card">
+                    <div style="font-size: 48px; text-align: center;">${course.icon}</div>
+                    <h3>${course.title}</h3>
+                    <p>${course.category} | ${course.hours} | ${course.lessons.length} aulas</p>
+                    <div class="course-actions">
+                        <button class="btn-edit" onclick="editCourse(${course.id})"><i class="fas fa-edit"></i> Editar</button>
+                        <button class="btn-preview" onclick="previewCourse(${course.id})"><i class="fas fa-eye"></i> Ver</button>
+                        <button class="btn-delete" onclick="deleteCourse(${course.id})"><i class="fas fa-trash"></i> Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function editCourse(courseId) {
+            const course = coursesData[courseId];
+            if (!course) return;
+            document.getElementById('newCourseTitle').value = course.title;
+            document.getElementById('newCourseCategory').value = course.category;
+            document.getElementById('newCourseHours').value = course.hours;
+            document.getElementById('newCourseIcon').value = course.icon;
+            document.getElementById('newCoursePoints').value = course.points;
+            tempLessons = JSON.parse(JSON.stringify(course.lessons));
+            tempQuiz = JSON.parse(JSON.stringify(course.quiz));
+            lessonCounter = tempLessons.length + 1;
+            quizCounter = tempQuiz.length + 1;
+            renderLessonsList();
+            renderQuizList();
+            showAdminTab('create');
+            editingCourseId = courseId;
+        }
+        
+        function deleteCourse(courseId) {
+            if (confirm('Tem certeza que deseja excluir este curso?')) {
+                delete coursesData[courseId];
+                localStorage.setItem('learn_courses', JSON.stringify(coursesData));
+                renderAdminCoursesList();
+                loadCourses();
+                alert('Curso excluído com sucesso!');
+            }
+        }
+        
+        function previewCourse(courseId) {
+            const course = coursesData[courseId];
+            alert(`📚 ${course.title}\n\n📖 Aulas: ${course.lessons.length}\n📝 Quiz: ${course.quiz.length} perguntas\n⏱️ Carga: ${course.hours}\n⭐ Pontos: ${course.points}`);
+        }
+        
+        function addLessonField() {
+            tempLessons.push({ id: lessonCounter, title: "", videoUrl: "", content: "" });
+            renderLessonsList();
+            lessonCounter++;
+        }
+        
+        function removeLesson(index) { tempLessons.splice(index, 1); renderLessonsList(); }
+        function updateLesson(index, field, value) { tempLessons[index][field] = value; }
+        
+        function renderLessonsList() {
+            const container = document.getElementById('lessonsContainer');
+            if (!container) return;
+            container.innerHTML = tempLessons.map((lesson, idx) => `
+                <div class="lesson-item">
+                    <div class="lesson-header"><strong>Aula ${lesson.id}</strong><button class="btn-icon" onclick="removeLesson(${idx})"><i class="fas fa-trash"></i></button></div>
+                    <div class="form-group"><input type="text" placeholder="Título da aula" value="${escapeHtml(lesson.title)}" onchange="updateLesson(${idx}, 'title', this.value)"></div>
+                    <div class="form-group"><input type="text" placeholder="URL do Vídeo (YouTube)" value="${escapeHtml(lesson.videoUrl)}" onchange="updateLesson(${idx}, 'videoUrl', this.value)"></div>
+                    <div class="form-group"><textarea placeholder="Conteúdo da aula (HTML permitido)" rows="4" onchange="updateLesson(${idx}, 'content', this.value)">${escapeHtml(lesson.content)}</textarea></div>
+                </div>
+            `).join('');
+        }
+        
+        function addQuizField() { tempQuiz.push({ q: "", options: ["", "", "", ""], correct: 0 }); renderQuizList(); quizCounter++; }
+        function removeQuiz(index) { tempQuiz.splice(index, 1); renderQuizList(); }
+        function updateQuizQuestion(index, value) { tempQuiz[index].q = value; }
+        function updateQuizOption(index, optIndex, value) { tempQuiz[index].options[optIndex] = value; }
+        function updateQuizCorrect(index, value) { tempQuiz[index].correct = parseInt(value); }
+        
+        function renderQuizList() {
+            const container = document.getElementById('quizContainer');
+            if (!container) return;
+            container.innerHTML = tempQuiz.map((quiz, idx) => `
+                <div class="quiz-item">
+                    <div class="quiz-header"><strong>Pergunta ${idx+1}</strong><button class="btn-icon" onclick="removeQuiz(${idx})"><i class="fas fa-trash"></i></button></div>
+                    <div class="form-group"><input type="text" placeholder="Pergunta" value="${escapeHtml(quiz.q)}" onchange="updateQuizQuestion(${idx}, this.value)"></div>
+                    <div class="form-group"><input type="text" placeholder="Opção A" value="${escapeHtml(quiz.options[0])}" onchange="updateQuizOption(${idx}, 0, this.value)"></div>
+                    <div class="form-group"><input type="text" placeholder="Opção B" value="${escapeHtml(quiz.options[1])}" onchange="updateQuizOption(${idx}, 1, this.value)"></div>
+                    <div class="form-group"><input type="text" placeholder="Opção C" value="${escapeHtml(quiz.options[2])}" onchange="updateQuizOption(${idx}, 2, this.value)"></div>
+                    <div class="form-group"><input type="text" placeholder="Opção D" value="${escapeHtml(quiz.options[3])}" onchange="updateQuizOption(${idx}, 3, this.value)"></div>
+                    <div class="form-group"><label>Resposta Correta:</label><select onchange="updateQuizCorrect(${idx}, this.value)"><option value="0">Opção A</option><option value="1">Opção B</option><option value="2">Opção C</option><option value="3">Opção D</option></select></div>
+                </div>
+            `).join('');
+        }
+        
+        function clearCourseForm() {
+            document.getElementById('newCourseTitle').value = '';
+            document.getElementById('newCourseCategory').value = '📚 Geral';
+            document.getElementById('newCourseHours').value = '';
+            document.getElementById('newCourseIcon').value = '📚';
+            document.getElementById('newCoursePoints').value = '100';
+            tempLessons = [];
+            tempQuiz = [];
+            lessonCounter = 1;
+            quizCounter = 1;
+            renderLessonsList();
+            renderQuizList();
+            editingCourseId = null;
+        }
+        
+        function saveNewCourse() {
+            const title = document.getElementById('newCourseTitle').value.trim();
+            if (!title) { alert('Digite o título do curso!'); return; }
+            if (tempLessons.length === 0) { alert('Adicione pelo menos uma aula!'); return; }
+            if (tempQuiz.length === 0) { alert('Adicione pelo menos uma pergunta ao quiz!'); return; }
+            
+            const newId = editingCourseId || Math.max(...Object.keys(coursesData).map(Number), 0) + 1;
+            
+            const newCourse = {
+                id: newId,
+                title: title,
+                category: document.getElementById('newCourseCategory').value,
+                hours: document.getElementById('newCourseHours').value || '10h',
+                icon: document.getElementById('newCourseIcon').value || '📚',
+                points: parseInt(document.getElementById('newCoursePoints').value) || 100,
+                lessons: tempLessons.map((l, idx) => ({ ...l, id: idx+1 })),
+                quiz: tempQuiz
+            };
+            
+            coursesData[newId] = newCourse;
+            localStorage.setItem('learn_courses', JSON.stringify(coursesData));
+            
+            alert(`Curso "${title}" ${editingCourseId ? 'atualizado' : 'criado'} com sucesso!`);
+            clearCourseForm();
+            renderAdminCoursesList();
+            loadCourses();
+            editingCourseId = null;
+            showAdminTab('courses');
+        }
+        
+        function updateAdminStats() {
+            const coursesArray = Object.values(coursesData);
+            const totalLessons = coursesArray.reduce((sum, c) => sum + c.lessons.length, 0);
+            const totalPoints = users.reduce((sum, u) => sum + (u.points || 0), 0);
+            document.getElementById('statTotalCourses').innerText = coursesArray.length;
+            document.getElementById('statTotalLessons').innerText = totalLessons;
+            document.getElementById('statTotalUsers').innerText = users.length;
+            document.getElementById('statTotalPoints').innerText = totalPoints;
+            
+            const ctx = document.getElementById('adminStatsChart')?.getContext('2d');
+            if (ctx) {
+                const labels = coursesArray.map(c => c.title.length > 15 ? c.title.substring(0,15)+'...' : c.title);
+                const data = coursesArray.map(c => c.lessons.length);
+                if (adminChart) adminChart.destroy();
+                adminChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Quantidade de Aulas', data, backgroundColor: '#D82A28', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true } });
+            }
+        }
+        
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+        
+        // ============================================
+        // FUNÇÕES DO SISTEMA (ALUNO)
+        // ============================================
+        
+        function extractYoutubeId(url) {
+            if (!url) return null;
+            const patterns = [/(?:youtube\.com\/watch\?v=)([^&]+)/, /(?:youtu\.be\/)([^?]+)/, /(?:youtube\.com\/embed\/)([^?]+)/];
+            for (let pattern of patterns) { const match = url.match(pattern); if (match) return match[1]; }
+            return null;
+        }
+        
+        function getVideoHtml(videoUrl) {
+            if (!videoUrl) return '';
+            const videoId = extractYoutubeId(videoUrl);
+            if (!videoId) return '<p style="color: orange;">⚠️ Link do YouTube inválido</p>';
+            return `<div class="video-container"><iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
+        }
+        
         function getLevel(points) { if (points >= 500) return "💎 Platina"; if (points >= 300) return "🥇 Ouro"; if (points >= 150) return "🥈 Prata"; return "🥉 Bronze"; }
+        
+        function triggerConfetti() {
+            canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D82A28', '#1B2F47', '#10b981'] });
+            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.3 } }), 200);
+            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.7 } }), 400);
+        }
+        
+        function shareCertificate(platform) {
+            const text = `🎓 Acabei de concluir um curso na plataforma LEARN!`;
+            if (platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            else if (platform === 'linkedin') window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank');
+            else if (platform === 'email') window.location.href = `mailto:?subject=Certificado LEARN&body=${encodeURIComponent(text)}`;
+            alert(`✅ Compartilhado!`);
+        }
+        
+        function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
+        function addNotification(text) { notifications.unshift({ id: Date.now(), text, read: false, date: new Date() }); localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); }
+        function toggleNotifications() { const panel = document.getElementById('notificationPanel'); if (panel.style.display === 'block') panel.style.display = 'none'; else { panel.innerHTML = notifications.map(n => `<div class="notification-item ${!n.read ? 'unread' : ''}" onclick="markNotificationRead(${n.id})">${n.text}<br><small>${new Date(n.date).toLocaleString()}</small></div>`).join(''); panel.style.display = 'block'; } }
+        function markNotificationRead(id) { const n = notifications.find(n => n.id === id); if (n) n.read = true; localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); toggleNotifications(); }
+        
+        function updateDashboard() {
+            const total = Object.keys(coursesData).length;
+            const completed = currentUser?.completedCourses?.length || 0;
+            document.getElementById('dashboardGrid').innerHTML = `
+                <div class="dashboard-card"><div class="value">${completed}/${total}</div><div>Cursos Concluídos</div></div>
+                <div class="dashboard-card"><div class="value">${currentUser?.points || 0}</div><div>Pontos</div></div>
+                <div class="dashboard-card"><div class="value">${getLevel(currentUser?.points || 0)}</div><div>Nível</div></div>
+                <div class="dashboard-card"><div class="value">${currentUser?.badges?.length || 0}</div><div>Conquistas</div></div>
+            `;
+        }
         
         function updateBadges() {
             document.getElementById('levelStat').innerHTML = getLevel(currentUser?.points || 0);
@@ -591,11 +601,6 @@
             document.getElementById('badgesContainer').innerHTML = badges.length ? badges.map(b => `<div class="badge-item"><span class="badge-icon">${b.icon}</span><span>${b.name}</span></div>`).join('') : '<p>Complete cursos para ganhar conquistas!</p>';
         }
         
-        function addNotification(text) { notifications.unshift({ id: Date.now(), text, read: false, date: new Date() }); localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); }
-        function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
-        function toggleNotifications() { const panel = document.getElementById('notificationPanel'); if (panel.style.display === 'block') panel.style.display = 'none'; else { panel.innerHTML = notifications.map(n => `<div class="notification-item ${!n.read ? 'unread' : ''}" onclick="markNotificationRead(${n.id})">${n.text}<br><small>${new Date(n.date).toLocaleString()}</small></div>`).join(''); panel.style.display = 'block'; } }
-        function markNotificationRead(id) { const n = notifications.find(n => n.id === id); if (n) n.read = true; localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); toggleNotifications(); }
-        
         function updateStats() {
             const total = Object.keys(coursesData).length;
             const completed = currentUser?.completedCourses?.length || 0;
@@ -604,8 +609,7 @@
             document.getElementById('progressText').innerHTML = `${percent}% concluído (${completed}/${total})`;
             document.getElementById('userPointsStat').innerText = currentUser?.points || 0;
             document.getElementById('completedCountStat').innerText = completed;
-            document.getElementById('adminTotalUsers').innerText = users.length;
-            document.getElementById('adminTotalPoints').innerText = users.reduce((s, u) => s + (u.points || 0), 0);
+            updateDashboard();
             updateBadges();
         }
         
@@ -622,7 +626,7 @@
             document.getElementById('nextSteps').innerHTML = pending.length ? pending.map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}<div class="quiz-badge">Iniciar</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div></div></div>`).join('') : '<div style="text-align:center; padding:30px;">🎉 Todos concluídos!</div>';
             const completed = currentUser?.completedCourses || [];
             document.getElementById('certificatesList').innerHTML = completed.length ? `<div class="courses-grid">${completed.map(id => { const c = coursesData[id]; return c ? `<div class="course-card"><div class="course-image">${c.icon}</div><div class="course-info"><h3>${c.title}</h3><p>Certificado - ${c.hours}</p><button class="btn-sm" onclick="showCertificatePreview(${c.id})">📄 Ver</button></div></div>` : ''; }).join('')}</div>` : '<div style="text-align:center; padding:30px;">📜 Nenhum certificado.</div>';
-            if (currentUser?.role === 'admin') document.getElementById('adminUsersList').innerHTML = users.map(u => `<div style="background:var(--card-hover); border-radius:14px; padding:10px; margin-bottom:8px;"><strong>${u.name}</strong> ${u.role === 'admin' ? '<span style="background:#D82A28; color:white; padding:2px 6px; border-radius:10px; font-size:9px;">Admin</span>' : ''}<br><small>${u.department || '-'} | ${u.completedCourses?.length || 0} cursos | ${u.points || 0} pts</small></div>`).join('');
+            if (currentUser?.role === 'admin') renderAdminCoursesList();
         }
         
         function openCourse(courseId) {
@@ -638,7 +642,7 @@
             course.lessons.forEach(l => { const isComp = progress.find(p => p.id === l.id)?.completed || false; lessonsHtml += `<div class="lesson-card ${isComp ? 'completed' : ''}" onclick="openLesson(${courseId}, ${l.id})"><div class="lesson-number">Aula ${l.id}</div><h3>${l.title}</h3>${isComp ? '<span style="color:#10b981;">✅</span>' : ''}</div>`; });
             lessonsHtml += '</div>';
             let quizHtml = '';
-            if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:#f8fafc; border-radius:16px; padding:16px; margin-top:15px;"><h3 style="color:#D82A28;">📝 Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})">✅ Finalizar</button></div>`;
+            if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:#f8fafc; border-radius:16px; padding:16px; margin-top:15px;"><h3 style="color:#D82A28;">📝 Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})">✅ Finalizar Quiz</button></div>`;
             else if (quizSubmitted) quizHtml = `<div style="background:#ecfdf5; border-radius:16px; padding:16px; text-align:center;"><i class="fas fa-certificate" style="font-size:36px; color:#10b981;"></i><h3>Curso concluído!</h3><button class="complete-btn" onclick="showCertificatePreview(${courseId})">📄 Ver Certificado</button></div>`;
             document.getElementById('modalContent').innerHTML = `<div style="text-align:center;"><h2 style="color:#D82A28;">${course.icon} ${course.title}</h2><p>${course.lessons.length} aulas</p><div class="progress-container"><div class="progress-fill" style="width:${percent}%;"></div></div><p>${completedCount}/${course.lessons.length}</p></div>${lessonsHtml}${quizHtml}`;
             document.getElementById('courseModal').style.display = 'flex';
@@ -647,26 +651,89 @@
         
         function loadQuiz(courseId) { const course = coursesData[courseId]; const container = document.getElementById('quizQuestions'); if (!container) return; currentQuizAnswers = JSON.parse(localStorage.getItem(`quiz_${currentUser.id}_${courseId}`)) || {}; container.innerHTML = ''; course.quiz.forEach((q, idx) => { container.innerHTML += `<div class="quiz-question"><p><strong>${idx+1}. ${q.q}</strong></p>${q.options.map((opt, optIdx) => `<div class="quiz-option ${currentQuizAnswers[idx] === optIdx ? 'selected' : ''}" onclick="selectQuizAnswer(${courseId}, ${idx}, ${optIdx})">${String.fromCharCode(65+optIdx)}. ${opt}</div>`).join('')}</div>`; }); }
         function selectQuizAnswer(courseId, qIdx, optIdx) { currentQuizAnswers[qIdx] = optIdx; localStorage.setItem(`quiz_${currentUser.id}_${courseId}`, JSON.stringify(currentQuizAnswers)); loadQuiz(courseId); }
-        function submitQuiz(courseId) { const course = coursesData[courseId]; let score = 0; course.quiz.forEach((q, idx) => { if (currentQuizAnswers[idx] === q.correct) score++; }); if (Object.keys(currentQuizAnswers).length < course.quiz.length) { alert(`Responda todas!`); return; } if (score >= 7) { if (!currentUser.quizSubmitted) currentUser.quizSubmitted = {}; currentUser.quizSubmitted[courseId] = true; if (!currentUser.completedCourses.includes(courseId)) { currentUser.completedCourses.push(courseId); currentUser.points = (currentUser.points || 0) + course.points; } saveUser(); updateStats(); loadCourses(); addNotification(`🎉 "${course.title}" concluído!`); alert(`🎉 Parabéns! ${score}/10 acertos!`); openCourse(courseId); } else alert(`❌ ${score}/10 acertos. Precisa de pelo menos 7!`); }
-        function openLesson(courseId, lessonId) { const course = coursesData[courseId]; const lesson = course.lessons.find(l => l.id === lessonId); const isComp = currentUser.courseProgress[courseId]?.find(p => p.id === lessonId)?.completed || false; document.getElementById('lessonModalContent').innerHTML = `<div>${lesson.content}${!isComp ? `<button class="complete-btn" onclick="completeLesson(${courseId}, ${lessonId})" style="margin-top:15px;">✅ Marcar Concluída</button>` : '<div style="background:#ecfdf5; padding:12px; border-radius:12px; text-align:center;">✅ Aula concluída!</div>'}</div>`; document.getElementById('lessonModal').style.display = 'flex'; }
-        function completeLesson(courseId, lessonId) { const idx = currentUser.courseProgress[courseId].findIndex(p => p.id === lessonId); if (idx !== -1 && !currentUser.courseProgress[courseId][idx].completed) { currentUser.courseProgress[courseId][idx].completed = true; saveUser(); updateStats(); addNotification(`📖 Aula ${lessonId} concluída!`); alert(`Aula ${lessonId} concluída!`); closeLessonModal(); openCourse(courseId); } }
-        function showCertificatePreview(courseId) { const course = coursesData[courseId]; document.getElementById('certPreviewContent').innerHTML = `<div class="certificate-preview"><div class="cert-border"><div class="logo-text">LEARN</div><div class="cert-title">CERTIFICADO</div><div class="student-name">${currentUser.name}</div><div class="course-name">${course.title}</div><div class="details">Carga: ${course.hours} | Data: ${new Date().toLocaleDateString()}</div><div class="signatures"><div class="signature"><div class="signature-line"></div>Luiz Carlos</div><div class="signature"><div class="signature-line"></div>Diretoria</div></div><div>Nº: LEARN-${courseId}-${Date.now()}</div></div></div>`; document.getElementById('certPreviewModal').style.display = 'flex'; }
+        
+        function submitQuiz(courseId) {
+            const course = coursesData[courseId];
+            let score = 0;
+            course.quiz.forEach((q, idx) => { if (currentQuizAnswers[idx] === q.correct) score++; });
+            if (Object.keys(currentQuizAnswers).length < course.quiz.length) { alert(`Responda todas as perguntas!`); return; }
+            if (score >= 7) {
+                if (!currentUser.quizSubmitted) currentUser.quizSubmitted = {};
+                currentUser.quizSubmitted[courseId] = true;
+                if (!currentUser.completedCourses.includes(courseId)) {
+                    currentUser.completedCourses.push(courseId);
+                    currentUser.points = (currentUser.points || 0) + course.points;
+                }
+                saveUser(); updateStats(); loadCourses(); triggerConfetti();
+                alert(`🎉 PARABÉNS! ${score}/10 acertos! +${course.points} pontos!`);
+                openCourse(courseId);
+            } else alert(`❌ ${score}/10 acertos. Precisa de pelo menos 7!`);
+        }
+        
+        function openLesson(courseId, lessonId) {
+            const course = coursesData[courseId];
+            const lesson = course.lessons.find(l => l.id === lessonId);
+            const isComp = currentUser.courseProgress[courseId]?.find(p => p.id === lessonId)?.completed || false;
+            document.getElementById('lessonModalContent').innerHTML = `<div>${getVideoHtml(lesson.videoUrl)}${lesson.content}${!isComp ? `<button class="complete-btn" onclick="completeLesson(${courseId}, ${lessonId})">✅ Marcar como Concluída</button>` : '<div style="background:#ecfdf5; padding:12px; border-radius:12px; text-align:center;">✅ Aula já concluída!</div>'}</div>`;
+            document.getElementById('lessonModal').style.display = 'flex';
+        }
+        
+        function completeLesson(courseId, lessonId) {
+            const idx = currentUser.courseProgress[courseId].findIndex(p => p.id === lessonId);
+            if (idx !== -1 && !currentUser.courseProgress[courseId][idx].completed) {
+                currentUser.courseProgress[courseId][idx].completed = true;
+                saveUser(); updateStats(); triggerConfetti();
+                alert(`🎉 Aula ${lessonId} concluída! Continue assim!`);
+                closeLessonModal();
+                openCourse(courseId);
+            }
+        }
+        
+        function showCertificatePreview(courseId) {
+            const course = coursesData[courseId];
+            document.getElementById('certPreviewContent').innerHTML = `<div class="certificate-preview"><div class="cert-border"><div class="logo-text">LEARN</div><div class="cert-title">CERTIFICADO</div><div class="student-name">${currentUser.name}</div><div class="course-name">${course.title}</div><div class="details">Carga: ${course.hours} | Data: ${new Date().toLocaleDateString()}</div><div class="signatures"><div class="signature-line"></div>Luiz Carlos<div class="signature-line"></div>Diretoria</div><div>Nº: LEARN-${courseId}-${Date.now()}</div></div></div>`;
+            document.getElementById('certPreviewModal').style.display = 'flex';
+        }
+        
         async function generatePdfFromPreview() { const el = document.querySelector('#certPreviewContent .certificate-preview'); if (el) { await html2pdf().set({ margin: 0.5, filename: 'Certificado.pdf' }).from(el).save(); alert('PDF gerado!'); } }
+        
         function showRanking() { const sorted = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)); document.getElementById('rankingList').innerHTML = sorted.map((u, i) => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #e2e8f0;"><span><strong>${i+1}º</strong> ${u.name}</span><span><strong>${u.points || 0}</strong> pts</span><span>${getLevel(u.points)}</span></div>`).join(''); document.getElementById('rankingModal').style.display = 'flex'; }
-        function showProfile() { document.getElementById('profileModalContent').innerHTML = `<h2 style="color:#D82A28;">👤 Meu Perfil</h2><div><label>Nome</label><input type="text" id="profileName" value="${currentUser.name}" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><label>E-mail</label><input type="email" id="profileEmail" value="${currentUser.email || ''}" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><label>Departamento</label><select id="profileDept" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option></select><label>Nova Senha</label><input type="password" id="profilePassword" placeholder="Deixe em branco" style="width:100%; padding:10px; margin:8px 0; border-radius:10px;"><button class="complete-btn" onclick="saveProfile()" style="width:100%;">Salvar</button></div>`; document.getElementById('profileModal').style.display = 'flex'; }
-        function saveProfile() { const newName = document.getElementById('profileName').value; const newEmail = document.getElementById('profileEmail').value; const newPass = document.getElementById('profilePassword').value; if (newName) currentUser.name = newName; if (newEmail) currentUser.email = newEmail; if (newPass) currentUser.password = newPass; saveUser(); document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase(); addNotification('Perfil atualizado!'); closeProfileModal(); }
-        function exportBackup() { const data = { users, courses: coursesData, forum: forumPosts }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_backup.json`; link.click(); addNotification('Backup exportado!'); }
-        function exportUsersCSV() { let csv = "Nome,Email,Departamento,Role,Cursos,Pontos\n"; users.forEach(u => { csv += `${u.name},${u.email || ''},${u.department || ''},${u.role},${u.completedCourses?.length || 0},${u.points || 0}\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `usuarios_learn.csv`; link.click(); addNotification('CSV exportado!'); }
+        
+        function showProfile() { document.getElementById('profileModalContent').innerHTML = `<h2 style="color:#D82A28;">👤 Meu Perfil</h2><div><label>Nome</label><input type="text" id="profileName" value="${currentUser.name}"><label>E-mail</label><input type="email" id="profileEmail" value="${currentUser.email || ''}"><label>Departamento</label><select id="profileDept"><option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option></select><label>Nova Senha</label><input type="password" id="profilePassword" placeholder="Deixe em branco"><button class="complete-btn" onclick="saveProfile()">Salvar</button></div>`; document.getElementById('profileModal').style.display = 'flex'; }
+        function saveProfile() { const newName = document.getElementById('profileName').value; const newEmail = document.getElementById('profileEmail').value; const newPass = document.getElementById('profilePassword').value; if (newName) currentUser.name = newName; if (newEmail) currentUser.email = newEmail; if (newPass) currentUser.password = newPass; saveUser(); document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase(); alert('Perfil atualizado!'); closeProfileModal(); }
+        
+        function exportBackup() { const data = { users, courses: coursesData, forum: forumPosts }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_backup.json`; link.click(); alert('Backup exportado!'); }
+        function exportUsersCSV() { let csv = "Nome,Email,Departamento,Role,Cursos,Pontos\n"; users.forEach(u => { csv += `${u.name},${u.email || ''},${u.department || ''},${u.role},${u.completedCourses?.length || 0},${u.points || 0}\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `usuarios_learn.csv`; link.click(); alert('CSV exportado!'); }
+        
         function loadForum() { document.getElementById('forumList').innerHTML = forumPosts.length ? forumPosts.map(p => `<div class="forum-post"><h3>${p.title}</h3><p>${p.content}</p><small>👤 ${p.author} | ${p.date}</small></div>`).join('') : '<div style="text-align:center; padding:30px;">💬 Nenhuma pergunta.</div>'; }
         function showNewPostModal() { document.getElementById('newPostModal').style.display = 'flex'; }
         function closeNewPostModal() { document.getElementById('newPostModal').style.display = 'none'; }
-        function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); localStorage.setItem('learn_forum', JSON.stringify(forumPosts)); closeNewPostModal(); loadForum(); addNotification(`Nova pergunta: "${title}"`); } else alert('Preencha título e conteúdo'); }
+        function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); localStorage.setItem('learn_forum', JSON.stringify(forumPosts)); closeNewPostModal(); loadForum(); alert('Pergunta publicada!'); } else alert('Preencha título e conteúdo'); }
+        
         function showSection(section) { document.querySelectorAll('#homeSection, #coursesSection, #certificatesSection, #forumSection, #adminSection').forEach(s => s.style.display = 'none'); if (section === 'home') document.getElementById('homeSection').style.display = 'block'; else if (section === 'courses') document.getElementById('coursesSection').style.display = 'block'; else if (section === 'certificates') document.getElementById('certificatesSection').style.display = 'block'; else if (section === 'forum') { document.getElementById('forumSection').style.display = 'block'; loadForum(); } else if (section === 'admin' && currentUser?.role === 'admin') document.getElementById('adminSection').style.display = 'block'; }
         function showRegister() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('registerScreen').style.display = 'flex'; }
         function showLogin() { document.getElementById('registerScreen').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
-        function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {} }); localStorage.setItem('learn_users', JSON.stringify(users)); alert('Conta criada!'); showLogin(); } else alert('Preencha todos os campos'); }
-        function doLogin() { const username = document.getElementById('username').value; const password = document.getElementById('password').value; const user = users.find(u => u.name === username && u.password === password); if (user) { currentUser = user; localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; document.getElementById('welcomeName').innerText = username; document.getElementById('userAvatar').innerText = username.charAt(0).toUpperCase(); if (user.role === 'admin') document.getElementById('adminNav').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); addNotification(`Bem-vindo de volta!`); } else alert('Usuário ou senha inválidos'); }
+        function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }); localStorage.setItem('learn_users', JSON.stringify(users)); alert('Conta criada!'); showLogin(); } else alert('Preencha todos os campos'); }
+        
+        function doLogin() { 
+            const username = document.getElementById('username').value; 
+            const password = document.getElementById('password').value; 
+            const user = users.find(u => u.name === username && u.password === password); 
+            if (user) { 
+                currentUser = user; 
+                localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); 
+                document.getElementById('loginScreen').style.display = 'none'; 
+                document.getElementById('appContainer').style.display = 'block'; 
+                document.getElementById('welcomeName').innerText = username; 
+                document.getElementById('userAvatar').innerText = username.charAt(0).toUpperCase(); 
+                if (user.role === 'admin') document.getElementById('adminNav').style.display = 'block'; 
+                updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); 
+                alert(`Bem-vindo, ${username}!`); 
+            } else alert('Usuário ou senha inválidos'); 
+        }
         function doLogout() { localStorage.removeItem('learn_currentUser'); currentUser = null; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('appContainer').style.display = 'none'; }
+        
+        function changeLanguage(lang) { localStorage.setItem('learn_language', lang); }
         function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('learn_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
         function loadTheme() { if (localStorage.getItem('learn_theme') === 'dark') document.body.classList.add('dark'); }
         
@@ -676,18 +743,7 @@
         function closeCertPreview() { document.getElementById('certPreviewModal').style.display = 'none'; }
         function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; }
         
-        function init() { 
-            loadTheme(); 
-            if (currentUser) { 
-                document.getElementById('loginScreen').style.display = 'none'; 
-                document.getElementById('appContainer').style.display = 'block'; 
-                updateStats(); 
-                loadCourses(); 
-                showSection('home'); 
-                updateNotificationBadge(); 
-            } 
-        }
-        
+        function init() { loadTheme(); if (currentUser) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); } }
         window.onclick = (e) => { if (e.target.classList.contains('modal')) closeModal(); };
         init();
     </script>
