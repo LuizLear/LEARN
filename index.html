@@ -21,33 +21,12 @@
         body.dark .login-card, body.dark .quiz-area, body.dark .lesson-card, body.dark .dashboard-card,
         body.dark .course-admin-card { background: #1e293b; color: #f1f5f9; }
         
-        /* Formatação de texto nas aulas */
-        .lesson-content {
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-            line-height: 1.6;
-        }
-        .lesson-content p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        .lesson-content h2, .lesson-content h3 {
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .lesson-content ul, .lesson-content ol {
-            margin-left: 25px;
-            margin-bottom: 15px;
-        }
-        .lesson-content li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-        .example-box {
-            word-wrap: break-word;
-            white-space: normal;
-        }
+        .lesson-content { word-wrap: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.6; }
+        .lesson-content p { margin-bottom: 15px; line-height: 1.6; }
+        .lesson-content h2, .lesson-content h3 { margin-top: 20px; margin-bottom: 10px; }
+        .lesson-content ul, .lesson-content ol { margin-left: 25px; margin-bottom: 15px; }
+        .lesson-content li { margin-bottom: 8px; line-height: 1.5; }
+        .example-box { word-wrap: break-word; white-space: normal; }
         
         .header { background: rgba(26, 44, 62, 0.95); backdrop-filter: blur(12px); color: white; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo { font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #fff 0%, #D82A28 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -66,7 +45,6 @@
         .login-card button { width: 100%; padding: 12px; background: linear-gradient(135deg, #1a2c3e, #D82A28); color: white; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; margin-top: 8px; }
         .app-container { display: none; }
         
-        /* Admin Panel */
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
         .admin-tab { padding: 8px 20px; border-radius: 30px; cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-color); }
         .admin-tab.active { background: #D82A28; color: white; border-color: #D82A28; }
@@ -87,7 +65,6 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-preview { background: #1a2c3e; color: white; }
         
-        /* Slides da Aula */
         .slides-container { position: relative; min-height: 400px; }
         .slide { display: none; animation: fadeIn 0.5s ease; }
         .slide.active-slide { display: block; }
@@ -356,32 +333,33 @@
     <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()">&times;</span><h3 style="color:#D82A28;">➕ Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título"><textarea id="postContent" placeholder="Sua dúvida..." rows="3"></textarea><button class="complete-btn" onclick="createNewPost()">Publicar</button></div></div>
 
     <script>
-        // Firebase
-        const firebaseConfig = { apiKey: "AIzaSyB8Zvuwfx55elKk8B2ZNPiWk16y1NPowIA", authDomain: "learn-plataforma.firebaseapp.com", projectId: "learn-plataforma", storageBucket: "learn-plataforma.firebasestorage.app", messagingSenderId: "177385285776", appId: "1:177385285776:web:f41879d6282558cc7f1015" };
-        try { firebase.initializeApp(firebaseConfig); } catch(e) {}
-        
-        // ============================================
-        // CURSOS INICIAIS COM CONTEÚDO FORMATADO
-        // ============================================
-        let coursesData = JSON.parse(localStorage.getItem('learn_courses')) || {
-            1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, 
-                lessons: [{ id: 1, title: "Greetings and Introductions", videoUrl: "https://www.youtube.com/watch?v=PyLcxWNao3E", content: "<div class='lesson-content'><h2>🇬🇧 Greetings and Introductions</h2><p>Nesta aula você aprenderá as saudações básicas em inglês, essenciais para qualquer ambiente profissional.</p><div class='example-box'><strong>📌 Exemplos de Saudações:</strong><br>• Good morning - Bom dia (usado até 12h)<br>• Good afternoon - Boa tarde (12h às 18h)<br>• Good evening - Boa noite (após 18h)<br>• Hello / Hi - Olá (informal)</div><div style='background:#e6f0ff; padding:15px; border-radius:12px; margin-top:15px;'><strong>📖 Vocabulário Importante:</strong><br>• Nice to meet you - Prazer em conhecê-lo<br>• How are you? - Como você está?<br>• I'm fine, thank you - Estou bem, obrigado</div><div class='example-box' style='margin-top:15px;'><strong>✏️ Exercício:</strong><br>Pratique as saudações com um colega ou grave um áudio se apresentando em inglês.</div></div>" }],
-                quiz: [{ q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 }] },
-            2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, 
-                lessons: [{ id: 1, title: "Seiri - Senso de Utilização", videoUrl: "", content: "<div class='lesson-content'><h2>🧹 Seiri - Senso de Utilização</h2><p>O primeiro S do 5S significa separar o útil do inútil, descartando itens não utilizados no ambiente de trabalho.</p><div class='example-box'><strong>📌 Exemplos Práticos:</strong><br>• Separar ferramentas quebradas para descarte<br>• Remover documentos antigos e desatualizados<br>• Identificar equipamentos obsoletos</div><div style='background:#e6f0ff; padding:15px; border-radius:12px; margin-top:15px;'><strong>📖 Benefícios do Seiri:</strong><br>• Mais espaço disponível<br>• Menos tempo procurando itens<br>• Ambiente mais organizado e seguro</div><div class='example-box' style='margin-top:15px;'><strong>✏️ Exercício:</strong><br>Faça uma lista de 5 itens do seu local de trabalho que podem ser descartados ou reorganizados.</div></div>" }],
-                quiz: [{ q: "O que significa Seiri?", options: ["Organização", "Utilização", "Limpeza", "Disciplina"], correct: 1 }] },
-            3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, 
-                lessons: [{ id: 1, title: "Introdução ao Excel", videoUrl: "", content: "<div class='lesson-content'><h2>📊 Introdução ao Excel</h2><p>O Excel é a ferramenta mais poderosa para análise de dados, planilhas e cálculos.</p><div class='example-box'><strong>📌 Elementos da Interface:</strong><br>• Faixa de opções (Ribbon) - onde ficam os menus<br>• Barra de fórmulas - para inserir cálculos<br>• Planilhas - abas na parte inferior<br>• Células - interseção de linhas e colunas</div><div style='background:#e6f0ff; padding:15px; border-radius:12px; margin-top:15px;'><strong>📖 Conceitos Fundamentais:</strong><br>• Linhas: numeradas de 1 a 1.048.576<br>• Colunas: letras de A a XFD<br>• Célula: endereço único como A1, B2, etc.</div><div class='example-box' style='margin-top:15px;'><strong>✏️ Exercício:</strong><br>Abra o Excel, identifique a barra de fórmulas e crie uma planilha simples com seus dados pessoais.</div></div>" }],
-                quiz: [{ q: "Qual fórmula soma valores?", options: ["=SOMA", "=MÉDIA", "=PROCV", "=SE"], correct: 0 }] }
+        // Firebase Config
+        const firebaseConfig = { 
+            apiKey: "AIzaSyB8Zvuwfx55elKk8B2ZNPiWk16y1NPowIA", 
+            authDomain: "learn-plataforma.firebaseapp.com", 
+            projectId: "learn-plataforma", 
+            storageBucket: "learn-plataforma.firebasestorage.app", 
+            messagingSenderId: "177385285776", 
+            appId: "1:177385285776:web:f41879d6282558cc7f1015" 
         };
         
-        let users = JSON.parse(localStorage.getItem('learn_users')) || [
-            { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", email: "aluno@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] },
-            { id: 2, name: "admin.learn", password: "admin123", role: "admin", email: "admin@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }
-        ];
+        // Inicializar Firebase
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log("Firebase conectado!");
+        } catch(e) {
+            console.warn("Erro no Firebase:", e);
+        }
         
-        let forumPosts = JSON.parse(localStorage.getItem('learn_forum')) || [];
-        let notifications = JSON.parse(localStorage.getItem('learn_notifications')) || [{ id: 1, text: "🎉 Bem-vindo à plataforma LEARN!", read: false, date: new Date() }];
+        // ============================================
+        // CURSOS INICIAIS
+        // ============================================
+        let coursesData = {};
+        let users = [];
+        let forumPosts = [];
+        let notifications = [];
         let currentUser = null;
         let currentQuizAnswers = {};
         let adminChart = null;
@@ -396,9 +374,125 @@
         // Variáveis para slides da aula
         let currentSlideIndex = 0;
         let currentLessonSlides = [];
+        let currentCourseId = null;
+        let currentLessonId = null;
         
         // ============================================
-        // FUNÇÕES ADMIN - CRUD DE CURSOS
+        // FUNÇÕES DE INICIALIZAÇÃO DO FIREBASE
+        // ============================================
+        
+        async function loadDataFromFirebase() {
+            try {
+                // Carregar cursos
+                const coursesSnapshot = await db.collection('courses').get();
+                if (!coursesSnapshot.empty) {
+                    coursesData = {};
+                    coursesSnapshot.forEach(doc => {
+                        coursesData[parseInt(doc.id)] = doc.data();
+                    });
+                } else {
+                    // Dados iniciais
+                    coursesData = {
+                        1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, 
+                            lessons: [{ id: 1, title: "Greetings and Introductions", videoUrl: "https://www.youtube.com/watch?v=PyLcxWNao3E", content: "<div class='lesson-content'><h2>🇬🇧 Greetings and Introductions</h2><p>Nesta aula você aprenderá as saudações básicas em inglês.</p><div class='example-box'><strong>📌 Exemplos:</strong><br>• Good morning - Bom dia<br>• Good afternoon - Boa tarde</div><div class='example-box' style='margin-top:15px;'><strong>✏️ Exercício:</strong><br>Pratique as saudações.</div></div>" }],
+                            quiz: [{ q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 }] },
+                        2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, 
+                            lessons: [{ id: 1, title: "Seiri - Senso de Utilização", videoUrl: "", content: "<div class='lesson-content'><h2>🧹 Seiri - Senso de Utilização</h2><p>Separar o útil do inútil.</p><div class='example-box'><strong>📌 Exemplo:</strong><br>Separar ferramentas quebradas.</div></div>" }],
+                            quiz: [{ q: "O que significa Seiri?", options: ["Organização", "Utilização", "Limpeza", "Disciplina"], correct: 1 }] },
+                        3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, 
+                            lessons: [{ id: 1, title: "Introdução ao Excel", videoUrl: "", content: "<div class='lesson-content'><h2>📊 Introdução ao Excel</h2><p>Conhecendo a interface.</p><div class='example-box'><strong>📌 Elementos:</strong><br>Faixa de opções, Barra de fórmulas</div></div>" }],
+                            quiz: [{ q: "Qual fórmula soma valores?", options: ["=SOMA", "=MÉDIA", "=PROCV", "=SE"], correct: 0 }] }
+                    };
+                    await saveCoursesToFirebase();
+                }
+                
+                // Carregar usuários
+                const usersSnapshot = await db.collection('users').get();
+                if (!usersSnapshot.empty) {
+                    users = [];
+                    usersSnapshot.forEach(doc => {
+                        users.push(doc.data());
+                    });
+                } else {
+                    users = [
+                        { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", email: "aluno@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] },
+                        { id: 2, name: "admin.learn", password: "admin123", role: "admin", email: "admin@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }
+                    ];
+                    await saveUsersToFirebase();
+                }
+                
+                // Carregar fórum
+                const forumSnapshot = await db.collection('forum').doc('posts').get();
+                if (forumSnapshot.exists) {
+                    forumPosts = forumSnapshot.data().posts || [];
+                } else {
+                    forumPosts = [];
+                }
+                
+                // Carregar notificações
+                const notifSnapshot = await db.collection('notifications').doc('global').get();
+                if (notifSnapshot.exists) {
+                    notifications = notifSnapshot.data().notifications || [];
+                } else {
+                    notifications = [{ id: 1, text: "🎉 Bem-vindo à plataforma LEARN!", read: false, date: new Date() }];
+                }
+                
+                console.log("Dados carregados do Firebase!");
+                return true;
+            } catch(e) {
+                console.error("Erro ao carregar dados:", e);
+                // Fallback para localStorage
+                const cachedCourses = localStorage.getItem('learn_courses_backup');
+                if (cachedCourses) coursesData = JSON.parse(cachedCourses);
+                const cachedUsers = localStorage.getItem('learn_users_backup');
+                if (cachedUsers) users = JSON.parse(cachedUsers);
+                return false;
+            }
+        }
+        
+        async function saveCoursesToFirebase() {
+            try {
+                for (let id in coursesData) {
+                    await db.collection('courses').doc(id).set(coursesData[id]);
+                }
+                localStorage.setItem('learn_courses_backup', JSON.stringify(coursesData));
+                console.log("Cursos salvos!");
+            } catch(e) { console.error("Erro ao salvar cursos:", e); }
+        }
+        
+        async function saveUsersToFirebase() {
+            try {
+                for (let user of users) {
+                    await db.collection('users').doc(user.id.toString()).set(user);
+                }
+                localStorage.setItem('learn_users_backup', JSON.stringify(users));
+                console.log("Usuários salvos!");
+            } catch(e) { console.error("Erro ao salvar usuários:", e); }
+        }
+        
+        async function saveForumToFirebase() {
+            try {
+                await db.collection('forum').doc('posts').set({ posts: forumPosts });
+                localStorage.setItem('learn_forum_backup', JSON.stringify(forumPosts));
+            } catch(e) { console.error("Erro ao salvar fórum:", e); }
+        }
+        
+        async function saveNotificationsToFirebase() {
+            try {
+                await db.collection('notifications').doc('global').set({ notifications: notifications });
+                localStorage.setItem('learn_notifications_backup', JSON.stringify(notifications));
+            } catch(e) { console.error("Erro ao salvar notificações:", e); }
+        }
+        
+        async function saveAllToFirebase() {
+            await saveCoursesToFirebase();
+            await saveUsersToFirebase();
+            await saveForumToFirebase();
+            await saveNotificationsToFirebase();
+        }
+        
+        // ============================================
+        // FUNÇÕES ADMIN - CRUD DE CURSOS (COM FIREBASE)
         // ============================================
         
         function showAdminTab(tab) {
@@ -459,10 +553,10 @@
             editingCourseId = courseId;
         }
         
-        function deleteCourse(courseId) {
+        async function deleteCourse(courseId) {
             if (confirm('Tem certeza que deseja excluir este curso?')) {
                 delete coursesData[courseId];
-                localStorage.setItem('learn_courses', JSON.stringify(coursesData));
+                await saveCoursesToFirebase();
                 renderAdminCoursesList();
                 loadCourses();
                 alert('Curso excluído com sucesso!');
@@ -533,7 +627,7 @@
             editingCourseId = null;
         }
         
-        function saveNewCourse() {
+        async function saveNewCourse() {
             const title = document.getElementById('newCourseTitle').value.trim();
             if (!title) { alert('Digite o título do curso!'); return; }
             if (tempLessons.length === 0) { alert('Adicione pelo menos uma aula!'); return; }
@@ -553,7 +647,7 @@
             };
             
             coursesData[newId] = newCourse;
-            localStorage.setItem('learn_courses', JSON.stringify(coursesData));
+            await saveCoursesToFirebase();
             
             alert(`Curso "${title}" ${editingCourseId ? 'atualizado' : 'criado'} com sucesso!`);
             clearCourseForm();
@@ -601,22 +695,12 @@
             return `<div class="video-container"><iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
         }
         
-        // ============================================
-        // FUNÇÕES DE SLIDES PARA AULAS
-        // ============================================
-        
         function buildSlides(lesson) {
             const slides = [];
             slides.push({ icon: "📹", title: "Assista ao Vídeo", content: getVideoHtml(lesson.videoUrl) });
             slides.push({ icon: "📖", title: "Conteúdo da Aula", content: lesson.content });
-            
-            let exercicioContent = lesson.content;
-            if (!exercicioContent.includes("✏️ Exercício") && !exercicioContent.includes("Exercício")) {
-                exercicioContent += `<div class="example-box" style="margin-top: 20px; background: #e6f0ff;"><strong>✏️ Exercício:</strong><br>Após assistir ao vídeo e ler o conteúdo, pratique o que aprendeu. Faça anotações dos principais pontos.</div>`;
-            }
-            slides.push({ icon: "✏️", title: "Exercícios", content: exercicioContent });
-            
-            slides.push({ icon: "✅", title: "Concluir Aula", content: `<div style="text-align: center; padding: 20px;"><i class="fas fa-trophy" style="font-size: 64px; color: #f59e0b;"></i><h3 style="margin: 20px 0;">Parabéns! Você concluiu esta aula!</h3><p style="margin-bottom: 20px;">Revise os conceitos aprendidos e clique no botão abaixo para marcar a aula como concluída.</p><button class="complete-btn" id="finalCompleteBtn" style="margin-top: 20px;">✅ Marcar como Concluída</button></div>` });
+            slides.push({ icon: "✏️", title: "Exercícios", content: lesson.content + (lesson.content.includes("Exercício") ? '' : `<div class="example-box" style="margin-top: 20px; background: #e6f0ff;"><strong>✏️ Exercício:</strong><br>Pratique o que aprendeu.</div>`) });
+            slides.push({ icon: "✅", title: "Concluir Aula", content: `<div style="text-align: center; padding: 20px;"><i class="fas fa-trophy" style="font-size: 64px; color: #f59e0b;"></i><h3 style="margin: 20px 0;">Parabéns! Você concluiu esta aula!</h3><button class="complete-btn" id="finalCompleteBtn" style="margin-top: 20px;">✅ Marcar como Concluída</button></div>` });
             return slides;
         }
         
@@ -658,16 +742,13 @@
             else completeLesson(courseId, lessonId);
         }
         
-        let currentCourseId = null;
-        let currentLessonId = null;
-        
         function openLessonWithSlides(courseId, lessonId) {
             const course = coursesData[courseId];
             const lesson = course.lessons.find(l => l.id === lessonId);
             const isComp = currentUser.courseProgress[courseId]?.find(p => p.id === lessonId)?.completed || false;
             
             if (isComp) {
-                document.getElementById('lessonModalContent').innerHTML = `<div style="text-align: center; padding: 30px;"><i class="fas fa-check-circle" style="font-size: 64px; color: #10b981;"></i><h3 style="margin: 20px 0;">Aula já concluída!</h3><p>Parabéns! Você já completou esta aula com sucesso.</p><button class="complete-btn" onclick="closeLessonModal()">Fechar</button></div>`;
+                document.getElementById('lessonModalContent').innerHTML = `<div style="text-align: center; padding: 30px;"><i class="fas fa-check-circle" style="font-size: 64px; color: #10b981;"></i><h3 style="margin: 20px 0;">Aula já concluída!</h3><button class="complete-btn" onclick="closeLessonModal()">Fechar</button></div>`;
                 document.getElementById('lessonModal').style.display = 'flex';
                 return;
             }
@@ -679,10 +760,6 @@
             renderSlide(0, currentLessonSlides, courseId, lessonId);
             document.getElementById('lessonModal').style.display = 'flex';
         }
-        
-        // ============================================
-        // CERTIFICADO TRADICIONAL/ACADÊMICO
-        // ============================================
         
         function showCertificatePreview(courseId) {
             const course = coursesData[courseId];
@@ -699,43 +776,24 @@
                             <div style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; border-top: 2px solid #c4a56e; border-right: 2px solid #c4a56e;"></div>
                             <div style="position: absolute; bottom: 5px; left: 5px; width: 30px; height: 30px; border-bottom: 2px solid #c4a56e; border-left: 2px solid #c4a56e;"></div>
                             <div style="position: absolute; bottom: 5px; right: 5px; width: 30px; height: 30px; border-bottom: 2px solid #c4a56e; border-right: 2px solid #c4a56e;"></div>
-                            
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; border-radius: 50%; background: rgba(196,165,110,0.08); border: 1px solid rgba(196,165,110,0.3); pointer-events: none; z-index: 0;">
                                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; color: rgba(196,165,110,0.15);">★</div>
                             </div>
-                            
                             <div style="text-align: center; margin-bottom: 20px; position: relative; z-index: 1;">
                                 <div style="font-size: 32px; font-weight: 700; letter-spacing: 4px; color: #8B7355;">LEARN</div>
                                 <div style="font-size: 42px; font-weight: 700; color: #2c1810; margin: 15px 0 5px; letter-spacing: 6px;">CERTIFICADO</div>
                                 <div style="font-size: 14px; color: #8B7355; letter-spacing: 2px;">DE CONCLUSÃO DE CURSO</div>
                             </div>
-                            
                             <div style="text-align: center; font-size: 18px; color: #2c1810; margin: 30px 0 10px;">A Diretoria da LEARN certifica que</div>
                             <div style="text-align: center; font-size: 52px; font-weight: 700; color: #8B7355; margin: 15px 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; text-transform: uppercase;">${userName}</div>
                             <div style="text-align: center; font-size: 18px; color: #2c1810;">concluiu com êxito o curso de</div>
                             <div style="text-align: center; font-size: 28px; font-weight: 600; color: #2c1810; margin: 20px 0; font-style: italic;">${course.title}</div>
-                            
-                            <div style="text-align: center; font-size: 14px; color: #555; margin: 20px 0; line-height: 1.8;">
-                                Carga horária total: ${hours} (${hours.replace('h', '')}) horas<br>
-                                Conclusão: ${date}
-                            </div>
-                            
+                            <div style="text-align: center; font-size: 14px; color: #555; margin: 20px 0; line-height: 1.8;">Carga horária total: ${hours} (${hours.replace('h', '')}) horas<br>Conclusão: ${date}</div>
                             <div style="display: flex; justify-content: space-between; margin: 40px 30px 20px;">
-                                <div style="text-align: center; width: 200px;">
-                                    <div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div>
-                                    <div style="font-weight: 600; font-size: 14px;">Luiz Carlos Correa Junior</div>
-                                    <div style="font-size: 10px; color: #8B7355;">Gerente do Projeto LEARN</div>
-                                </div>
-                                <div style="text-align: center; width: 200px;">
-                                    <div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div>
-                                    <div style="font-weight: 600; font-size: 14px;">Diretoria Acadêmica</div>
-                                    <div style="font-size: 10px; color: #8B7355;">Diretor de Educação</div>
-                                </div>
+                                <div style="text-align: center; width: 200px;"><div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div><div style="font-weight: 600; font-size: 14px;">Luiz Carlos Correa Junior</div><div style="font-size: 10px; color: #8B7355;">Gerente do Projeto LEARN</div></div>
+                                <div style="text-align: center; width: 200px;"><div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div><div style="font-weight: 600; font-size: 14px;">Diretoria Acadêmica</div><div style="font-size: 10px; color: #8B7355;">Diretor de Educação</div></div>
                             </div>
-                            
-                            <div style="text-align: center; font-size: 10px; color: #aaa; margin-top: 20px; border-top: 1px solid #e0d5c0; padding-top: 15px;">
-                                Certificado nº: ${certNumber} | Registro Nacional de Educação Profissional
-                            </div>
+                            <div style="text-align: center; font-size: 10px; color: #aaa; margin-top: 20px; border-top: 1px solid #e0d5c0; padding-top: 15px;">Certificado nº: ${certNumber} | Registro Nacional de Educação Profissional</div>
                         </div>
                     </div>
                 </div>
@@ -746,35 +804,18 @@
         }
         
         function getLevel(points) { if (points >= 500) return "💎 Platina"; if (points >= 300) return "🥇 Ouro"; if (points >= 150) return "🥈 Prata"; return "🥉 Bronze"; }
-        
-        function triggerConfetti() {
-            canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D82A28', '#1B2F47', '#10b981'] });
-            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.3 } }), 200);
-            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.7 } }), 400);
-        }
-        
-        function shareCertificate(platform) {
-            const text = `🎓 Acabei de concluir um curso na plataforma LEARN!`;
-            if (platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-            else if (platform === 'linkedin') window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank');
-            else if (platform === 'email') window.location.href = `mailto:?subject=Certificado LEARN&body=${encodeURIComponent(text)}`;
-            alert(`✅ Compartilhado!`);
-        }
+        function triggerConfetti() { canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D82A28', '#1B2F47', '#10b981'] }); setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.3 } }), 200); setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.7 } }), 400); }
+        function shareCertificate(platform) { const text = `🎓 Acabei de concluir um curso na plataforma LEARN!`; if (platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank'); else if (platform === 'linkedin') window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank'); else if (platform === 'email') window.location.href = `mailto:?subject=Certificado LEARN&body=${encodeURIComponent(text)}`; alert(`✅ Compartilhado!`); }
         
         function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
-        function addNotification(text) { notifications.unshift({ id: Date.now(), text, read: false, date: new Date() }); localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); }
+        function addNotification(text) { notifications.unshift({ id: Date.now(), text, read: false, date: new Date() }); saveNotificationsToFirebase(); updateNotificationBadge(); }
         function toggleNotifications() { const panel = document.getElementById('notificationPanel'); if (panel.style.display === 'block') panel.style.display = 'none'; else { panel.innerHTML = notifications.map(n => `<div class="notification-item ${!n.read ? 'unread' : ''}" onclick="markNotificationRead(${n.id})">${n.text}<br><small>${new Date(n.date).toLocaleString()}</small></div>`).join(''); panel.style.display = 'block'; } }
-        function markNotificationRead(id) { const n = notifications.find(n => n.id === id); if (n) n.read = true; localStorage.setItem('learn_notifications', JSON.stringify(notifications)); updateNotificationBadge(); toggleNotifications(); }
+        function markNotificationRead(id) { const n = notifications.find(n => n.id === id); if (n) n.read = true; saveNotificationsToFirebase(); updateNotificationBadge(); toggleNotifications(); }
         
         function updateDashboard() {
             const total = Object.keys(coursesData).length;
             const completed = currentUser?.completedCourses?.length || 0;
-            document.getElementById('dashboardGrid').innerHTML = `
-                <div class="dashboard-card"><div class="value">${completed}/${total}</div><div>Cursos Concluídos</div></div>
-                <div class="dashboard-card"><div class="value">${currentUser?.points || 0}</div><div>Pontos</div></div>
-                <div class="dashboard-card"><div class="value">${getLevel(currentUser?.points || 0)}</div><div>Nível</div></div>
-                <div class="dashboard-card"><div class="value">${currentUser?.badges?.length || 0}</div><div>Conquistas</div></div>
-            `;
+            document.getElementById('dashboardGrid').innerHTML = `<div class="dashboard-card"><div class="value">${completed}/${total}</div><div>Cursos Concluídos</div></div><div class="dashboard-card"><div class="value">${currentUser?.points || 0}</div><div>Pontos</div></div><div class="dashboard-card"><div class="value">${getLevel(currentUser?.points || 0)}</div><div>Nível</div></div><div class="dashboard-card"><div class="value">${currentUser?.badges?.length || 0}</div><div>Conquistas</div></div>`;
         }
         
         function updateBadges() {
@@ -798,7 +839,11 @@
             updateBadges();
         }
         
-        function saveUser() { const idx = users.findIndex(u => u.id === currentUser.id); if (idx !== -1) users[idx] = currentUser; localStorage.setItem('learn_users', JSON.stringify(users)); localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); }
+        async function saveUser() { 
+            const idx = users.findIndex(u => u.id === currentUser.id); 
+            if (idx !== -1) users[idx] = currentUser; 
+            await saveUsersToFirebase();
+        }
         
         function rateCourse(courseId, rating) { if (!currentUser.ratings) currentUser.ratings = {}; currentUser.ratings[courseId] = rating; saveUser(); loadCourses(); }
         function renderStars(courseId) { const rating = currentUser?.ratings?.[courseId] || 0; let stars = ''; for (let i = 1; i <= 5; i++) stars += `<span class="star ${i <= rating ? 'active' : ''}" onclick="event.stopPropagation(); rateCourse(${courseId}, ${i})">★</span>`; return stars; }
@@ -879,14 +924,14 @@
         function loadForum() { document.getElementById('forumList').innerHTML = forumPosts.length ? forumPosts.map(p => `<div class="forum-post"><h3>${p.title}</h3><p>${p.content}</p><small>👤 ${p.author} | ${p.date}</small></div>`).join('') : '<div style="text-align:center; padding:30px;">💬 Nenhuma pergunta.</div>'; }
         function showNewPostModal() { document.getElementById('newPostModal').style.display = 'flex'; }
         function closeNewPostModal() { document.getElementById('newPostModal').style.display = 'none'; }
-        function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); localStorage.setItem('learn_forum', JSON.stringify(forumPosts)); closeNewPostModal(); loadForum(); alert('Pergunta publicada!'); } else alert('Preencha título e conteúdo'); }
+        async function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); await saveForumToFirebase(); closeNewPostModal(); loadForum(); alert('Pergunta publicada!'); } else alert('Preencha título e conteúdo'); }
         
         function showSection(section) { document.querySelectorAll('#homeSection, #coursesSection, #certificatesSection, #forumSection, #adminSection').forEach(s => s.style.display = 'none'); if (section === 'home') document.getElementById('homeSection').style.display = 'block'; else if (section === 'courses') document.getElementById('coursesSection').style.display = 'block'; else if (section === 'certificates') document.getElementById('certificatesSection').style.display = 'block'; else if (section === 'forum') { document.getElementById('forumSection').style.display = 'block'; loadForum(); } else if (section === 'admin' && currentUser?.role === 'admin') document.getElementById('adminSection').style.display = 'block'; }
         function showRegister() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('registerScreen').style.display = 'flex'; }
         function showLogin() { document.getElementById('registerScreen').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
-        function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }); localStorage.setItem('learn_users', JSON.stringify(users)); alert('Conta criada!'); showLogin(); } else alert('Preencha todos os campos'); }
+        async function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }); await saveUsersToFirebase(); alert('Conta criada!'); showLogin(); } else alert('Preencha todos os campos'); }
         
-        function doLogin() { 
+        async function doLogin() { 
             const username = document.getElementById('username').value; 
             const password = document.getElementById('password').value; 
             const user = users.find(u => u.name === username && u.password === password); 
@@ -914,7 +959,22 @@
         function closeCertPreview() { document.getElementById('certPreviewModal').style.display = 'none'; }
         function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; }
         
-        function init() { loadTheme(); if (currentUser) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); } }
+        async function init() { 
+            loadTheme(); 
+            await loadDataFromFirebase();
+            const storedUser = localStorage.getItem('learn_currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                const freshUser = users.find(u => u.id === currentUser.id);
+                if (freshUser) currentUser = freshUser;
+                document.getElementById('loginScreen').style.display = 'none'; 
+                document.getElementById('appContainer').style.display = 'block'; 
+                document.getElementById('welcomeName').innerText = currentUser.name; 
+                document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase(); 
+                if (currentUser.role === 'admin') document.getElementById('adminNav').style.display = 'block'; 
+                updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); 
+            } 
+        }
         window.onclick = (e) => { if (e.target.classList.contains('modal')) closeModal(); };
         init();
     </script>
