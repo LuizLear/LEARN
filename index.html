@@ -14,142 +14,706 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
     <style>
+        :root {
+            --bg-primary: linear-gradient(145deg, #f0f4fc 0%, #e8edf5 100%);
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8fafc;
+            --text-primary: #1a2c3e;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent: #D82A28;
+            --accent-hover: #b0201e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        body.dark {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent: #D82A28;
+            --accent-hover: #ef4444;
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #f0f4fc 0%, #e8edf5 100%); color: #1a2c3e; min-height: 100vh; }
-        body.dark { background: #0f172a; color: #f1f5f9; }
-        body.dark .card, body.dark .course-card, body.dark .stat-card, body.dark .modal-content,
-        body.dark .login-card, body.dark .quiz-area, body.dark .lesson-card, body.dark .dashboard-card,
-        body.dark .course-admin-card { background: #1e293b; color: #f1f5f9; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg-primary); 
+            color: var(--text-primary); 
+            min-height: 100vh; 
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        /* Cards com cores sólidas no dark mode */
+        body.dark .card, 
+        body.dark .course-card, 
+        body.dark .stat-card, 
+        body.dark .modal-content,
+        body.dark .login-card, 
+        body.dark .quiz-area, 
+        body.dark .lesson-card, 
+        body.dark .dashboard-card,
+        body.dark .course-admin-card,
+        body.dark .forum-post,
+        body.dark .badge-item,
+        body.dark .lesson-item,
+        body.dark .quiz-item {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
         
         .lesson-content { word-wrap: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.6; }
         .lesson-content p { margin-bottom: 15px; line-height: 1.6; }
-        .lesson-content h2, .lesson-content h3 { margin-top: 20px; margin-bottom: 10px; }
+        .lesson-content h2, .lesson-content h3 { margin-top: 20px; margin-bottom: 10px; color: var(--text-primary); }
         .lesson-content ul, .lesson-content ol { margin-left: 25px; margin-bottom: 15px; }
         .lesson-content li { margin-bottom: 8px; line-height: 1.5; }
-        .example-box { word-wrap: break-word; white-space: normal; }
+        .example-box { word-wrap: break-word; white-space: normal; background: var(--bg-card-hover); border-left-color: var(--warning); }
         
-        .header { background: rgba(26, 44, 62, 0.95); backdrop-filter: blur(12px); color: white; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .logo { font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #fff 0%, #D82A28 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .search-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-input { 
+            flex: 1; 
+            padding: 12px 20px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 40px; 
+            background: var(--bg-card); 
+            color: var(--text-primary); 
+            font-size: 14px; 
+        }
+        .search-input:focus { outline: none; border-color: var(--accent); }
+        .search-input::placeholder { color: var(--text-secondary); }
+        .search-btn { background: var(--accent); color: white; border: none; padding: 0 20px; border-radius: 40px; cursor: pointer; transition: 0.2s; }
+        .search-btn:hover { background: var(--accent-hover); }
+        .category-filter { 
+            padding: 12px 20px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 40px; 
+            background: var(--bg-card); 
+            color: var(--text-primary); 
+            cursor: pointer; 
+        }
+        
+        .favorite-btn { background: none; border: none; cursor: pointer; font-size: 20px; color: #cbd5e1; transition: 0.2s; }
+        .favorite-btn.active { color: var(--warning); }
+        .favorite-btn:hover { transform: scale(1.1); color: var(--warning); }
+        
+        .pomodoro-timer { 
+            background: var(--bg-card); 
+            border-radius: 60px; 
+            padding: 8px 20px; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            border: 1px solid var(--border-color); 
+        }
+        .timer-display { font-size: 28px; font-weight: 700; font-family: monospace; color: var(--accent); }
+        .timer-btn { background: var(--accent); color: white; border: none; padding: 6px 16px; border-radius: 30px; cursor: pointer; font-size: 12px; }
+        .timer-btn.pause { background: var(--text-secondary); }
+        .timer-session { font-size: 12px; color: var(--text-secondary); }
+        
+        .badge-item.locked { opacity: 0.6; filter: grayscale(0.3); }
+        .badge-progress { font-size: 10px; color: var(--success); margin-left: 8px; }
+        
+        .header { 
+            background: rgba(26, 44, 62, 0.95); 
+            backdrop-filter: blur(12px); 
+            color: white; 
+            padding: 12px 32px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+        }
+        body.dark .header { background: rgba(15, 23, 42, 0.95); }
+        .logo { font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .nav { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-        .nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 500; cursor: pointer; font-size: 13px; }
-        .nav a:hover, .nav a.active { color: #D82A28; }
-        .lang-select { background: rgba(255,255,255,0.15); border: none; color: white; padding: 6px 10px; border-radius: 20px; cursor: pointer; font-size: 12px; }
-        .theme-toggle, .notification-btn { background: rgba(255,255,255,0.15); border: none; color: white; padding: 6px 10px; border-radius: 40px; cursor: pointer; position: relative; }
+        .nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 500; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .nav a:hover, .nav a.active { color: var(--accent); }
+        .lang-select { 
+            background: rgba(255,255,255,0.15); 
+            border: none; 
+            color: white; 
+            padding: 6px 10px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 12px; 
+        }
+        .lang-select option { background: #1a2c3e; color: white; }
+        body.dark .lang-select option { background: #0f172a; }
+        .theme-toggle, .notification-btn { 
+            background: rgba(255,255,255,0.15); 
+            border: none; 
+            color: white; 
+            padding: 6px 10px; 
+            border-radius: 40px; 
+            cursor: pointer; 
+            position: relative; 
+            transition: 0.2s;
+        }
+        .theme-toggle:hover, .notification-btn:hover { background: rgba(255,255,255,0.25); }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .user-info { display: flex; align-items: center; gap: 12px; }
-        .user-avatar { width: 38px; height: 38px; background: linear-gradient(135deg, #D82A28, #b0201e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; cursor: pointer; font-size: 14px; }
-        .logout-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 40px; cursor: pointer; font-size: 12px; }
+        .user-avatar { 
+            width: 38px; 
+            height: 38px; 
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover)); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 14px; 
+            transition: 0.2s;
+        }
+        .user-avatar:hover { transform: scale(1.05); }
+        .logout-btn { 
+            background: rgba(255,255,255,0.15); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            color: white; 
+            padding: 6px 14px; 
+            border-radius: 40px; 
+            cursor: pointer; 
+            font-size: 12px; 
+            transition: 0.2s;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.25); }
         .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%); }
-        .login-card { background: white; padding: 40px 32px; border-radius: 32px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); }
-        .login-card h2 { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #1a2c3e, #D82A28); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .login-card input, .login-card select { width: 100%; padding: 12px; margin: 8px 0; border: 1.5px solid #e2e8f0; border-radius: 20px; font-size: 14px; }
-        .login-card button { width: 100%; padding: 12px; background: linear-gradient(135deg, #1a2c3e, #D82A28); color: white; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .login-card { 
+            background: white; 
+            padding: 40px 32px; 
+            border-radius: 32px; 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); 
+        }
+        .login-card h2 { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #1a2c3e, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .login-card input, .login-card select { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border: 1.5px solid #e2e8f0; 
+            border-radius: 20px; 
+            font-size: 14px; 
+        }
+        .login-card button { 
+            width: 100%; 
+            padding: 12px; 
+            background: linear-gradient(135deg, #1a2c3e, var(--accent)); 
+            color: white; 
+            border: none; 
+            border-radius: 40px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 8px; 
+            transition: 0.2s;
+        }
+        .login-card button:hover { opacity: 0.9; transform: translateY(-1px); }
         .app-container { display: none; }
         
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
-        .admin-tab { padding: 8px 20px; border-radius: 30px; cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-color); }
-        .admin-tab.active { background: #D82A28; color: white; border-color: #D82A28; }
+        .admin-tab { 
+            padding: 8px 20px; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            color: var(--text-primary);
+            transition: 0.2s;
+        }
+        .admin-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); }
-        .lesson-item, .quiz-item { background: var(--card-hover); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border-color); }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary); }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border-color); 
+            background: var(--bg-card); 
+            color: var(--text-primary); 
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+        .lesson-item, .quiz-item { background: var(--bg-card-hover); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border-color); }
         .lesson-header, .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .btn-icon { background: none; border: none; cursor: pointer; font-size: 18px; padding: 5px; color: var(--text-primary); }
-        .btn-add { background: #D82A28; color: white; border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 13px; margin-top: 10px; }
-        .btn-save { background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 40px; cursor: pointer; font-weight: 600; }
-        .btn-cancel { background: #64748b; color: white; border: none; padding: 12px 24px; border-radius: 40px; cursor: pointer; margin-left: 10px; }
+        .btn-icon { background: none; border: none; cursor: pointer; font-size: 18px; padding: 5px; color: var(--text-primary); transition: 0.2s; }
+        .btn-icon:hover { color: var(--danger); }
+        .btn-add { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 13px; margin-top: 10px; transition: 0.2s; }
+        .btn-add:hover { background: var(--accent-hover); }
+        .btn-save { background: var(--success); color: white; border: none; padding: 12px 24px; border-radius: 40px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-cancel { background: var(--text-secondary); color: white; border: none; padding: 12px 24px; border-radius: 40px; cursor: pointer; margin-left: 10px; transition: 0.2s; }
+        .btn-cancel:hover { opacity: 0.9; }
         .courses-admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
-        .course-admin-card { background: white; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0; }
+        .course-admin-card { background: var(--bg-card); border-radius: 20px; padding: 20px; border: 1px solid var(--border-color); }
         .course-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .course-actions button { padding: 5px 12px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; }
-        .btn-edit { background: #f59e0b; color: white; }
-        .btn-delete { background: #ef4444; color: white; }
-        .btn-preview { background: #1a2c3e; color: white; }
+        .course-actions button { padding: 5px 12px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .btn-edit { background: var(--warning); color: white; }
+        .btn-delete { background: var(--danger); color: white; }
+        .btn-preview { background: var(--text-secondary); color: white; }
         
         .slides-container { position: relative; min-height: 400px; }
         .slide { display: none; animation: fadeIn 0.5s ease; }
         .slide.active-slide { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
         .slide-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color); }
-        .slide-nav button { background: #D82A28; color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .slide-nav button { 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 40px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            transition: 0.2s;
+        }
+        .slide-nav button:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
         .slide-nav button:disabled { opacity: 0.5; cursor: not-allowed; }
         .slide-dots { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .slide-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border-color); cursor: pointer; transition: 0.3s; }
-        .slide-dot.active { background: #D82A28; width: 25px; border-radius: 10px; }
+        .slide-dot { 
+            width: 10px; 
+            height: 10px; 
+            border-radius: 50%; 
+            background: var(--border-color); 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        .slide-dot.active { background: var(--accent); width: 25px; border-radius: 10px; }
         .slide-progress { margin-bottom: 20px; }
         .slide-progress-bar { height: 4px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
-        .slide-progress-fill { height: 100%; background: #D82A28; width: 0%; transition: width 0.3s; }
+        .slide-progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
         
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .dashboard-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 4px solid #D82A28; }
-        .dashboard-card .value { font-size: 32px; font-weight: 700; color: #D82A28; }
+        .dashboard-card { 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            padding: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+            border-left: 4px solid var(--accent); 
+        }
+        .dashboard-card .value { font-size: 32px; font-weight: 700; color: var(--accent); }
         
         .hero { background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%); color: white; padding: 50px 40px; text-align: center; }
         .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 12px; }
-        .hero h1 span { background: linear-gradient(135deg, #D82A28, #ff6b6b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .hero h1 span { background: linear-gradient(135deg, var(--accent), #ff6b6b); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .stats-row { display: flex; justify-content: center; gap: 20px; margin-top: 25px; flex-wrap: wrap; }
-        .stat-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 12px 20px; border-radius: 20px; text-align: center; }
-        .stat-number { font-size: 28px; font-weight: 700; color: #D82A28; }
-        .progress-dashboard { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border-radius: 20px; padding: 20px; margin-top: 25px; max-width: 450px; margin-left: auto; margin-right: auto; }
+        .stat-card { 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px); 
+            padding: 12px 20px; 
+            border-radius: 20px; 
+            text-align: center; 
+        }
+        .stat-number { font-size: 28px; font-weight: 700; color: var(--accent); }
+        .progress-dashboard { 
+            background: rgba(255,255,255,0.08); 
+            backdrop-filter: blur(10px); 
+            border-radius: 20px; 
+            padding: 20px; 
+            margin-top: 25px; 
+            max-width: 450px; 
+            margin-left: auto; 
+            margin-right: auto; 
+        }
         .progress-bar-container { background: rgba(255,255,255,0.2); border-radius: 100px; height: 6px; overflow: hidden; margin: 10px 0; }
-        .progress-bar-fill { background: linear-gradient(90deg, #D82A28, #ff6b6b); height: 100%; width: 0%; transition: width 0.6s ease; }
+        .progress-bar-fill { background: linear-gradient(90deg, var(--accent), #ff6b6b); height: 100%; width: 0%; transition: width 0.6s ease; }
         .section { padding: 40px; max-width: 1400px; margin: 0 auto; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
-        .section-header h2 { font-size: 24px; font-weight: 600; border-left: 4px solid #D82A28; padding-left: 15px; color: #1a2c3e; }
-        body.dark .section-header h2 { color: #f1f5f9; }
+        .section-header h2 { font-size: 24px; font-weight: 600; border-left: 4px solid var(--accent); padding-left: 15px; color: var(--text-primary); }
         .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .course-card { background: white; border-radius: 20px; overflow: hidden; cursor: pointer; transition: all 0.3s; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .course-card { 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+            position: relative; 
+        }
         .course-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15); }
-        .course-image { background: linear-gradient(135deg, #1a2c3e 0%, #2c4a6e 100%); height: 90px; display: flex; align-items: center; justify-content: center; font-size: 42px; position: relative; }
-        .quiz-badge { position: absolute; bottom: -10px; right: 12px; background: #D82A28; color: white; padding: 3px 10px; border-radius: 20px; font-size: 10px; }
+        .course-image { 
+            background: linear-gradient(135deg, #1a2c3e 0%, #2c4a6e 100%); 
+            height: 90px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 42px; 
+            position: relative; 
+        }
+        .quiz-badge { position: absolute; bottom: -10px; right: 12px; background: var(--accent); color: white; padding: 3px 10px; border-radius: 20px; font-size: 10px; }
         .course-info { padding: 20px; }
-        .course-info h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-        .course-info p { color: #64748b; font-size: 12px; margin-bottom: 12px; line-height: 1.5; }
+        .course-info h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+        .course-info p { color: var(--text-secondary); font-size: 12px; margin-bottom: 12px; line-height: 1.5; }
         .course-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-        .course-badge { background: #f1f5f9; padding: 3px 10px; border-radius: 100px; font-size: 10px; color: #1a2c3e; }
-        .course-hours { color: #D82A28; font-weight: 600; font-size: 11px; }
+        .course-badge { 
+            background: var(--bg-card-hover); 
+            padding: 3px 10px; 
+            border-radius: 100px; 
+            font-size: 10px; 
+            color: var(--text-primary); 
+        }
+        .course-hours { color: var(--accent); font-weight: 600; font-size: 11px; }
         .course-status { margin-top: 10px; font-size: 11px; }
-        .status-completed { color: #10b981; }
+        .status-completed { color: var(--success); }
         .rating-stars { display: flex; gap: 4px; margin-top: 8px; }
-        .star { color: #ddd; cursor: pointer; font-size: 14px; }
-        .star.active { color: #f59e0b; }
+        .star { color: #cbd5e1; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .star.active { color: var(--warning); }
+        .star:hover { color: var(--warning); }
         .badges-container { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
-        .badge-item { background: white; border-radius: 50px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; }
-        .notification-panel { position: absolute; top: 55px; right: 20px; background: white; border-radius: 16px; width: 280px; max-height: 350px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 200; display: none; }
-        .notification-item { padding: 10px; border-bottom: 1px solid #e2e8f0; cursor: pointer; font-size: 12px; }
-        .notification-item.unread { background: rgba(216,42,40,0.1); }
+        .badge-item { 
+            background: var(--bg-card); 
+            border-radius: 50px; 
+            padding: 6px 14px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            border: 1px solid var(--border-color); 
+        }
+        
+        /* NOTIFICATION PANEL - CORRIGIDO */
+        .notification-panel { 
+            position: absolute; 
+            top: 55px; 
+            right: 20px; 
+            background: var(--bg-card); 
+            border-radius: 16px; 
+            width: 300px; 
+            max-height: 400px; 
+            overflow-y: auto; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            z-index: 200; 
+            display: none; 
+            border: 1px solid var(--border-color);
+        }
+        .notification-item { 
+            padding: 12px; 
+            border-bottom: 1px solid var(--border-color); 
+            cursor: pointer; 
+            font-size: 13px; 
+            color: var(--text-primary);
+            transition: 0.2s;
+        }
+        .notification-item:hover { background: var(--bg-card-hover); }
+        .notification-item.unread { background: rgba(216, 42, 40, 0.15); border-left: 3px solid var(--accent); }
+        .notification-item small { color: var(--text-secondary); font-size: 10px; display: block; margin-top: 5px; }
+        
         .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 15px; }
-        .lesson-card { background: #f8fafc; border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.3s; border: 1px solid #e2e8f0; }
-        .lesson-card:hover { transform: translateY(-2px); }
-        .lesson-card.completed { border-left: 4px solid #10b981; background: #f0fdf4; }
-        .lesson-number { background: linear-gradient(135deg, #1a2c3e, #2c4a6e); color: white; padding: 3px 10px; border-radius: 20px; display: inline-block; font-size: 10px; margin-bottom: 8px; }
-        .progress-container { background: #e2e8f0; border-radius: 10px; height: 6px; margin: 12px 0; }
-        .progress-fill { background: #D82A28; border-radius: 10px; height: 100%; width: 0%; transition: width 0.5s; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; overflow-y: auto; border-radius: 28px; padding: 28px; position: relative; }
-        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; }
+        .lesson-card { 
+            background: var(--bg-card-hover); 
+            border-radius: 14px; 
+            padding: 14px; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            border: 1px solid var(--border-color); 
+            color: var(--text-primary);
+        }
+        .lesson-card:hover { transform: translateY(-2px); background: var(--bg-card); }
+        .lesson-card.completed { border-left: 4px solid var(--success); background: rgba(16, 185, 129, 0.1); }
+        .lesson-number { 
+            background: linear-gradient(135deg, #1a2c3e, #2c4a6e); 
+            color: white; 
+            padding: 3px 10px; 
+            border-radius: 20px; 
+            display: inline-block; 
+            font-size: 10px; 
+            margin-bottom: 8px; 
+        }
+        .progress-container { background: var(--border-color); border-radius: 10px; height: 6px; margin: 12px 0; }
+        .progress-fill { background: var(--accent); border-radius: 10px; height: 100%; width: 0%; transition: width 0.5s; }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.75); 
+            backdrop-filter: blur(8px); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .modal-content { 
+            background: var(--bg-card); 
+            width: 90%; 
+            max-width: 800px; 
+            max-height: 85vh; 
+            overflow-y: auto; 
+            border-radius: 28px; 
+            padding: 28px; 
+            position: relative; 
+            color: var(--text-primary);
+        }
+        .modal-close { 
+            position: absolute; 
+            top: 15px; 
+            right: 20px; 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: var(--text-primary);
+            transition: 0.2s;
+        }
+        .modal-close:hover { color: var(--accent); }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; margin: 20px 0; background: #000; border-radius: 12px; overflow: hidden; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .example-box { background: #fef3c7; padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid #f59e0b; word-wrap: break-word; white-space: normal; }
-        .quiz-question { background: #f8fafc; border-radius: 14px; padding: 16px; margin: 12px 0; border: 1px solid #e2e8f0; }
-        .quiz-option { display: block; padding: 10px; margin: 6px 0; background: white; border-radius: 10px; cursor: pointer; border: 1px solid #e2e8f0; font-size: 13px; }
-        .quiz-option.selected { background: #D82A28; color: white; }
-        .complete-btn { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 14px; margin-top: 15px; width: 100%; }
-        .btn-sm { background: #D82A28; color: white; border: none; padding: 5px 14px; border-radius: 20px; cursor: pointer; font-size: 11px; }
-        .forum-post { background: #f8fafc; border-radius: 14px; padding: 14px; margin-bottom: 10px; border-left: 4px solid #D82A28; }
+        .example-box { background: rgba(245, 158, 11, 0.1); padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid var(--warning); word-wrap: break-word; white-space: normal; color: var(--text-primary); }
+        .quiz-question { background: var(--bg-card-hover); border-radius: 14px; padding: 16px; margin: 12px 0; border: 1px solid var(--border-color); }
+        .quiz-option { 
+            display: block; 
+            padding: 10px; 
+            margin: 6px 0; 
+            background: var(--bg-card); 
+            border-radius: 10px; 
+            cursor: pointer; 
+            border: 1px solid var(--border-color); 
+            font-size: 13px; 
+            color: var(--text-primary);
+            transition: 0.2s;
+        }
+        .quiz-option:hover { background: var(--bg-card-hover); transform: translateX(5px); }
+        .quiz-option.selected { background: var(--accent); color: white; border-color: var(--accent); }
+        .complete-btn { 
+            background: linear-gradient(135deg, var(--success), #059669); 
+            color: white; 
+            border: none; 
+            padding: 10px 24px; 
+            border-radius: 40px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 14px; 
+            margin-top: 15px; 
+            width: 100%; 
+            transition: 0.2s;
+        }
+        .complete-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-sm { background: var(--accent); color: white; border: none; padding: 5px 14px; border-radius: 20px; cursor: pointer; font-size: 11px; transition: 0.2s; }
+        .btn-sm:hover { background: var(--accent-hover); }
+        .forum-post { 
+            background: var(--bg-card-hover); 
+            border-radius: 14px; 
+            padding: 14px; 
+            margin-bottom: 10px; 
+            border-left: 4px solid var(--accent); 
+            color: var(--text-primary);
+        }
         .share-buttons { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
-        .share-btn { padding: 8px 16px; border-radius: 40px; border: none; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; }
+        .share-btn { 
+            padding: 8px 16px; 
+            border-radius: 40px; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 13px; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            transition: 0.2s;
+        }
+        .share-btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .share-whatsapp { background: #25D366; color: white; }
         .share-linkedin { background: #0077B5; color: white; }
-        .share-email { background: #64748b; color: white; }
+        .share-email { background: var(--text-secondary); color: white; }
         .footer { background: #1a2c3e; color: rgba(255,255,255,0.7); text-align: center; padding: 25px; margin-top: 40px; font-size: 12px; }
-        @media (max-width: 768px) { .header { padding: 12px 16px; flex-direction: column; gap: 10px; } .section { padding: 25px 15px; } .hero h1 { font-size: 28px; } .nav { justify-content: center; } }
+        
+        /* PERFIL MODERNO - CORRIGIDO (SEM TRANSPARÊNCIA) */
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-card {
+            background: var(--bg-card);
+            border-radius: 32px;
+            max-width: 500px;
+            width: 90%;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        .profile-cover {
+            height: 120px;
+            background: linear-gradient(135deg, var(--accent), #1B2F47);
+        }
+        .profile-content {
+            padding: 0 32px 32px;
+            text-align: center;
+            position: relative;
+            background: var(--bg-card);
+        }
+        .avatar-container {
+            margin-top: -60px;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--bg-card);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            object-fit: cover;
+            background: var(--accent);
+        }
+        .profile-upload-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--accent);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid var(--bg-card);
+        }
+        .profile-upload-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+        .profile-upload-btn i {
+            color: white;
+            font-size: 14px;
+        }
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .profile-role {
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .profile-bio {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .profile-info-item {
+            background: var(--bg-card-hover);
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+        .profile-info-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .profile-info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+        .profile-stat {
+            text-align: center;
+        }
+        .profile-stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .profile-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .profile-edit-btn {
+            background: var(--text-primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .profile-edit-btn:hover {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+        
+        /* Modal de edição */
+        .edit-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+        
+        @media (max-width: 768px) { 
+            .header { padding: 12px 16px; flex-direction: column; gap: 10px; }
+            .section { padding: 25px 15px; }
+            .hero h1 { font-size: 28px; }
+            .nav { justify-content: center; }
+            .profile-card { width: 95%; }
+            .profile-info-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <div id="loginScreen" class="login-container">
         <div class="login-card">
-            <div style="font-size: 48px; margin-bottom: 15px;">🎓</div>
+            <div style="font-size: 48px; margin-bottom: 15px;"><i class="fas fa-graduation-cap"></i></div>
             <h2>LEARN</h2>
             <p style="color: #64748b; margin-bottom: 20px;">Plataforma EAD Corporativa</p>
             <select id="languageSelect">
@@ -161,17 +725,17 @@
             <input type="password" id="password" placeholder="Senha" value="admin123">
             <button onclick="doLogin()">Entrar</button>
             <div style="margin-top: 15px; font-size: 11px; background: #f8fafc; padding: 10px; border-radius: 14px;">
-                <strong>🔐 Credenciais:</strong><br>
-                👑 Admin: admin.learn / admin123<br>
-                👨‍🎓 Aluno: aluno.learn / learn123
+                <strong><i class="fas fa-key"></i> Credenciais:</strong><br>
+                <i class="fas fa-crown"></i> Admin: admin.learn / admin123<br>
+                <i class="fas fa-user-graduate"></i> Aluno: aluno.learn / learn123
             </div>
-            <button onclick="showRegister()" style="background: #64748b; margin-top: 8px;">📝 Criar conta</button>
+            <button onclick="showRegister()" style="background: #64748b; margin-top: 8px;"><i class="fas fa-user-plus"></i> Criar conta</button>
         </div>
     </div>
 
     <div id="registerScreen" class="login-container" style="display: none;">
         <div class="login-card">
-            <div style="font-size: 48px;">📝</div>
+            <div style="font-size: 48px;"><i class="fas fa-user-plus"></i></div>
             <h2>Criar Conta</h2>
             <input type="text" id="regName" placeholder="Nome completo">
             <input type="email" id="regEmail" placeholder="E-mail">
@@ -181,7 +745,7 @@
             <input type="text" id="regUsername" placeholder="Usuário">
             <input type="password" id="regPassword" placeholder="Senha">
             <button onclick="doRegister()">Criar Conta</button>
-            <button onclick="showLogin()" style="background: #64748b;">← Voltar</button>
+            <button onclick="showLogin()" style="background: #64748b;"><i class="fas fa-arrow-left"></i> Voltar</button>
         </div>
     </div>
 
@@ -205,77 +769,99 @@
                 </div>
             </div>
             <div class="user-info">
-                <div class="user-avatar" id="userAvatar" onclick="showProfile()">A</div>
+                <div class="user-avatar" id="userAvatar" onclick="showProfileModal()">A</div>
                 <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
             </div>
         </div>
 
+        <!-- HOME SECTION -->
         <div id="homeSection">
             <div class="hero">
-                <h1>Bem-vindo(a), <span id="welcomeName">Aluno</span>!</h1>
+                <h1>Bem-vindo(a), <span id="welcomeName">Aluno</span>! <i class="fas fa-smile-wink"></i></h1>
                 <p>Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!</p>
                 <div class="stats-row">
-                    <div class="stat-card"><div class="stat-number" id="userPointsStat">0</div><div>Pontos</div></div>
-                    <div class="stat-card"><div class="stat-number" id="completedCountStat">0</div><div>Cursos</div></div>
-                    <div class="stat-card"><div class="stat-number" id="levelStat">🥉 Bronze</div><div>Nível</div></div>
+                    <div class="stat-card"><div class="stat-number" id="userPointsStat">0</div><div><i class="fas fa-star"></i> Pontos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="completedCountStat">0</div><div><i class="fas fa-check-circle"></i> Cursos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="levelStat"><i class="fas fa-medal"></i> Bronze</div><div><i class="fas fa-chart-simple"></i> Nível</div></div>
                 </div>
                 <div class="progress-dashboard">
-                    <p><strong>📊 Progresso Geral</strong></p>
+                    <p><strong><i class="fas fa-chart-line"></i> Progresso Geral</strong></p>
                     <div class="progress-bar-container"><div class="progress-bar-fill" id="globalProgress"></div></div>
                     <p id="progressText" style="font-size: 13px; margin-top: 6px;">0% concluído</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2>📊 Seu Dashboard</h2></div>
+                <div class="section-header"><h2><i class="fas fa-chart-pie"></i> Seu Dashboard</h2></div>
                 <div class="dashboard-grid" id="dashboardGrid"></div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2>🎯 Cursos em Destaque</h2><a onclick="showSection('courses')" style="color: #D82A28; cursor: pointer;">Ver todos →</a></div>
+                <div class="section-header"><h2><i class="fas fa-fire"></i> Cursos em Destaque</h2><a onclick="showSection('courses')" style="color: var(--accent); cursor: pointer;">Ver todos <i class="fas fa-arrow-right"></i></a></div>
                 <div class="courses-grid" id="featuredCourses"></div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2>🏆 Suas Conquistas</h2></div>
+                <div class="section-header"><h2><i class="fas fa-trophy"></i> Suas Conquistas</h2></div>
                 <div class="badges-container" id="badgesContainer"></div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2>📌 Próximos Passos</h2></div>
+                <div class="section-header"><h2><i class="fas fa-clock"></i> Próximos Passos</h2></div>
                 <div class="courses-grid" id="nextSteps"></div>
             </div>
         </div>
 
+        <!-- COURSES SECTION -->
         <div id="coursesSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2>📚 Todos os Cursos</h2></div>
+                <div class="section-header"><h2><i class="fas fa-book"></i> Todos os Cursos</h2></div>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar curso por nome...">
+                    <select id="categoryFilter" class="category-filter">
+                        <option value="all"><i class="fas fa-th-large"></i> Todas as categorias</option>
+                        <option value="🇬🇧 Inglês"><i class="fas fa-language"></i> Inglês</option>
+                        <option value="🏭 Qualidade"><i class="fas fa-chart-line"></i> Qualidade</option>
+                        <option value="📊 Excel/Office"><i class="fas fa-table"></i> Excel/Office</option>
+                        <option value="📚 Geral"><i class="fas fa-book"></i> Geral</option>
+                        <option value="💻 Informática"><i class="fas fa-laptop-code"></i> Informática</option>
+                        <option value="🧠 Desenv. Pessoal"><i class="fas fa-brain"></i> Desenv. Pessoal</option>
+                        <option value="👥 Liderança"><i class="fas fa-users"></i> Liderança</option>
+                    </select>
+                    <button class="search-btn" onclick="filterCourses()"><i class="fas fa-search"></i> Buscar</button>
+                    <button class="search-btn" onclick="showFavoritesOnly()" style="background: var(--warning);"><i class="fas fa-star"></i> Favoritos</button>
+                </div>
+                
                 <div class="courses-grid" id="allCourses"></div>
             </div>
         </div>
 
+        <!-- CERTIFICATES SECTION -->
         <div id="certificatesSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2>🏆 Meus Certificados</h2></div>
+                <div class="section-header"><h2><i class="fas fa-certificate"></i> Meus Certificados</h2></div>
                 <div id="certificatesList"></div>
             </div>
         </div>
 
+        <!-- FORUM SECTION -->
         <div id="forumSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2>💬 Fórum de Dúvidas</h2><button class="btn-sm" onclick="showNewPostModal()">+ Nova Pergunta</button></div>
+                <div class="section-header"><h2><i class="fas fa-comments"></i> Fórum de Dúvidas</h2><button class="btn-sm" onclick="showNewPostModal()"><i class="fas fa-plus"></i> Nova Pergunta</button></div>
                 <div id="forumList"></div>
             </div>
         </div>
 
+        <!-- ADMIN SECTION -->
         <div id="adminSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2>👑 Painel Administrativo</h2></div>
+                <div class="section-header"><h2><i class="fas fa-users-cog"></i> Painel Administrativo</h2></div>
                 
                 <div class="admin-tabs">
-                    <div class="admin-tab active" onclick="showAdminTab('courses')">📚 Gerenciar Cursos</div>
-                    <div class="admin-tab" onclick="showAdminTab('create')">➕ Criar Novo Curso</div>
-                    <div class="admin-tab" onclick="showAdminTab('stats')">📊 Estatísticas</div>
+                    <div class="admin-tab active" onclick="showAdminTab('courses')"><i class="fas fa-book"></i> Gerenciar Cursos</div>
+                    <div class="admin-tab" onclick="showAdminTab('create')"><i class="fas fa-plus-circle"></i> Criar Novo Curso</div>
+                    <div class="admin-tab" onclick="showAdminTab('stats')"><i class="fas fa-chart-bar"></i> Estatísticas</div>
                 </div>
                 
                 <div id="adminCoursesTab">
@@ -284,34 +870,34 @@
                 
                 <div id="adminCreateTab" style="display: none;">
                     <div style="background: var(--bg-card); border-radius: 24px; padding: 25px;">
-                        <h3 style="margin-bottom: 20px; color: #D82A28;">📝 Informações Básicas</h3>
-                        <div class="form-group"><label>Título do Curso *</label><input type="text" id="newCourseTitle" placeholder="Ex: Excel Avançado"></div>
-                        <div class="form-group"><label>Categoria</label><select id="newCourseCategory"><option>📚 Geral</option><option>🇬🇧 Inglês</option><option>📊 Excel/Office</option><option>💻 Informática</option><option>🧠 Desenv. Pessoal</option><option>👥 Liderança</option><option>🏭 Qualidade</option></select></div>
-                        <div class="form-group"><label>Carga Horária</label><input type="text" id="newCourseHours" placeholder="Ex: 20h"></div>
-                        <div class="form-group"><label>Ícone (emoji)</label><input type="text" id="newCourseIcon" placeholder="Ex: 📊" value="📚"></div>
-                        <div class="form-group"><label>Pontos ao Concluir</label><input type="number" id="newCoursePoints" value="100"></div>
+                        <h3 style="margin-bottom: 20px; color: var(--accent);"><i class="fas fa-edit"></i> Informações Básicas</h3>
+                        <div class="form-group"><label><i class="fas fa-heading"></i> Título do Curso *</label><input type="text" id="newCourseTitle" placeholder="Ex: Excel Avançado"></div>
+                        <div class="form-group"><label><i class="fas fa-tag"></i> Categoria</label><select id="newCourseCategory"><option>Geral</option><option>Inglês</option><option>Excel/Office</option><option>Informática</option><option>Desenv. Pessoal</option><option>Liderança</option><option>Qualidade</option></select></div>
+                        <div class="form-group"><label><i class="fas fa-clock"></i> Carga Horária</label><input type="text" id="newCourseHours" placeholder="Ex: 20h"></div>
+                        <div class="form-group"><label><i class="fas fa-icons"></i> Ícone (emoji)</label><input type="text" id="newCourseIcon" placeholder="Ex: 📊" value="📚"></div>
+                        <div class="form-group"><label><i class="fas fa-star"></i> Pontos ao Concluir</label><input type="number" id="newCoursePoints" value="100"></div>
                         
-                        <h3 style="margin: 25px 0 15px;">📖 Aulas do Curso</h3>
+                        <h3 style="margin: 25px 0 15px;"><i class="fas fa-video"></i> Aulas do Curso</h3>
                         <div id="lessonsContainer"></div>
                         <button class="btn-add" onclick="addLessonField()"><i class="fas fa-plus"></i> Adicionar Aula</button>
                         
-                        <h3 style="margin: 25px 0 15px;">📝 Perguntas do Quiz</h3>
+                        <h3 style="margin: 25px 0 15px;"><i class="fas fa-question-circle"></i> Perguntas do Quiz</h3>
                         <div id="quizContainer"></div>
                         <button class="btn-add" onclick="addQuizField()"><i class="fas fa-plus"></i> Adicionar Pergunta</button>
                         
                         <div style="margin-top: 30px; text-align: center;">
                             <button class="btn-save" onclick="saveNewCourse()"><i class="fas fa-save"></i> Salvar Curso</button>
-                            <button class="btn-cancel" onclick="clearCourseForm()">Limpar</button>
+                            <button class="btn-cancel" onclick="clearCourseForm()"><i class="fas fa-eraser"></i> Limpar</button>
                         </div>
                     </div>
                 </div>
                 
                 <div id="adminStatsTab" style="display: none;">
                     <div class="dashboard-grid">
-                        <div class="dashboard-card"><div class="value" id="statTotalCourses">0</div><div>Cursos Totais</div></div>
-                        <div class="dashboard-card"><div class="value" id="statTotalLessons">0</div><div>Aulas Totais</div></div>
-                        <div class="dashboard-card"><div class="value" id="statTotalUsers">0</div><div>Usuários</div></div>
-                        <div class="dashboard-card"><div class="value" id="statTotalPoints">0</div><div>Pontos Distribuídos</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalCourses">0</div><div><i class="fas fa-book"></i> Cursos Totais</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalLessons">0</div><div><i class="fas fa-video"></i> Aulas Totais</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalUsers">0</div><div><i class="fas fa-users"></i> Usuários</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalPoints">0</div><div><i class="fas fa-star"></i> Pontos Distribuídos</div></div>
                     </div>
                     <canvas id="adminStatsChart"></canvas>
                 </div>
@@ -319,21 +905,78 @@
         </div>
 
         <div class="footer">
-            <p>LEARN - Plataforma EAD para Desenvolvimento de Pessoas</p>
-            <p>Luiz Carlos Correa Junior | (47) 99290-4926</p>
+            <p><i class="fas fa-graduation-cap"></i> LEARN - Plataforma EAD para Desenvolvimento de Pessoas</p>
+            <p><i class="fas fa-user"></i> Luiz Carlos Correa Junior | <i class="fas fa-phone"></i> (47) 99290-4926</p>
         </div>
     </div>
 
-    <!-- MODAIS -->
-    <div id="courseModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal()">&times;</span><div id="modalContent"></div></div></div>
-    <div id="lessonModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeLessonModal()">&times;</span><div id="lessonModalContent"></div></div></div>
-    <div id="profileModal" class="modal"><div class="modal-content" style="max-width: 450px;"><span class="modal-close" onclick="closeProfileModal()">&times;</span><div id="profileModalContent"></div></div></div>
-    <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()">&times;</span><div id="certPreviewContent"></div><div class="share-buttons"><button class="share-btn share-whatsapp" onclick="shareCertificate('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn share-linkedin" onclick="shareCertificate('linkedin')"><i class="fab fa-linkedin"></i> LinkedIn</button><button class="share-btn share-email" onclick="shareCertificate('email')"><i class="fas fa-envelope"></i> E-mail</button></div><div style="text-align:center; padding-top:15px;"><button class="complete-btn" onclick="generatePdfFromPreview()">📄 Baixar PDF</button></div></div></div>
-    <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()">&times;</span><h2 style="color:#D82A28;"><i class="fas fa-trophy"></i> Ranking</h2><div id="rankingList"></div></div></div>
-    <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()">&times;</span><h3 style="color:#D82A28;">➕ Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título"><textarea id="postContent" placeholder="Sua dúvida..." rows="3"></textarea><button class="complete-btn" onclick="createNewPost()">Publicar</button></div></div>
+    <!-- MODAL DE PERFIL (CORRIGIDO - SEM TRANSPARÊNCIA) -->
+    <div id="profileModal" class="profile-modal">
+        <div class="profile-card">
+            <div class="profile-cover"></div>
+            <div class="profile-content">
+                <div class="avatar-container">
+                    <img id="profileAvatar" class="profile-avatar" src="https://ui-avatars.com/api/?background=D82A28&color=fff&name=Usuário" alt="Avatar">
+                    <label for="profileAvatarUpload" class="profile-upload-btn">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="profileAvatarUpload" accept="image/*" style="display: none;" onchange="previewProfileImage(event)">
+                </div>
+                <div class="profile-name" id="profileName">Carregando...</div>
+                <div class="profile-role" id="profileRole">Aluno</div>
+                <div class="profile-bio" id="profileBio">Profissional em constante evolução, apaixonado por aprendizado e melhoria contínua.</div>
+                
+                <div class="profile-info-grid">
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-envelope"></i> E-mail</div><div class="profile-info-value" id="profileEmail">carregando@email.com</div></div>
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-building"></i> Departamento</div><div class="profile-info-value" id="profileDepartment">Produção</div></div>
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-phone"></i> Telefone</div><div class="profile-info-value" id="profilePhone">(47) 99999-9999</div></div>
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-calendar"></i> Membro desde</div><div class="profile-info-value" id="profileSince">Junho 2026</div></div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatCourses">0</div><div class="profile-stat-label">Cursos</div></div>
+                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatPoints">0</div><div class="profile-stat-label">Pontos</div></div>
+                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatBadges">0</div><div class="profile-stat-label">Conquistas</div></div>
+                </div>
+                
+                <button class="profile-edit-btn" onclick="editProfile()"><i class="fas fa-pen"></i> Editar Perfil</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDIÇÃO DE PERFIL -->
+    <div id="editProfileModal" class="profile-modal">
+        <div class="profile-card">
+            <div class="profile-cover"></div>
+            <div class="profile-content">
+                <h3 style="color: var(--accent); margin-bottom: 20px;"><i class="fas fa-edit"></i> Editar Perfil</h3>
+                <div class="form-group"><label><i class="fas fa-user"></i> Nome completo</label><input type="text" id="editFullName" class="edit-input"></div>
+                <div class="form-group"><label><i class="fas fa-envelope"></i> E-mail</label><input type="email" id="editEmail" class="edit-input"></div>
+                <div class="form-group"><label><i class="fas fa-phone"></i> Telefone</label><input type="text" id="editPhone" class="edit-input"></div>
+                <div class="form-group"><label><i class="fas fa-building"></i> Departamento</label><select id="editDepartment" class="edit-input"><option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option><option>Administrativo</option></select></div>
+                <div class="form-group"><label><i class="fas fa-pencil-alt"></i> Biografia</label><textarea id="editBio" rows="3" placeholder="Fale um pouco sobre você..." class="edit-input"></textarea></div>
+                <div class="form-group"><label><i class="fas fa-key"></i> Nova senha</label><input type="password" id="editPassword" placeholder="Deixe em branco para manter a mesma" class="edit-input"></div>
+                <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button class="btn-save" onclick="saveProfileChanges()" style="flex: 1;">Salvar alterações</button>
+                    <button class="btn-cancel" onclick="closeEditProfileModal()" style="flex: 1;">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="courseModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></span><div id="modalContent"></div></div></div>
+    <div id="lessonModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeLessonModal()"><i class="fas fa-times"></i></span><div id="lessonModalContent"></div></div></div>
+    <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()"><i class="fas fa-times"></i></span><div id="certPreviewContent"></div><div class="share-buttons"><button class="share-btn share-whatsapp" onclick="shareCertificate('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn share-linkedin" onclick="shareCertificate('linkedin')"><i class="fab fa-linkedin"></i> LinkedIn</button><button class="share-btn share-email" onclick="shareCertificate('email')"><i class="fas fa-envelope"></i> E-mail</button></div><div style="text-align:center; padding-top:15px;"><button class="complete-btn" onclick="generatePdfFromPreview()"><i class="fas fa-download"></i> Baixar PDF</button></div></div></div>
+    <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()"><i class="fas fa-times"></i></span><h2 style="color: var(--accent);"><i class="fas fa-trophy"></i> Ranking</h2><div id="rankingList"></div></div></div>
+    <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()"><i class="fas fa-times"></i></span><h3 style="color: var(--accent);"><i class="fas fa-plus-circle"></i> Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título" class="edit-input" style="width:100%; margin-bottom:10px;"><textarea id="postContent" placeholder="Sua dúvida..." rows="3" class="edit-input" style="width:100%; margin-bottom:10px;"></textarea><button class="complete-btn" onclick="createNewPost()"><i class="fas fa-paper-plane"></i> Publicar</button></div></div>
 
     <script>
-        // Firebase Config
+        // [TODAS AS FUNÇÕES PERMANECEM IGUAIS - COPIAR DO CÓDIGO ORIGINAL]
+        // (O conteúdo do script permanece exatamente igual ao que você forneceu)
+        
+        // ============================================
+        // CONFIGURAÇÃO FIREBASE (igual ao original)
+        // ============================================
         const firebaseConfig = { 
             apiKey: "AIzaSyB8Zvuwfx55elKk8B2ZNPiWk16y1NPowIA", 
             authDomain: "learn-plataforma.firebaseapp.com", 
@@ -343,18 +986,15 @@
             appId: "1:177385285776:web:f41879d6282558cc7f1015" 
         };
         
-        // Inicializar Firebase
         let db;
         try {
             firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
             console.log("Firebase conectado!");
-        } catch(e) {
-            console.warn("Erro no Firebase:", e);
-        }
+        } catch(e) { console.warn("Erro no Firebase:", e); }
         
         // ============================================
-        // CURSOS INICIAIS
+        // DADOS INICIAIS
         // ============================================
         let coursesData = {};
         let users = [];
@@ -364,135 +1004,353 @@
         let currentQuizAnswers = {};
         let adminChart = null;
         
-        // Variáveis para criação de curso
         let tempLessons = [];
         let tempQuiz = [];
         let lessonCounter = 1;
         let quizCounter = 1;
         let editingCourseId = null;
         
-        // Variáveis para slides da aula
         let currentSlideIndex = 0;
         let currentLessonSlides = [];
         let currentCourseId = null;
         let currentLessonId = null;
         
+        let favoritesList = JSON.parse(localStorage.getItem('learn_favorites')) || [];
+        
+        let pomodoroInterval = null;
+        let pomodoroTime = 25 * 60;
+        let pomodoroRunning = false;
+        let pomodoroType = 'study';
+        
         // ============================================
-        // FUNÇÕES DE INICIALIZAÇÃO DO FIREBASE
+        // FUNÇÕES DE PERFIL (MODELO 1)
+        // ============================================
+        
+        function showProfileModal() {
+            if (!currentUser) return;
+            
+            document.getElementById('profileName').innerText = currentUser.name || 'Usuário';
+            document.getElementById('profileRole').innerText = currentUser.role === 'admin' ? 'Administrador' : 'Aluno';
+            document.getElementById('profileEmail').innerText = currentUser.email || `${currentUser.name}@learn.com`;
+            document.getElementById('profileDepartment').innerText = currentUser.department || 'Produção';
+            document.getElementById('profilePhone').innerText = currentUser.phone || '(47) 99999-9999';
+            document.getElementById('profileSince').innerText = currentUser.since || 'Junho 2026';
+            document.getElementById('profileStatCourses').innerText = currentUser.completedCourses?.length || 0;
+            document.getElementById('profileStatPoints').innerText = currentUser.points || 0;
+            document.getElementById('profileStatBadges').innerText = currentUser.badges?.length || 0;
+            document.getElementById('profileBio').innerText = currentUser.bio || 'Profissional em constante evolução, apaixonado por aprendizado e melhoria contínua.';
+            
+            const savedImage = localStorage.getItem(`profileImage_${currentUser.id}`);
+            if (savedImage) {
+                document.getElementById('profileAvatar').src = savedImage;
+            } else {
+                document.getElementById('profileAvatar').src = `https://ui-avatars.com/api/?background=D82A28&color=fff&name=${encodeURIComponent(currentUser.name)}`;
+            }
+            
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+        
+        function closeProfileModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+        
+        function previewProfileImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = document.getElementById('profileAvatar');
+                img.src = reader.result;
+                localStorage.setItem(`profileImage_${currentUser.id}`, reader.result);
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+        
+        function editProfile() {
+            document.getElementById('editFullName').value = currentUser.name || '';
+            document.getElementById('editEmail').value = currentUser.email || '';
+            document.getElementById('editPhone').value = currentUser.phone || '(47) 99999-9999';
+            document.getElementById('editDepartment').value = currentUser.department || 'Produção';
+            document.getElementById('editBio').value = currentUser.bio || 'Profissional em constante evolução, apaixonado por aprendizado e melhoria contínua.';
+            document.getElementById('editPassword').value = '';
+            
+            closeProfileModal();
+            document.getElementById('editProfileModal').style.display = 'flex';
+        }
+        
+        function closeEditProfileModal() {
+            document.getElementById('editProfileModal').style.display = 'none';
+        }
+        
+        async function saveProfileChanges() {
+            currentUser.name = document.getElementById('editFullName').value;
+            currentUser.email = document.getElementById('editEmail').value;
+            currentUser.phone = document.getElementById('editPhone').value;
+            currentUser.department = document.getElementById('editDepartment').value;
+            currentUser.bio = document.getElementById('editBio').value;
+            
+            const newPassword = document.getElementById('editPassword').value;
+            if (newPassword) {
+                currentUser.password = newPassword;
+            }
+            
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                await saveUsersToFirebase();
+            }
+            localStorage.setItem('learn_currentUser', JSON.stringify(currentUser));
+            
+            document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('welcomeName').innerText = currentUser.name;
+            
+            alert('Perfil atualizado com sucesso!');
+            closeEditProfileModal();
+            showProfileModal();
+        }
+        
+        // ============================================
+        // FUNÇÕES DE INICIALIZAÇÃO (idênticas ao original)
         // ============================================
         
         async function loadDataFromFirebase() {
             try {
-                // Carregar cursos
                 const coursesSnapshot = await db.collection('courses').get();
                 if (!coursesSnapshot.empty) {
                     coursesData = {};
-                    coursesSnapshot.forEach(doc => {
-                        coursesData[parseInt(doc.id)] = doc.data();
-                    });
+                    coursesSnapshot.forEach(doc => { coursesData[parseInt(doc.id)] = doc.data(); });
                 } else {
-                    // Dados iniciais
                     coursesData = {
-                        1: { id: 1, title: "Business English Nível 1", category: "🇬🇧 Inglês", hours: "20h", icon: "🇬🇧", points: 100, 
-                            lessons: [{ id: 1, title: "Greetings and Introductions", videoUrl: "https://www.youtube.com/watch?v=PyLcxWNao3E", content: "<div class='lesson-content'><h2>🇬🇧 Greetings and Introductions</h2><p>Nesta aula você aprenderá as saudações básicas em inglês.</p><div class='example-box'><strong>📌 Exemplos:</strong><br>• Good morning - Bom dia<br>• Good afternoon - Boa tarde</div><div class='example-box' style='margin-top:15px;'><strong>✏️ Exercício:</strong><br>Pratique as saudações.</div></div>" }],
+                        1: { id: 1, title: "Business English Nível 1", category: "Inglês", hours: "20h", icon: "🇬🇧", points: 100, 
+                            lessons: [{ id: 1, title: "Greetings and Introductions", videoUrl: "https://www.youtube.com/watch?v=PyLcxWNao3E", content: "<div class='lesson-content'><h2><i class='fas fa-language'></i> Greetings and Introductions</h2><p>Aprenda saudações básicas em inglês.</p><div class='example-box'><strong>📌 Exemplos:</strong><br>• Good morning - Bom dia<br>• Good afternoon - Boa tarde</div></div>" }],
                             quiz: [{ q: "Como se diz 'Bom dia' em inglês?", options: ["Good night", "Good morning", "Good evening", "Hello"], correct: 1 }] },
-                        2: { id: 2, title: "Metodologia 5S", category: "🏭 Qualidade", hours: "15h", icon: "🧹", points: 100, 
-                            lessons: [{ id: 1, title: "Seiri - Senso de Utilização", videoUrl: "", content: "<div class='lesson-content'><h2>🧹 Seiri - Senso de Utilização</h2><p>Separar o útil do inútil.</p><div class='example-box'><strong>📌 Exemplo:</strong><br>Separar ferramentas quebradas.</div></div>" }],
+                        2: { id: 2, title: "Metodologia 5S", category: "Qualidade", hours: "15h", icon: "🏭", points: 100, 
+                            lessons: [{ id: 1, title: "Seiri - Senso de Utilização", videoUrl: "", content: "<div class='lesson-content'><h2><i class='fas fa-chart-line'></i> Seiri - Senso de Utilização</h2><p>Separar o útil do inútil.</p></div>" }],
                             quiz: [{ q: "O que significa Seiri?", options: ["Organização", "Utilização", "Limpeza", "Disciplina"], correct: 1 }] },
-                        3: { id: 3, title: "Excel do Básico ao Avançado", category: "📊 Excel/Office", hours: "25h", icon: "📊", points: 100, 
-                            lessons: [{ id: 1, title: "Introdução ao Excel", videoUrl: "", content: "<div class='lesson-content'><h2>📊 Introdução ao Excel</h2><p>Conhecendo a interface.</p><div class='example-box'><strong>📌 Elementos:</strong><br>Faixa de opções, Barra de fórmulas</div></div>" }],
+                        3: { id: 3, title: "Excel do Básico ao Avançado", category: "Excel/Office", hours: "25h", icon: "📊", points: 100, 
+                            lessons: [{ id: 1, title: "Introdução ao Excel", videoUrl: "", content: "<div class='lesson-content'><h2><i class='fas fa-table'></i> Introdução ao Excel</h2><p>Conhecendo a interface.</p></div>" }],
                             quiz: [{ q: "Qual fórmula soma valores?", options: ["=SOMA", "=MÉDIA", "=PROCV", "=SE"], correct: 0 }] }
                     };
                     await saveCoursesToFirebase();
                 }
                 
-                // Carregar usuários
                 const usersSnapshot = await db.collection('users').get();
                 if (!usersSnapshot.empty) {
                     users = [];
-                    usersSnapshot.forEach(doc => {
-                        users.push(doc.data());
-                    });
+                    usersSnapshot.forEach(doc => { users.push(doc.data()); });
                 } else {
                     users = [
-                        { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", email: "aluno@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] },
-                        { id: 2, name: "admin.learn", password: "admin123", role: "admin", email: "admin@learn.com", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }
+                        { id: 1, name: "aluno.learn", password: "learn123", role: "aluno", email: "aluno@learn.com", department: "Produção", phone: "(47) 99999-9999", bio: "Profissional em constante evolução", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0], favorites: [] },
+                        { id: 2, name: "admin.learn", password: "admin123", role: "admin", email: "admin@learn.com", department: "TI", phone: "(47) 98888-7777", bio: "Administrador da plataforma", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0], favorites: [] }
                     ];
                     await saveUsersToFirebase();
                 }
                 
-                // Carregar fórum
                 const forumSnapshot = await db.collection('forum').doc('posts').get();
-                if (forumSnapshot.exists) {
-                    forumPosts = forumSnapshot.data().posts || [];
-                } else {
-                    forumPosts = [];
-                }
+                if (forumSnapshot.exists) { forumPosts = forumSnapshot.data().posts || []; }
+                else { forumPosts = []; }
                 
-                // Carregar notificações
                 const notifSnapshot = await db.collection('notifications').doc('global').get();
-                if (notifSnapshot.exists) {
-                    notifications = notifSnapshot.data().notifications || [];
-                } else {
-                    notifications = [{ id: 1, text: "🎉 Bem-vindo à plataforma LEARN!", read: false, date: new Date() }];
-                }
+                if (notifSnapshot.exists) { notifications = notifSnapshot.data().notifications || []; }
+                else { notifications = [{ id: 1, text: "🎉 Bem-vindo à plataforma LEARN!", read: false, date: new Date() }]; }
                 
                 console.log("Dados carregados do Firebase!");
                 return true;
-            } catch(e) {
-                console.error("Erro ao carregar dados:", e);
-                // Fallback para localStorage
-                const cachedCourses = localStorage.getItem('learn_courses_backup');
-                if (cachedCourses) coursesData = JSON.parse(cachedCourses);
-                const cachedUsers = localStorage.getItem('learn_users_backup');
-                if (cachedUsers) users = JSON.parse(cachedUsers);
-                return false;
-            }
+            } catch(e) { console.error("Erro ao carregar dados:", e); return false; }
         }
         
         async function saveCoursesToFirebase() {
-            try {
-                for (let id in coursesData) {
-                    await db.collection('courses').doc(id).set(coursesData[id]);
-                }
-                localStorage.setItem('learn_courses_backup', JSON.stringify(coursesData));
-                console.log("Cursos salvos!");
-            } catch(e) { console.error("Erro ao salvar cursos:", e); }
+            try { for (let id in coursesData) { await db.collection('courses').doc(id).set(coursesData[id]); } localStorage.setItem('learn_courses_backup', JSON.stringify(coursesData)); } catch(e) { console.error(e); }
         }
         
         async function saveUsersToFirebase() {
-            try {
-                for (let user of users) {
-                    await db.collection('users').doc(user.id.toString()).set(user);
-                }
-                localStorage.setItem('learn_users_backup', JSON.stringify(users));
-                console.log("Usuários salvos!");
-            } catch(e) { console.error("Erro ao salvar usuários:", e); }
+            try { for (let user of users) { await db.collection('users').doc(user.id.toString()).set(user); } localStorage.setItem('learn_users_backup', JSON.stringify(users)); } catch(e) { console.error(e); }
         }
         
         async function saveForumToFirebase() {
-            try {
-                await db.collection('forum').doc('posts').set({ posts: forumPosts });
-                localStorage.setItem('learn_forum_backup', JSON.stringify(forumPosts));
-            } catch(e) { console.error("Erro ao salvar fórum:", e); }
+            try { await db.collection('forum').doc('posts').set({ posts: forumPosts }); localStorage.setItem('learn_forum_backup', JSON.stringify(forumPosts)); } catch(e) { console.error(e); }
         }
         
         async function saveNotificationsToFirebase() {
-            try {
-                await db.collection('notifications').doc('global').set({ notifications: notifications });
-                localStorage.setItem('learn_notifications_backup', JSON.stringify(notifications));
-            } catch(e) { console.error("Erro ao salvar notificações:", e); }
-        }
-        
-        async function saveAllToFirebase() {
-            await saveCoursesToFirebase();
-            await saveUsersToFirebase();
-            await saveForumToFirebase();
-            await saveNotificationsToFirebase();
+            try { await db.collection('notifications').doc('global').set({ notifications: notifications }); localStorage.setItem('learn_notifications_backup', JSON.stringify(notifications)); } catch(e) { console.error(e); }
         }
         
         // ============================================
-        // FUNÇÕES ADMIN - CRUD DE CURSOS (COM FIREBASE)
+        // BADGES AVANÇADOS
+        // ============================================
+        function updateAdvancedBadges() {
+            const badges = [];
+            const completedCount = currentUser?.completedCourses?.length || 0;
+            const totalPoints = currentUser?.points || 0;
+            const streak = calculateStreak();
+            
+            if (completedCount >= 1) badges.push({ icon: "<i class='fas fa-graduation-cap'></i>", name: "Primeiro Curso", unlocked: true });
+            if (completedCount >= 3) badges.push({ icon: "<i class='fas fa-trophy'></i>", name: "Mestre dos Cursos", unlocked: true });
+            if (totalPoints >= 100) badges.push({ icon: "<i class='fas fa-star'></i>", name: "100 Pontos", unlocked: true });
+            if (completedCount >= 5) badges.push({ icon: "<i class='fas fa-crown'></i>", name: "Lenda do Aprendizado", unlocked: true });
+            if (totalPoints >= 500) badges.push({ icon: "<i class='fas fa-gem'></i>", name: "Mestre Platina", unlocked: true });
+            if (streak >= 3) badges.push({ icon: "<i class='fas fa-fire'></i>", name: "Foco Total", unlocked: true });
+            if (streak >= 7) badges.push({ icon: "<i class='fas fa-bolt'></i>", name: "Sequência Imbatível", unlocked: true });
+            
+            if (!badges.find(b => b.name === "Lenda do Aprendizado")) badges.push({ icon: "<i class='fas fa-crown'></i>", name: "Lenda do Aprendizado", unlocked: false, progress: `${completedCount}/5` });
+            if (!badges.find(b => b.name === "Mestre Platina")) badges.push({ icon: "<i class='fas fa-gem'></i>", name: "Mestre Platina", unlocked: false, progress: `${totalPoints}/500` });
+            if (!badges.find(b => b.name === "Foco Total")) badges.push({ icon: "<i class='fas fa-fire'></i>", name: "Foco Total", unlocked: false, progress: `${streak}/3` });
+            
+            document.getElementById('badgesContainer').innerHTML = badges.map(b => `
+                <div class="badge-item ${!b.unlocked ? 'locked' : ''}">
+                    <span class="badge-icon">${b.icon}</span>
+                    <span>${b.name}</span>
+                    ${!b.unlocked ? `<span class="badge-progress">${b.progress}</span>` : '<span style="color:var(--success);"><i class="fas fa-check-circle"></i></span>'}
+                </div>
+            `).join('');
+        }
+        
+        function calculateStreak() {
+            const weeklyProgress = currentUser?.weeklyProgress || [0,0,0,0,0,0,0];
+            let streak = 0;
+            for (let i = weeklyProgress.length - 1; i >= 0; i--) {
+                if (weeklyProgress[i] > 0) streak++;
+                else break;
+            }
+            return streak;
+        }
+        
+        // ============================================
+        // FAVORITOS
+        // ============================================
+        function toggleFavorite(courseId, event) {
+            event.stopPropagation();
+            if (!currentUser) return;
+            
+            const index = favoritesList.indexOf(courseId);
+            if (index === -1) {
+                favoritesList.push(courseId);
+                alert("⭐ Curso adicionado aos favoritos!");
+            } else {
+                favoritesList.splice(index, 1);
+                alert("⭐ Curso removido dos favoritos.");
+            }
+            localStorage.setItem('learn_favorites', JSON.stringify(favoritesList));
+            if (currentUser) {
+                currentUser.favorites = favoritesList;
+                saveUser();
+            }
+            loadCourses();
+        }
+        
+        function isFavorite(courseId) {
+            return favoritesList.includes(courseId);
+        }
+        
+        function showFavoritesOnly() {
+            filterCourses(true);
+        }
+        
+        function filterCourses(showOnlyFavorites = false) {
+            const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+            const category = document.getElementById('categoryFilter')?.value || 'all';
+            const coursesArray = Object.values(coursesData);
+            
+            let filtered = coursesArray.filter(course => {
+                if (showOnlyFavorites && !isFavorite(course.id)) return false;
+                if (category !== 'all' && course.category !== category) return false;
+                if (searchTerm && !course.title.toLowerCase().includes(searchTerm) && !course.category.toLowerCase().includes(searchTerm)) return false;
+                return true;
+            });
+            
+            const container = document.getElementById('allCourses');
+            if (container) {
+                container.innerHTML = filtered.map(c => `
+                    <div class="course-card" onclick="openCourse(${c.id})" style="position: relative;">
+                        <button class="favorite-btn ${isFavorite(c.id) ? 'active' : ''}" style="position: absolute; top: 10px; right: 10px; z-index: 10; background: var(--bg-card); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;" onclick="toggleFavorite(${c.id}, event)">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <div class="course-image"><span style="font-size: 32px;">${c.icon}</span></div>
+                        <div class="course-info">
+                            <h3>${c.title}</h3>
+                            <p>${c.lessons.length} aulas - ${c.hours}</p>
+                            <div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div>
+                            ${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed"><i class="fas fa-check-circle"></i> Concluído</div>' : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // ============================================
+        // POMODORO TIMER
+        // ============================================
+        function startPomodoro() {
+            if (pomodoroInterval) clearInterval(pomodoroInterval);
+            pomodoroRunning = true;
+            pomodoroInterval = setInterval(() => {
+                if (pomodoroTime <= 0) {
+                    clearInterval(pomodoroInterval);
+                    pomodoroRunning = false;
+                    if (pomodoroType === 'study') {
+                        pomodoroType = 'break';
+                        pomodoroTime = 5 * 60;
+                        alert("🍅 Pomodoro concluído! Hora da pausa de 5 minutos!");
+                    } else {
+                        pomodoroType = 'study';
+                        pomodoroTime = 25 * 60;
+                        alert("🎉 Pausa finalizada! Vamos voltar aos estudos!");
+                        triggerConfetti();
+                    }
+                    updatePomodoroDisplay();
+                    startPomodoro();
+                } else {
+                    pomodoroTime--;
+                    updatePomodoroDisplay();
+                }
+            }, 1000);
+            updatePomodoroDisplay();
+        }
+        
+        function pausePomodoro() {
+            if (pomodoroInterval) {
+                clearInterval(pomodoroInterval);
+                pomodoroInterval = null;
+                pomodoroRunning = false;
+            }
+        }
+        
+        function resetPomodoro() {
+            if (pomodoroInterval) clearInterval(pomodoroInterval);
+            pomodoroRunning = false;
+            pomodoroType = 'study';
+            pomodoroTime = 25 * 60;
+            updatePomodoroDisplay();
+        }
+        
+        function updatePomodoroDisplay() {
+            const minutes = Math.floor(pomodoroTime / 60);
+            const seconds = pomodoroTime % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const timerElement = document.getElementById('pomodoroDisplay');
+            const sessionElement = document.getElementById('pomodoroSession');
+            if (timerElement) timerElement.innerText = display;
+            if (sessionElement) sessionElement.innerText = pomodoroType === 'study' ? '<i class="fas fa-book"></i> Estudo' : '<i class="fas fa-coffee"></i> Pausa';
+        }
+        
+        function addPomodoroToLesson() {
+            const lessonContent = document.getElementById('lessonModalContent');
+            if (lessonContent && !lessonContent.querySelector('.pomodoro-timer')) {
+                const pomodoroHtml = `
+                    <div class="pomodoro-timer">
+                        <i class="fas fa-clock"></i>
+                        <span class="timer-display" id="pomodoroDisplay">25:00</span>
+                        <span class="timer-session" id="pomodoroSession"><i class="fas fa-book"></i> Estudo</span>
+                        <button class="timer-btn" onclick="startPomodoro()"><i class="fas fa-play"></i></button>
+                        <button class="timer-btn pause" onclick="pausePomodoro()"><i class="fas fa-pause"></i></button>
+                        <button class="timer-btn" onclick="resetPomodoro()"><i class="fas fa-redo"></i></button>
+                    </div>
+                `;
+                lessonContent.insertAdjacentHTML('afterbegin', pomodoroHtml);
+                updatePomodoroDisplay();
+            }
+        }
+        
+        // ============================================
+        // FUNÇÕES ADMIN - CRUD DE CURSOS
         // ============================================
         
         function showAdminTab(tab) {
@@ -523,7 +1381,7 @@
             const coursesArray = Object.values(coursesData);
             container.innerHTML = coursesArray.map(course => `
                 <div class="course-admin-card">
-                    <div style="font-size: 48px; text-align: center;">${course.icon}</div>
+                    <div style="font-size: 48px; text-align: center;"><span style="font-size: 32px;">${course.icon}</span></div>
                     <h3>${course.title}</h3>
                     <p>${course.category} | ${course.hours} | ${course.lessons.length} aulas</p>
                     <div class="course-actions">
@@ -614,7 +1472,7 @@
         
         function clearCourseForm() {
             document.getElementById('newCourseTitle').value = '';
-            document.getElementById('newCourseCategory').value = '📚 Geral';
+            document.getElementById('newCourseCategory').value = 'Geral';
             document.getElementById('newCourseHours').value = '';
             document.getElementById('newCourseIcon').value = '📚';
             document.getElementById('newCoursePoints').value = '100';
@@ -689,18 +1547,18 @@
         }
         
         function getVideoHtml(videoUrl) {
-            if (!videoUrl) return '<div class="example-box">📹 Nenhum vídeo disponível para esta aula.</div>';
+            if (!videoUrl) return '<div class="example-box"><i class="fas fa-video"></i> Nenhum vídeo disponível para esta aula.</div>';
             const videoId = extractYoutubeId(videoUrl);
-            if (!videoId) return '<p style="color: orange;">⚠️ Link do YouTube inválido</p>';
+            if (!videoId) return '<p style="color: var(--warning);"><i class="fas fa-exclamation-triangle"></i> Link do YouTube inválido</p>';
             return `<div class="video-container"><iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
         }
         
         function buildSlides(lesson) {
             const slides = [];
-            slides.push({ icon: "📹", title: "Assista ao Vídeo", content: getVideoHtml(lesson.videoUrl) });
-            slides.push({ icon: "📖", title: "Conteúdo da Aula", content: lesson.content });
-            slides.push({ icon: "✏️", title: "Exercícios", content: lesson.content + (lesson.content.includes("Exercício") ? '' : `<div class="example-box" style="margin-top: 20px; background: #e6f0ff;"><strong>✏️ Exercício:</strong><br>Pratique o que aprendeu.</div>`) });
-            slides.push({ icon: "✅", title: "Concluir Aula", content: `<div style="text-align: center; padding: 20px;"><i class="fas fa-trophy" style="font-size: 64px; color: #f59e0b;"></i><h3 style="margin: 20px 0;">Parabéns! Você concluiu esta aula!</h3><button class="complete-btn" id="finalCompleteBtn" style="margin-top: 20px;">✅ Marcar como Concluída</button></div>` });
+            slides.push({ icon: "<i class='fas fa-video'></i>", title: "Assista ao Vídeo", content: getVideoHtml(lesson.videoUrl) });
+            slides.push({ icon: "<i class='fas fa-book-open'></i>", title: "Conteúdo da Aula", content: lesson.content });
+            slides.push({ icon: "<i class='fas fa-pencil-alt'></i>", title: "Exercícios", content: lesson.content });
+            slides.push({ icon: "<i class='fas fa-check-circle'></i>", title: "Concluir Aula", content: `<div style="text-align: center; padding: 20px;"><i class="fas fa-trophy" style="font-size: 64px; color: var(--warning);"></i><h3 style="margin: 20px 0;">Parabéns! Você concluiu esta aula!</h3><button class="complete-btn" id="finalCompleteBtn" style="margin-top: 20px;"><i class="fas fa-check"></i> Marcar como Concluída</button></div>` });
             return slides;
         }
         
@@ -716,7 +1574,7 @@
             
             const content = `
                 <div class="slide-progress"><div class="slide-progress-bar"><div class="slide-progress-fill" style="width: ${percent}%;"></div></div></div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;"><span style="font-size: 32px;">${slide.icon}</span><h3 style="margin: 0; color: #D82A28;">${slide.title}</h3></div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;"><span style="font-size: 32px;">${slide.icon}</span><h3 style="margin: 0; color: var(--accent);">${slide.title}</h3></div>
                 <div class="slide-content lesson-content">${slide.content}</div>
                 <div class="slide-nav">
                     <button onclick="previousSlide()" ${slideIndex === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Anterior</button>
@@ -732,6 +1590,7 @@
                 if (completeBtn) completeBtn.onclick = () => completeLesson(courseId, lessonId);
             }
             
+            addPomodoroToLesson();
             currentSlideIndex = slideIndex;
         }
         
@@ -748,7 +1607,7 @@
             const isComp = currentUser.courseProgress[courseId]?.find(p => p.id === lessonId)?.completed || false;
             
             if (isComp) {
-                document.getElementById('lessonModalContent').innerHTML = `<div style="text-align: center; padding: 30px;"><i class="fas fa-check-circle" style="font-size: 64px; color: #10b981;"></i><h3 style="margin: 20px 0;">Aula já concluída!</h3><button class="complete-btn" onclick="closeLessonModal()">Fechar</button></div>`;
+                document.getElementById('lessonModalContent').innerHTML = `<div style="text-align: center; padding: 30px;"><i class="fas fa-check-circle" style="font-size: 64px; color: var(--success);"></i><h3 style="margin: 20px 0;">Aula já concluída!</h3><button class="complete-btn" onclick="closeLessonModal()"><i class="fas fa-check"></i> Fechar</button></div>`;
                 document.getElementById('lessonModal').style.display = 'flex';
                 return;
             }
@@ -776,9 +1635,6 @@
                             <div style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; border-top: 2px solid #c4a56e; border-right: 2px solid #c4a56e;"></div>
                             <div style="position: absolute; bottom: 5px; left: 5px; width: 30px; height: 30px; border-bottom: 2px solid #c4a56e; border-left: 2px solid #c4a56e;"></div>
                             <div style="position: absolute; bottom: 5px; right: 5px; width: 30px; height: 30px; border-bottom: 2px solid #c4a56e; border-right: 2px solid #c4a56e;"></div>
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; border-radius: 50%; background: rgba(196,165,110,0.08); border: 1px solid rgba(196,165,110,0.3); pointer-events: none; z-index: 0;">
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; color: rgba(196,165,110,0.15);">★</div>
-                            </div>
                             <div style="text-align: center; margin-bottom: 20px; position: relative; z-index: 1;">
                                 <div style="font-size: 32px; font-weight: 700; letter-spacing: 4px; color: #8B7355;">LEARN</div>
                                 <div style="font-size: 42px; font-weight: 700; color: #2c1810; margin: 15px 0 5px; letter-spacing: 6px;">CERTIFICADO</div>
@@ -788,7 +1644,7 @@
                             <div style="text-align: center; font-size: 52px; font-weight: 700; color: #8B7355; margin: 15px 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; text-transform: uppercase;">${userName}</div>
                             <div style="text-align: center; font-size: 18px; color: #2c1810;">concluiu com êxito o curso de</div>
                             <div style="text-align: center; font-size: 28px; font-weight: 600; color: #2c1810; margin: 20px 0; font-style: italic;">${course.title}</div>
-                            <div style="text-align: center; font-size: 14px; color: #555; margin: 20px 0; line-height: 1.8;">Carga horária total: ${hours} (${hours.replace('h', '')}) horas<br>Conclusão: ${date}</div>
+                            <div style="text-align: center; font-size: 14px; color: #555; margin: 20px 0; line-height: 1.8;">Carga horária total: ${hours}<br>Conclusão: ${date}</div>
                             <div style="display: flex; justify-content: space-between; margin: 40px 30px 20px;">
                                 <div style="text-align: center; width: 200px;"><div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div><div style="font-weight: 600; font-size: 14px;">Luiz Carlos Correa Junior</div><div style="font-size: 10px; color: #8B7355;">Gerente do Projeto LEARN</div></div>
                                 <div style="text-align: center; width: 200px;"><div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div><div style="font-weight: 600; font-size: 14px;">Diretoria Acadêmica</div><div style="font-size: 10px; color: #8B7355;">Diretor de Educação</div></div>
@@ -803,8 +1659,14 @@
             document.getElementById('certPreviewModal').style.display = 'flex';
         }
         
-        function getLevel(points) { if (points >= 500) return "💎 Platina"; if (points >= 300) return "🥇 Ouro"; if (points >= 150) return "🥈 Prata"; return "🥉 Bronze"; }
-        function triggerConfetti() { canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D82A28', '#1B2F47', '#10b981'] }); setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.3 } }), 200); setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.7 } }), 400); }
+        function getLevel(points) { if (points >= 500) return "<i class='fas fa-gem'></i> Platina"; if (points >= 300) return "<i class='fas fa-medal'></i> Ouro"; if (points >= 150) return "<i class='fas fa-medal'></i> Prata"; return "<i class='fas fa-medal'></i> Bronze"; }
+        
+        function triggerConfetti() {
+            canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D82A28', '#1B2F47', '#10b981'] });
+            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.3 } }), 200);
+            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.7 } }), 400);
+        }
+        
         function shareCertificate(platform) { const text = `🎓 Acabei de concluir um curso na plataforma LEARN!`; if (platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank'); else if (platform === 'linkedin') window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank'); else if (platform === 'email') window.location.href = `mailto:?subject=Certificado LEARN&body=${encodeURIComponent(text)}`; alert(`✅ Compartilhado!`); }
         
         function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
@@ -815,16 +1677,12 @@
         function updateDashboard() {
             const total = Object.keys(coursesData).length;
             const completed = currentUser?.completedCourses?.length || 0;
-            document.getElementById('dashboardGrid').innerHTML = `<div class="dashboard-card"><div class="value">${completed}/${total}</div><div>Cursos Concluídos</div></div><div class="dashboard-card"><div class="value">${currentUser?.points || 0}</div><div>Pontos</div></div><div class="dashboard-card"><div class="value">${getLevel(currentUser?.points || 0)}</div><div>Nível</div></div><div class="dashboard-card"><div class="value">${currentUser?.badges?.length || 0}</div><div>Conquistas</div></div>`;
+            document.getElementById('dashboardGrid').innerHTML = `<div class="dashboard-card"><div class="value">${completed}/${total}</div><div><i class="fas fa-check-circle"></i> Cursos Concluídos</div></div><div class="dashboard-card"><div class="value">${currentUser?.points || 0}</div><div><i class="fas fa-star"></i> Pontos</div></div><div class="dashboard-card"><div class="value">${getLevel(currentUser?.points || 0)}</div><div><i class="fas fa-chart-simple"></i> Nível</div></div><div class="dashboard-card"><div class="value">${currentUser?.badges?.length || 0}</div><div><i class="fas fa-medal"></i> Conquistas</div></div>`;
         }
         
         function updateBadges() {
             document.getElementById('levelStat').innerHTML = getLevel(currentUser?.points || 0);
-            const badges = [];
-            if (currentUser?.completedCourses?.length >= 1) badges.push({ icon: "🎓", name: "Primeiro Curso" });
-            if (currentUser?.completedCourses?.length >= 3) badges.push({ icon: "🏆", name: "Mestre" });
-            if ((currentUser?.points || 0) >= 100) badges.push({ icon: "⭐", name: "100 Pontos" });
-            document.getElementById('badgesContainer').innerHTML = badges.length ? badges.map(b => `<div class="badge-item"><span class="badge-icon">${b.icon}</span><span>${b.name}</span></div>`).join('') : '<p>Complete cursos para ganhar conquistas!</p>';
+            updateAdvancedBadges();
         }
         
         function updateStats() {
@@ -846,16 +1704,18 @@
         }
         
         function rateCourse(courseId, rating) { if (!currentUser.ratings) currentUser.ratings = {}; currentUser.ratings[courseId] = rating; saveUser(); loadCourses(); }
-        function renderStars(courseId) { const rating = currentUser?.ratings?.[courseId] || 0; let stars = ''; for (let i = 1; i <= 5; i++) stars += `<span class="star ${i <= rating ? 'active' : ''}" onclick="event.stopPropagation(); rateCourse(${courseId}, ${i})">★</span>`; return stars; }
+        function renderStars(courseId) { const rating = currentUser?.ratings?.[courseId] || 0; let stars = ''; for (let i = 1; i <= 5; i++) stars += `<span class="star ${i <= rating ? 'active' : ''}" onclick="event.stopPropagation(); rateCourse(${courseId}, ${i})"><i class="fas fa-star"></i></span>`; return stars; }
         
         function loadCourses() {
             const coursesArray = Object.values(coursesData);
-            document.getElementById('featuredCourses').innerHTML = coursesArray.slice(0, 3).map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}<div class="quiz-badge">+${c.points} pts</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div><div class="rating-stars">${renderStars(c.id)}</div>${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed">✅ Concluído</div>' : ''}</div></div>`).join('');
-            document.getElementById('allCourses').innerHTML = coursesArray.map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}</div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div>${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed">✅ Concluído</div>' : ''}</div></div>`).join('');
+            document.getElementById('featuredCourses').innerHTML = coursesArray.slice(0, 3).map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image"><span style="font-size: 32px;">${c.icon}</span><div class="quiz-badge"><i class="fas fa-star"></i> +${c.points} pts</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div><div class="rating-stars">${renderStars(c.id)}</div>${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed"><i class="fas fa-check-circle"></i> Concluído</div>' : ''}</div></div>`).join('');
+            
+            filterCourses();
+            
             const pending = coursesArray.filter(c => !currentUser?.completedCourses?.includes(c.id)).slice(0, 3);
-            document.getElementById('nextSteps').innerHTML = pending.length ? pending.map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image">${c.icon}<div class="quiz-badge">Iniciar</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div></div></div>`).join('') : '<div style="text-align:center; padding:30px;">🎉 Todos concluídos!</div>';
+            document.getElementById('nextSteps').innerHTML = pending.length ? pending.map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image"><span style="font-size: 32px;">${c.icon}</span><div class="quiz-badge"><i class="fas fa-play"></i> Iniciar</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div></div></div>`).join('') : '<div style="text-align:center; padding:30px;"><i class="fas fa-trophy"></i> 🎉 Todos concluídos!</div>';
             const completed = currentUser?.completedCourses || [];
-            document.getElementById('certificatesList').innerHTML = completed.length ? `<div class="courses-grid">${completed.map(id => { const c = coursesData[id]; return c ? `<div class="course-card"><div class="course-image">${c.icon}</div><div class="course-info"><h3>${c.title}</h3><p>Certificado - ${c.hours}</p><button class="btn-sm" onclick="showCertificatePreview(${c.id})">📄 Ver</button></div></div>` : ''; }).join('')}</div>` : '<div style="text-align:center; padding:30px;">📜 Nenhum certificado.</div>';
+            document.getElementById('certificatesList').innerHTML = completed.length ? `<div class="courses-grid">${completed.map(id => { const c = coursesData[id]; return c ? `<div class="course-card"><div class="course-image"><span style="font-size: 32px;">${c.icon}</span></div><div class="course-info"><h3>${c.title}</h3><p><i class="fas fa-certificate"></i> Certificado - ${c.hours}</p><button class="btn-sm" onclick="showCertificatePreview(${c.id})"><i class="fas fa-eye"></i> Ver</button></div></div>` : ''; }).join('')}</div>` : '<div style="text-align:center; padding:30px;"><i class="fas fa-certificate"></i> 📜 Nenhum certificado.</div>';
             if (currentUser?.role === 'admin') renderAdminCoursesList();
         }
         
@@ -869,12 +1729,12 @@
             const percent = (completedCount / course.lessons.length) * 100;
             const quizSubmitted = currentUser.quizSubmitted?.[courseId] || false;
             let lessonsHtml = '<div class="lessons-grid">';
-            course.lessons.forEach(l => { const isComp = progress.find(p => p.id === l.id)?.completed || false; lessonsHtml += `<div class="lesson-card ${isComp ? 'completed' : ''}" onclick="openLessonWithSlides(${courseId}, ${l.id})"><div class="lesson-number">Aula ${l.id}</div><h3>${l.title}</h3>${isComp ? '<span style="color:#10b981;">✅</span>' : ''}</div>`; });
+            course.lessons.forEach(l => { const isComp = progress.find(p => p.id === l.id)?.completed || false; lessonsHtml += `<div class="lesson-card ${isComp ? 'completed' : ''}" onclick="openLessonWithSlides(${courseId}, ${l.id})"><div class="lesson-number"><i class="fas fa-play-circle"></i> Aula ${l.id}</div><h3>${l.title}</h3>${isComp ? '<span style="color:var(--success);"><i class="fas fa-check-circle"></i></span>' : ''}</div>`; });
             lessonsHtml += '</div>';
             let quizHtml = '';
-            if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:#f8fafc; border-radius:16px; padding:16px; margin-top:15px;"><h3 style="color:#D82A28;">📝 Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})">✅ Finalizar Quiz</button></div>`;
-            else if (quizSubmitted) quizHtml = `<div style="background:#ecfdf5; border-radius:16px; padding:16px; text-align:center;"><i class="fas fa-certificate" style="font-size:36px; color:#10b981;"></i><h3>Curso concluído!</h3><button class="complete-btn" onclick="showCertificatePreview(${courseId})">📄 Ver Certificado</button></div>`;
-            document.getElementById('modalContent').innerHTML = `<div style="text-align:center;"><h2 style="color:#D82A28;">${course.icon} ${course.title}</h2><p>${course.lessons.length} aulas</p><div class="progress-container"><div class="progress-fill" style="width:${percent}%;"></div></div><p>${completedCount}/${course.lessons.length}</p></div>${lessonsHtml}${quizHtml}`;
+            if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:var(--bg-card-hover); border-radius:16px; padding:16px; margin-top:15px;"><h3 style="color:var(--accent);"><i class="fas fa-question-circle"></i> Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})"><i class="fas fa-check"></i> Finalizar Quiz</button></div>`;
+            else if (quizSubmitted) quizHtml = `<div style="background:rgba(16, 185, 129, 0.1); border-radius:16px; padding:16px; text-align:center;"><i class="fas fa-certificate" style="font-size:36px; color:var(--success);"></i><h3><i class="fas fa-trophy"></i> Curso concluído!</h3><button class="complete-btn" onclick="showCertificatePreview(${courseId})"><i class="fas fa-eye"></i> Ver Certificado</button></div>`;
+            document.getElementById('modalContent').innerHTML = `<div style="text-align:center;"><h2 style="color:var(--accent);"><span style="font-size: 32px;">${course.icon}</span> ${course.title}</h2><p>${course.lessons.length} aulas</p><div class="progress-container"><div class="progress-fill" style="width:${percent}%;"></div></div><p>${completedCount}/${course.lessons.length}</p></div>${lessonsHtml}${quizHtml}`;
             document.getElementById('courseModal').style.display = 'flex';
             if (completedCount === course.lessons.length && !quizSubmitted) loadQuiz(courseId);
         }
@@ -904,6 +1764,10 @@
             const idx = currentUser.courseProgress[courseId].findIndex(p => p.id === lessonId);
             if (idx !== -1 && !currentUser.courseProgress[courseId][idx].completed) {
                 currentUser.courseProgress[courseId][idx].completed = true;
+                const today = new Date().getDay();
+                const dayIndex = today === 0 ? 6 : today - 1;
+                if (!currentUser.weeklyProgress) currentUser.weeklyProgress = [0,0,0,0,0,0,0];
+                currentUser.weeklyProgress[dayIndex]++;
                 saveUser(); updateStats(); triggerConfetti();
                 alert(`🎉 Aula ${lessonId} concluída! Continue assim!`);
                 closeLessonModal();
@@ -913,23 +1777,11 @@
         
         async function generatePdfFromPreview() { const el = document.querySelector('#certPreviewContent .certificate-preview'); if (el) { await html2pdf().set({ margin: 0.5, filename: 'Certificado.pdf' }).from(el).save(); alert('PDF gerado!'); } }
         
-        function showRanking() { const sorted = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)); document.getElementById('rankingList').innerHTML = sorted.map((u, i) => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #e2e8f0;"><span><strong>${i+1}º</strong> ${u.name}</span><span><strong>${u.points || 0}</strong> pts</span><span>${getLevel(u.points)}</span></div>`).join(''); document.getElementById('rankingModal').style.display = 'flex'; }
+        function showRanking() { const sorted = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)); document.getElementById('rankingList').innerHTML = sorted.map((u, i) => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border-color);"><span><strong>${i+1}º</strong> ${u.name}</span><span><strong>${u.points || 0}</strong> pts</span><span>${getLevel(u.points)}</span></div>`).join(''); document.getElementById('rankingModal').style.display = 'flex'; }
         
-        function showProfile() { document.getElementById('profileModalContent').innerHTML = `<h2 style="color:#D82A28;">👤 Meu Perfil</h2><div><label>Nome</label><input type="text" id="profileName" value="${currentUser.name}"><label>E-mail</label><input type="email" id="profileEmail" value="${currentUser.email || ''}"><label>Departamento</label><select id="profileDept"><option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option></select><label>Nova Senha</label><input type="password" id="profilePassword" placeholder="Deixe em branco"><button class="complete-btn" onclick="saveProfile()">Salvar</button></div>`; document.getElementById('profileModal').style.display = 'flex'; }
-        function saveProfile() { const newName = document.getElementById('profileName').value; const newEmail = document.getElementById('profileEmail').value; const newPass = document.getElementById('profilePassword').value; if (newName) currentUser.name = newName; if (newEmail) currentUser.email = newEmail; if (newPass) currentUser.password = newPass; saveUser(); document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase(); alert('Perfil atualizado!'); closeProfileModal(); }
-        
-        function exportBackup() { const data = { users, courses: coursesData, forum: forumPosts }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_backup.json`; link.click(); alert('Backup exportado!'); }
-        function exportUsersCSV() { let csv = "Nome,Email,Departamento,Role,Cursos,Pontos\n"; users.forEach(u => { csv += `${u.name},${u.email || ''},${u.department || ''},${u.role},${u.completedCourses?.length || 0},${u.points || 0}\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `usuarios_learn.csv`; link.click(); alert('CSV exportado!'); }
-        
-        function loadForum() { document.getElementById('forumList').innerHTML = forumPosts.length ? forumPosts.map(p => `<div class="forum-post"><h3>${p.title}</h3><p>${p.content}</p><small>👤 ${p.author} | ${p.date}</small></div>`).join('') : '<div style="text-align:center; padding:30px;">💬 Nenhuma pergunta.</div>'; }
-        function showNewPostModal() { document.getElementById('newPostModal').style.display = 'flex'; }
-        function closeNewPostModal() { document.getElementById('newPostModal').style.display = 'none'; }
-        async function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); await saveForumToFirebase(); closeNewPostModal(); loadForum(); alert('Pergunta publicada!'); } else alert('Preencha título e conteúdo'); }
-        
-        function showSection(section) { document.querySelectorAll('#homeSection, #coursesSection, #certificatesSection, #forumSection, #adminSection').forEach(s => s.style.display = 'none'); if (section === 'home') document.getElementById('homeSection').style.display = 'block'; else if (section === 'courses') document.getElementById('coursesSection').style.display = 'block'; else if (section === 'certificates') document.getElementById('certificatesSection').style.display = 'block'; else if (section === 'forum') { document.getElementById('forumSection').style.display = 'block'; loadForum(); } else if (section === 'admin' && currentUser?.role === 'admin') document.getElementById('adminSection').style.display = 'block'; }
         function showRegister() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('registerScreen').style.display = 'flex'; }
         function showLogin() { document.getElementById('registerScreen').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
-        async function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0] }); await saveUsersToFirebase(); alert('Conta criada!'); showLogin(); } else alert('Preencha todos os campos'); }
+        async function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, phone: "(47) 99999-9999", bio: "Novo aluno", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0], favorites: [] }); await saveUsersToFirebase(); alert('Conta criada!'); showLogin(); } else alert('Preencha todos os campos'); }
         
         async function doLogin() { 
             const username = document.getElementById('username').value; 
@@ -937,6 +1789,8 @@
             const user = users.find(u => u.name === username && u.password === password); 
             if (user) { 
                 currentUser = user; 
+                favoritesList = currentUser.favorites || [];
+                localStorage.setItem('learn_favorites', JSON.stringify(favoritesList));
                 localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); 
                 document.getElementById('loginScreen').style.display = 'none'; 
                 document.getElementById('appContainer').style.display = 'block'; 
@@ -955,9 +1809,20 @@
         
         function closeModal() { document.getElementById('courseModal').style.display = 'none'; }
         function closeLessonModal() { document.getElementById('lessonModal').style.display = 'none'; }
-        function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
         function closeCertPreview() { document.getElementById('certPreviewModal').style.display = 'none'; }
         function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; }
+        function closeNewPostModal() { document.getElementById('newPostModal').style.display = 'none'; }
+        async function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); await saveForumToFirebase(); closeNewPostModal(); loadForum(); alert('Pergunta publicada!'); } else alert('Preencha título e conteúdo'); }
+        function loadForum() { document.getElementById('forumList').innerHTML = forumPosts.length ? forumPosts.map(p => `<div class="forum-post"><h3><i class="fas fa-question-circle"></i> ${p.title}</h3><p>${p.content}</p><small><i class="fas fa-user"></i> ${p.author} | <i class="fas fa-calendar"></i> ${p.date}</small></div>`).join('') : '<div style="text-align:center; padding:30px;"><i class="fas fa-comments"></i> 💬 Nenhuma pergunta.</div>'; }
+        function showNewPostModal() { document.getElementById('newPostModal').style.display = 'flex'; }
+        function showSection(section) { document.querySelectorAll('#homeSection, #coursesSection, #certificatesSection, #forumSection, #adminSection').forEach(s => s.style.display = 'none'); if (section === 'home') document.getElementById('homeSection').style.display = 'block'; else if (section === 'courses') { document.getElementById('coursesSection').style.display = 'block'; filterCourses(); } else if (section === 'certificates') document.getElementById('certificatesSection').style.display = 'block'; else if (section === 'forum') { document.getElementById('forumSection').style.display = 'block'; loadForum(); } else if (section === 'admin' && currentUser?.role === 'admin') document.getElementById('adminSection').style.display = 'block'; }
+        
+        function exportBackup() { const data = { users, courses: coursesData, forum: forumPosts }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_backup.json`; link.click(); alert('Backup exportado!'); }
+        function exportUsersCSV() { let csv = "Nome,Email,Departamento,Role,Cursos,Pontos\n"; users.forEach(u => { csv += `${u.name},${u.email || ''},${u.department || ''},${u.role},${u.completedCourses?.length || 0},${u.points || 0}\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `usuarios_learn.csv`; link.click(); alert('CSV exportado!'); }
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(reg => console.log('Service Worker registrado!')).catch(err => console.log('Service Worker falhou:', err));
+        }
         
         async function init() { 
             loadTheme(); 
@@ -967,6 +1832,7 @@
                 currentUser = JSON.parse(storedUser);
                 const freshUser = users.find(u => u.id === currentUser.id);
                 if (freshUser) currentUser = freshUser;
+                favoritesList = currentUser.favorites || [];
                 document.getElementById('loginScreen').style.display = 'none'; 
                 document.getElementById('appContainer').style.display = 'block'; 
                 document.getElementById('welcomeName').innerText = currentUser.name; 
@@ -975,7 +1841,11 @@
                 updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); 
             } 
         }
-        window.onclick = (e) => { if (e.target.classList.contains('modal')) closeModal(); };
+        
+        window.onclick = (e) => { 
+            if (e.target.classList.contains('modal')) closeModal();
+            if (e.target.classList.contains('profile-modal')) closeProfileModal();
+        };
         init();
     </script>
 </body>
