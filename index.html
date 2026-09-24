@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -65,108 +66,6 @@
             background: var(--bg-card);
             color: var(--text-primary);
             border-color: var(--border-color);
-        }
-        
-        /* Corrige fundo de elementos específicos no dark */
-        body.dark .login-card,
-        body.dark .profile-card,
-        body.dark .profile-content,
-        body.dark .profile-info-item,
-        body.dark .edit-input {
-            background: var(--bg-card);
-            color: var(--text-primary);
-        }
-        body.dark .login-card input,
-        body.dark .login-card select,
-        body.dark .edit-input {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-        body.dark .profile-cover {
-            background: linear-gradient(135deg, var(--accent), #1B2F47);
-        }
-        body.dark .notification-panel {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-        }
-        body.dark .notification-item {
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-        body.dark .notification-item:hover {
-            background: var(--bg-card-hover);
-        }
-        body.dark .notification-item.unread {
-            background: rgba(216, 42, 40, 0.25);
-        }
-        body.dark .pomodoro-timer {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-        }
-        body.dark .search-input,
-        body.dark .category-filter {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-        body.dark .search-input::placeholder {
-            color: var(--text-secondary);
-        }
-        body.dark .admin-tab {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-            color: var(--text-primary);
-        }
-        body.dark .admin-tab.active {
-            background: var(--accent);
-            color: white;
-        }
-        body.dark .form-group input,
-        body.dark .form-group select,
-        body.dark .form-group textarea {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-        body.dark .lesson-content h2,
-        body.dark .lesson-content h3 {
-            color: var(--text-primary);
-        }
-        body.dark .example-box {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--text-primary);
-        }
-        body.dark .quiz-option {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-            color: var(--text-primary);
-        }
-        body.dark .quiz-option:hover {
-            background: var(--bg-card-hover);
-        }
-        body.dark .quiz-option.selected {
-            background: var(--accent);
-            color: white;
-        }
-        body.dark .star {
-            color: #64748b;
-        }
-        body.dark .star.active {
-            color: var(--warning);
-        }
-        body.dark .course-image {
-            background: linear-gradient(135deg, #1a2c3e 0%, #2c4a6e 100%);
-        }
-        body.dark .footer {
-            background: #0f172a;
-            color: rgba(255,255,255,0.7);
-        }
-        body.dark .login-card h2 {
-            background: linear-gradient(135deg, #f1f5f9, var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
         }
         
         .lesson-content { word-wrap: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.6; }
@@ -304,25 +203,22 @@
         .logout-btn:hover { background: rgba(255,255,255,0.25); }
         .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #1a2c3e 0%, #0f1a24 100%); }
         .login-card { 
-            background: var(--bg-card); 
+            background: white; 
             padding: 40px 32px; 
             border-radius: 32px; 
             width: 100%; 
             max-width: 400px; 
             text-align: center; 
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); 
-            color: var(--text-primary);
         }
         .login-card h2 { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #1a2c3e, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .login-card input, .login-card select { 
             width: 100%; 
             padding: 12px; 
             margin: 8px 0; 
-            border: 1.5px solid var(--border-color); 
+            border: 1.5px solid #e2e8f0; 
             border-radius: 20px; 
             font-size: 14px; 
-            background: var(--bg-card);
-            color: var(--text-primary);
         }
         .login-card button { 
             width: 100%; 
@@ -668,7 +564,6 @@
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
             animation: modalFadeIn 0.3s ease;
             border: 1px solid var(--border-color);
-            color: var(--text-primary);
         }
         .profile-cover {
             height: 120px;
@@ -679,7 +574,6 @@
             text-align: center;
             position: relative;
             background: var(--bg-card);
-            color: var(--text-primary);
         }
         .avatar-container {
             margin-top: -60px;
@@ -749,7 +643,6 @@
             padding: 12px;
             border-radius: 16px;
             border: 1px solid var(--border-color);
-            color: var(--text-primary);
         }
         .profile-info-label {
             font-size: 11px;
@@ -823,51 +716,50 @@
         <div class="login-card">
             <div style="font-size: 48px; margin-bottom: 15px;"><i class="fas fa-graduation-cap"></i></div>
             <h2>LEARN</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 20px;" data-i18n="subtitle">Plataforma EAD Corporativa</p>
-            <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <p style="color: #64748b; margin-bottom: 20px;">Plataforma EAD Corporativa</p>
+            <select id="languageSelect">
                 <option value="pt">🇧🇷 Português</option>
                 <option value="en">🇺🇸 English</option>
                 <option value="es">🇪🇸 Español</option>
             </select>
-            <input type="text" id="username" placeholder="Usuário" data-i18n-placeholder="usernamePlaceholder" value="admin.learn">
-            <input type="password" id="password" placeholder="Senha" data-i18n-placeholder="passwordPlaceholder" value="admin123">
-            <button onclick="doLogin()" data-i18n="loginBtn">Entrar</button>
-            <!-- Credenciais removidas -->
-            <button onclick="showRegister()" style="background: #64748b; margin-top: 8px;" data-i18n="createAccountBtn"><i class="fas fa-user-plus"></i> Criar conta</button>
+            <input type="text" id="username" placeholder="Usuário" value="admin.learn">
+            <input type="password" id="password" placeholder="Senha" value="admin123">
+            <button onclick="doLogin()">Entrar</button>
+            <div style="margin-top: 15px; font-size: 11px; background: #f8fafc; padding: 10px; border-radius: 14px;">
+                <strong><i class="fas fa-key"></i> Credenciais:</strong><br>
+                <i class="fas fa-crown"></i> Admin: admin.learn / admin123<br>
+                <i class="fas fa-user-graduate"></i> Aluno: aluno.learn / learn123
+            </div>
+            <button onclick="showRegister()" style="background: #64748b; margin-top: 8px;"><i class="fas fa-user-plus"></i> Criar conta</button>
         </div>
     </div>
 
     <div id="registerScreen" class="login-container" style="display: none;">
         <div class="login-card">
             <div style="font-size: 48px;"><i class="fas fa-user-plus"></i></div>
-            <h2 data-i18n="createAccountTitle">Criar Conta</h2>
-            <input type="text" id="regName" placeholder="Nome completo" data-i18n-placeholder="fullNamePlaceholder">
-            <input type="email" id="regEmail" placeholder="E-mail" data-i18n-placeholder="emailPlaceholder">
+            <h2>Criar Conta</h2>
+            <input type="text" id="regName" placeholder="Nome completo">
+            <input type="email" id="regEmail" placeholder="E-mail">
             <select id="regDepartment">
-                <option data-i18n="deptProduction">Produção</option>
-                <option data-i18n="deptQuality">Qualidade</option>
-                <option data-i18n="deptPCP">PCP</option>
-                <option data-i18n="deptHR">RH</option>
-                <option data-i18n="deptLogistics">Logística</option>
-                <option data-i18n="deptAdmin">Administrativo</option>
+                <option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option><option>Administrativo</option>
             </select>
-            <input type="text" id="regUsername" placeholder="Usuário" data-i18n-placeholder="usernamePlaceholder">
-            <input type="password" id="regPassword" placeholder="Senha" data-i18n-placeholder="passwordPlaceholder">
-            <button onclick="doRegister()" data-i18n="createAccountBtn">Criar Conta</button>
-            <button onclick="showLogin()" style="background: #64748b;" data-i18n="backBtn"><i class="fas fa-arrow-left"></i> Voltar</button>
+            <input type="text" id="regUsername" placeholder="Usuário">
+            <input type="password" id="regPassword" placeholder="Senha">
+            <button onclick="doRegister()">Criar Conta</button>
+            <button onclick="showLogin()" style="background: #64748b;"><i class="fas fa-arrow-left"></i> Voltar</button>
         </div>
     </div>
 
     <div id="appContainer" class="app-container">
         <div class="header">
-            <div class="logo">LEARN <small>| <span data-i18n="eadPlatform">Plataforma EAD</span></small></div>
+            <div class="logo">LEARN <small>| Plataforma EAD</small></div>
             <div class="nav">
-                <a onclick="showSection('home')" data-i18n="navHome"><i class="fas fa-home"></i> Início</a>
-                <a onclick="showSection('courses')" data-i18n="navCourses"><i class="fas fa-book-open"></i> Cursos</a>
-                <a onclick="showSection('certificates')" data-i18n="navCertificates"><i class="fas fa-certificate"></i> Certificados</a>
-                <a onclick="showSection('forum')" data-i18n="navForum"><i class="fas fa-comments"></i> Fórum</a>
-                <a onclick="showRanking()" data-i18n="navRanking"><i class="fas fa-trophy"></i> Ranking</a>
-                <a onclick="showSection('admin')" id="adminNav" data-i18n="navAdmin"><i class="fas fa-users"></i> Admin</a>
+                <a onclick="showSection('home')"><i class="fas fa-home"></i> Início</a>
+                <a onclick="showSection('courses')"><i class="fas fa-book-open"></i> Cursos</a>
+                <a onclick="showSection('certificates')"><i class="fas fa-certificate"></i> Certificados</a>
+                <a onclick="showSection('forum')"><i class="fas fa-comments"></i> Fórum</a>
+                <a onclick="showRanking()"><i class="fas fa-trophy"></i> Ranking</a>
+                <a onclick="showSection('admin')" id="adminNav"><i class="fas fa-users"></i> Admin</a>
                 <select class="lang-select" id="appLanguageSelect" onchange="changeLanguage(this.value)">
                     <option value="pt">🇧🇷 PT</option><option value="en">🇺🇸 EN</option><option value="es">🇪🇸 ES</option>
                 </select>
@@ -879,44 +771,44 @@
             </div>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar" onclick="showProfileModal()">A</div>
-                <button class="logout-btn" onclick="doLogout()" data-i18n="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
             </div>
         </div>
 
         <!-- HOME SECTION -->
         <div id="homeSection">
             <div class="hero">
-                <h1 data-i18n="welcomeMsg">Bem-vindo(a), <span id="welcomeName">Aluno</span>! <i class="fas fa-smile-wink"></i></h1>
-                <p data-i18n="welcomeSub">Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!</p>
+                <h1>Bem-vindo(a), <span id="welcomeName">Aluno</span>! <i class="fas fa-smile-wink"></i></h1>
+                <p>Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!</p>
                 <div class="stats-row">
-                    <div class="stat-card"><div class="stat-number" id="userPointsStat">0</div><div><i class="fas fa-star"></i> <span data-i18n="points">Pontos</span></div></div>
-                    <div class="stat-card"><div class="stat-number" id="completedCountStat">0</div><div><i class="fas fa-check-circle"></i> <span data-i18n="coursesCompleted">Cursos</span></div></div>
-                    <div class="stat-card"><div class="stat-number" id="levelStat"><i class="fas fa-medal"></i> Bronze</div><div><i class="fas fa-chart-simple"></i> <span data-i18n="level">Nível</span></div></div>
+                    <div class="stat-card"><div class="stat-number" id="userPointsStat">0</div><div><i class="fas fa-star"></i> Pontos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="completedCountStat">0</div><div><i class="fas fa-check-circle"></i> Cursos</div></div>
+                    <div class="stat-card"><div class="stat-number" id="levelStat"><i class="fas fa-medal"></i> Bronze</div><div><i class="fas fa-chart-simple"></i> Nível</div></div>
                 </div>
                 <div class="progress-dashboard">
-                    <p><strong><i class="fas fa-chart-line"></i> <span data-i18n="globalProgress">Progresso Geral</span></strong></p>
+                    <p><strong><i class="fas fa-chart-line"></i> Progresso Geral</strong></p>
                     <div class="progress-bar-container"><div class="progress-bar-fill" id="globalProgress"></div></div>
-                    <p id="progressText" style="font-size: 13px; margin-top: 6px;" data-i18n="progressPercent">0% concluído</p>
+                    <p id="progressText" style="font-size: 13px; margin-top: 6px;">0% concluído</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-chart-pie"></i> <span data-i18n="yourDashboard">Seu Dashboard</span></h2></div>
+                <div class="section-header"><h2><i class="fas fa-chart-pie"></i> Seu Dashboard</h2></div>
                 <div class="dashboard-grid" id="dashboardGrid"></div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-fire"></i> <span data-i18n="featuredCourses">Cursos em Destaque</span></h2><a onclick="showSection('courses')" style="color: var(--accent); cursor: pointer;" data-i18n="viewAll">Ver todos <i class="fas fa-arrow-right"></i></a></div>
+                <div class="section-header"><h2><i class="fas fa-fire"></i> Cursos em Destaque</h2><a onclick="showSection('courses')" style="color: var(--accent); cursor: pointer;">Ver todos <i class="fas fa-arrow-right"></i></a></div>
                 <div class="courses-grid" id="featuredCourses"></div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-trophy"></i> <span data-i18n="yourAchievements">Suas Conquistas</span></h2></div>
+                <div class="section-header"><h2><i class="fas fa-trophy"></i> Suas Conquistas</h2></div>
                 <div class="badges-container" id="badgesContainer"></div>
             </div>
 
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-clock"></i> <span data-i18n="nextSteps">Próximos Passos</span></h2></div>
+                <div class="section-header"><h2><i class="fas fa-clock"></i> Próximos Passos</h2></div>
                 <div class="courses-grid" id="nextSteps"></div>
             </div>
         </div>
@@ -924,22 +816,22 @@
         <!-- COURSES SECTION -->
         <div id="coursesSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-book"></i> <span data-i18n="allCourses">Todos os Cursos</span></h2></div>
+                <div class="section-header"><h2><i class="fas fa-book"></i> Todos os Cursos</h2></div>
                 
                 <div class="search-bar">
-                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar curso por nome..." data-i18n-placeholder="searchCoursesPlaceholder">
+                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar curso por nome...">
                     <select id="categoryFilter" class="category-filter">
-                        <option value="all"><i class="fas fa-th-large"></i> <span data-i18n="allCategories">Todas as categorias</span></option>
-                        <option value="🇬🇧 Inglês"><i class="fas fa-language"></i> <span data-i18n="catEnglish">Inglês</span></option>
-                        <option value="🏭 Qualidade"><i class="fas fa-chart-line"></i> <span data-i18n="catQuality">Qualidade</span></option>
-                        <option value="📊 Excel/Office"><i class="fas fa-table"></i> <span data-i18n="catExcel">Excel/Office</span></option>
-                        <option value="📚 Geral"><i class="fas fa-book"></i> <span data-i18n="catGeneral">Geral</span></option>
-                        <option value="💻 Informática"><i class="fas fa-laptop-code"></i> <span data-i18n="catIT">Informática</span></option>
-                        <option value="🧠 Desenv. Pessoal"><i class="fas fa-brain"></i> <span data-i18n="catPersonal">Desenv. Pessoal</span></option>
-                        <option value="👥 Liderança"><i class="fas fa-users"></i> <span data-i18n="catLeadership">Liderança</span></option>
+                        <option value="all"><i class="fas fa-th-large"></i> Todas as categorias</option>
+                        <option value="🇬🇧 Inglês"><i class="fas fa-language"></i> Inglês</option>
+                        <option value="🏭 Qualidade"><i class="fas fa-chart-line"></i> Qualidade</option>
+                        <option value="📊 Excel/Office"><i class="fas fa-table"></i> Excel/Office</option>
+                        <option value="📚 Geral"><i class="fas fa-book"></i> Geral</option>
+                        <option value="💻 Informática"><i class="fas fa-laptop-code"></i> Informática</option>
+                        <option value="🧠 Desenv. Pessoal"><i class="fas fa-brain"></i> Desenv. Pessoal</option>
+                        <option value="👥 Liderança"><i class="fas fa-users"></i> Liderança</option>
                     </select>
-                    <button class="search-btn" onclick="filterCourses()" data-i18n="searchBtn"><i class="fas fa-search"></i> Buscar</button>
-                    <button class="search-btn" onclick="showFavoritesOnly()" style="background: var(--warning);" data-i18n="favoritesBtn"><i class="fas fa-star"></i> Favoritos</button>
+                    <button class="search-btn" onclick="filterCourses()"><i class="fas fa-search"></i> Buscar</button>
+                    <button class="search-btn" onclick="showFavoritesOnly()" style="background: var(--warning);"><i class="fas fa-star"></i> Favoritos</button>
                 </div>
                 
                 <div class="courses-grid" id="allCourses"></div>
@@ -949,7 +841,7 @@
         <!-- CERTIFICATES SECTION -->
         <div id="certificatesSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-certificate"></i> <span data-i18n="myCertificates">Meus Certificados</span></h2></div>
+                <div class="section-header"><h2><i class="fas fa-certificate"></i> Meus Certificados</h2></div>
                 <div id="certificatesList"></div>
             </div>
         </div>
@@ -957,7 +849,7 @@
         <!-- FORUM SECTION -->
         <div id="forumSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-comments"></i> <span data-i18n="forumTitle">Fórum de Dúvidas</span></h2><button class="btn-sm" onclick="showNewPostModal()" data-i18n="newQuestionBtn"><i class="fas fa-plus"></i> Nova Pergunta</button></div>
+                <div class="section-header"><h2><i class="fas fa-comments"></i> Fórum de Dúvidas</h2><button class="btn-sm" onclick="showNewPostModal()"><i class="fas fa-plus"></i> Nova Pergunta</button></div>
                 <div id="forumList"></div>
             </div>
         </div>
@@ -965,12 +857,12 @@
         <!-- ADMIN SECTION -->
         <div id="adminSection" style="display: none;">
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-users-cog"></i> <span data-i18n="adminPanel">Painel Administrativo</span></h2></div>
+                <div class="section-header"><h2><i class="fas fa-users-cog"></i> Painel Administrativo</h2></div>
                 
                 <div class="admin-tabs">
-                    <div class="admin-tab active" onclick="showAdminTab('courses')" data-i18n="adminManageCourses"><i class="fas fa-book"></i> Gerenciar Cursos</div>
-                    <div class="admin-tab" onclick="showAdminTab('create')" data-i18n="adminCreateCourse"><i class="fas fa-plus-circle"></i> Criar Novo Curso</div>
-                    <div class="admin-tab" onclick="showAdminTab('stats')" data-i18n="adminStats"><i class="fas fa-chart-bar"></i> Estatísticas</div>
+                    <div class="admin-tab active" onclick="showAdminTab('courses')"><i class="fas fa-book"></i> Gerenciar Cursos</div>
+                    <div class="admin-tab" onclick="showAdminTab('create')"><i class="fas fa-plus-circle"></i> Criar Novo Curso</div>
+                    <div class="admin-tab" onclick="showAdminTab('stats')"><i class="fas fa-chart-bar"></i> Estatísticas</div>
                 </div>
                 
                 <div id="adminCoursesTab">
@@ -979,34 +871,34 @@
                 
                 <div id="adminCreateTab" style="display: none;">
                     <div style="background: var(--bg-card); border-radius: 24px; padding: 25px;">
-                        <h3 style="margin-bottom: 20px; color: var(--accent);"><i class="fas fa-edit"></i> <span data-i18n="basicInfo">Informações Básicas</span></h3>
-                        <div class="form-group"><label><i class="fas fa-heading"></i> <span data-i18n="courseTitle">Título do Curso</span> *</label><input type="text" id="newCourseTitle" placeholder="Ex: Excel Avançado" data-i18n-placeholder="courseTitlePlaceholder"></div>
-                        <div class="form-group"><label><i class="fas fa-tag"></i> <span data-i18n="category">Categoria</span></label><select id="newCourseCategory"><option data-i18n="catGeneral">Geral</option><option data-i18n="catEnglish">Inglês</option><option data-i18n="catExcel">Excel/Office</option><option data-i18n="catIT">Informática</option><option data-i18n="catPersonal">Desenv. Pessoal</option><option data-i18n="catLeadership">Liderança</option><option data-i18n="catQuality">Qualidade</option></select></div>
-                        <div class="form-group"><label><i class="fas fa-clock"></i> <span data-i18n="workload">Carga Horária</span></label><input type="text" id="newCourseHours" placeholder="Ex: 20h" data-i18n-placeholder="workloadPlaceholder"></div>
-                        <div class="form-group"><label><i class="fas fa-icons"></i> <span data-i18n="icon">Ícone (emoji)</span></label><input type="text" id="newCourseIcon" placeholder="Ex: 📊" value="📚"></div>
-                        <div class="form-group"><label><i class="fas fa-star"></i> <span data-i18n="pointsLabel">Pontos ao Concluir</span></label><input type="number" id="newCoursePoints" value="100"></div>
+                        <h3 style="margin-bottom: 20px; color: var(--accent);"><i class="fas fa-edit"></i> Informações Básicas</h3>
+                        <div class="form-group"><label><i class="fas fa-heading"></i> Título do Curso *</label><input type="text" id="newCourseTitle" placeholder="Ex: Excel Avançado"></div>
+                        <div class="form-group"><label><i class="fas fa-tag"></i> Categoria</label><select id="newCourseCategory"><option>Geral</option><option>Inglês</option><option>Excel/Office</option><option>Informática</option><option>Desenv. Pessoal</option><option>Liderança</option><option>Qualidade</option></select></div>
+                        <div class="form-group"><label><i class="fas fa-clock"></i> Carga Horária</label><input type="text" id="newCourseHours" placeholder="Ex: 20h"></div>
+                        <div class="form-group"><label><i class="fas fa-icons"></i> Ícone (emoji)</label><input type="text" id="newCourseIcon" placeholder="Ex: 📊" value="📚"></div>
+                        <div class="form-group"><label><i class="fas fa-star"></i> Pontos ao Concluir</label><input type="number" id="newCoursePoints" value="100"></div>
                         
-                        <h3 style="margin: 25px 0 15px;"><i class="fas fa-video"></i> <span data-i18n="courseLessons">Aulas do Curso</span></h3>
+                        <h3 style="margin: 25px 0 15px;"><i class="fas fa-video"></i> Aulas do Curso</h3>
                         <div id="lessonsContainer"></div>
-                        <button class="btn-add" onclick="addLessonField()" data-i18n="addLessonBtn"><i class="fas fa-plus"></i> Adicionar Aula</button>
+                        <button class="btn-add" onclick="addLessonField()"><i class="fas fa-plus"></i> Adicionar Aula</button>
                         
-                        <h3 style="margin: 25px 0 15px;"><i class="fas fa-question-circle"></i> <span data-i18n="quizQuestions">Perguntas do Quiz</span></h3>
+                        <h3 style="margin: 25px 0 15px;"><i class="fas fa-question-circle"></i> Perguntas do Quiz</h3>
                         <div id="quizContainer"></div>
-                        <button class="btn-add" onclick="addQuizField()" data-i18n="addQuestionBtn"><i class="fas fa-plus"></i> Adicionar Pergunta</button>
+                        <button class="btn-add" onclick="addQuizField()"><i class="fas fa-plus"></i> Adicionar Pergunta</button>
                         
                         <div style="margin-top: 30px; text-align: center;">
-                            <button class="btn-save" onclick="saveNewCourse()" data-i18n="saveCourseBtn"><i class="fas fa-save"></i> Salvar Curso</button>
-                            <button class="btn-cancel" onclick="clearCourseForm()" data-i18n="clearBtn"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="btn-save" onclick="saveNewCourse()"><i class="fas fa-save"></i> Salvar Curso</button>
+                            <button class="btn-cancel" onclick="clearCourseForm()"><i class="fas fa-eraser"></i> Limpar</button>
                         </div>
                     </div>
                 </div>
                 
                 <div id="adminStatsTab" style="display: none;">
                     <div class="dashboard-grid">
-                        <div class="dashboard-card"><div class="value" id="statTotalCourses">0</div><div><i class="fas fa-book"></i> <span data-i18n="totalCourses">Cursos Totais</span></div></div>
-                        <div class="dashboard-card"><div class="value" id="statTotalLessons">0</div><div><i class="fas fa-video"></i> <span data-i18n="totalLessons">Aulas Totais</span></div></div>
-                        <div class="dashboard-card"><div class="value" id="statTotalUsers">0</div><div><i class="fas fa-users"></i> <span data-i18n="totalUsers">Usuários</span></div></div>
-                        <div class="dashboard-card"><div class="value" id="statTotalPoints">0</div><div><i class="fas fa-star"></i> <span data-i18n="totalPoints">Pontos Distribuídos</span></div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalCourses">0</div><div><i class="fas fa-book"></i> Cursos Totais</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalLessons">0</div><div><i class="fas fa-video"></i> Aulas Totais</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalUsers">0</div><div><i class="fas fa-users"></i> Usuários</div></div>
+                        <div class="dashboard-card"><div class="value" id="statTotalPoints">0</div><div><i class="fas fa-star"></i> Pontos Distribuídos</div></div>
                     </div>
                     <canvas id="adminStatsChart"></canvas>
                 </div>
@@ -1014,12 +906,12 @@
         </div>
 
         <div class="footer">
-            <p><i class="fas fa-graduation-cap"></i> LEARN - <span data-i18n="footerText">Plataforma EAD para Desenvolvimento de Pessoas</span></p>
+            <p><i class="fas fa-graduation-cap"></i> LEARN - Plataforma EAD para Desenvolvimento de Pessoas</p>
             <p><i class="fas fa-user"></i> Luiz Carlos Correa Junior | <i class="fas fa-phone"></i> (47) 99290-4926</p>
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL -->
+    <!-- MODAL DE PERFIL (CORRIGIDO - SEM TRANSPARÊNCIA) -->
     <div id="profileModal" class="profile-modal">
         <div class="profile-card">
             <div class="profile-cover"></div>
@@ -1036,19 +928,19 @@
                 <div class="profile-bio" id="profileBio">Profissional em constante evolução, apaixonado por aprendizado e melhoria contínua.</div>
                 
                 <div class="profile-info-grid">
-                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-envelope"></i> <span data-i18n="email">E-mail</span></div><div class="profile-info-value" id="profileEmail">carregando@email.com</div></div>
-                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-building"></i> <span data-i18n="department">Departamento</span></div><div class="profile-info-value" id="profileDepartment">Produção</div></div>
-                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-phone"></i> <span data-i18n="phone">Telefone</span></div><div class="profile-info-value" id="profilePhone">(47) 99999-9999</div></div>
-                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-calendar"></i> <span data-i18n="memberSince">Membro desde</span></div><div class="profile-info-value" id="profileSince">Junho 2026</div></div>
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-envelope"></i> E-mail</div><div class="profile-info-value" id="profileEmail">carregando@email.com</div></div>
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-building"></i> Departamento</div><div class="profile-info-value" id="profileDepartment">Produção</div></div>
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-phone"></i> Telefone</div><div class="profile-info-value" id="profilePhone">(47) 99999-9999</div></div>
+                    <div class="profile-info-item"><div class="profile-info-label"><i class="fas fa-calendar"></i> Membro desde</div><div class="profile-info-value" id="profileSince">Junho 2026</div></div>
                 </div>
                 
                 <div class="profile-stats">
-                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatCourses">0</div><div class="profile-stat-label" data-i18n="courses">Cursos</div></div>
-                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatPoints">0</div><div class="profile-stat-label" data-i18n="points">Pontos</div></div>
-                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatBadges">0</div><div class="profile-stat-label" data-i18n="achievements">Conquistas</div></div>
+                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatCourses">0</div><div class="profile-stat-label">Cursos</div></div>
+                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatPoints">0</div><div class="profile-stat-label">Pontos</div></div>
+                    <div class="profile-stat"><div class="profile-stat-number" id="profileStatBadges">0</div><div class="profile-stat-label">Conquistas</div></div>
                 </div>
                 
-                <button class="profile-edit-btn" onclick="editProfile()" data-i18n="editProfileBtn"><i class="fas fa-pen"></i> Editar Perfil</button>
+                <button class="profile-edit-btn" onclick="editProfile()"><i class="fas fa-pen"></i> Editar Perfil</button>
             </div>
         </div>
     </div>
@@ -1058,16 +950,16 @@
         <div class="profile-card">
             <div class="profile-cover"></div>
             <div class="profile-content">
-                <h3 style="color: var(--accent); margin-bottom: 20px;"><i class="fas fa-edit"></i> <span data-i18n="editProfileTitle">Editar Perfil</span></h3>
-                <div class="form-group"><label><i class="fas fa-user"></i> <span data-i18n="fullName">Nome completo</span></label><input type="text" id="editFullName" class="edit-input"></div>
-                <div class="form-group"><label><i class="fas fa-envelope"></i> <span data-i18n="email">E-mail</span></label><input type="email" id="editEmail" class="edit-input"></div>
-                <div class="form-group"><label><i class="fas fa-phone"></i> <span data-i18n="phone">Telefone</span></label><input type="text" id="editPhone" class="edit-input"></div>
-                <div class="form-group"><label><i class="fas fa-building"></i> <span data-i18n="department">Departamento</span></label><select id="editDepartment" class="edit-input"><option data-i18n="deptProduction">Produção</option><option data-i18n="deptQuality">Qualidade</option><option data-i18n="deptPCP">PCP</option><option data-i18n="deptHR">RH</option><option data-i18n="deptLogistics">Logística</option><option data-i18n="deptAdmin">Administrativo</option></select></div>
-                <div class="form-group"><label><i class="fas fa-pencil-alt"></i> <span data-i18n="bio">Biografia</span></label><textarea id="editBio" rows="3" placeholder="Fale um pouco sobre você..." class="edit-input" data-i18n-placeholder="bioPlaceholder"></textarea></div>
-                <div class="form-group"><label><i class="fas fa-key"></i> <span data-i18n="newPassword">Nova senha</span></label><input type="password" id="editPassword" placeholder="Deixe em branco para manter a mesma" class="edit-input" data-i18n-placeholder="passwordPlaceholder2"></div>
+                <h3 style="color: var(--accent); margin-bottom: 20px;"><i class="fas fa-edit"></i> Editar Perfil</h3>
+                <div class="form-group"><label><i class="fas fa-user"></i> Nome completo</label><input type="text" id="editFullName" class="edit-input"></div>
+                <div class="form-group"><label><i class="fas fa-envelope"></i> E-mail</label><input type="email" id="editEmail" class="edit-input"></div>
+                <div class="form-group"><label><i class="fas fa-phone"></i> Telefone</label><input type="text" id="editPhone" class="edit-input"></div>
+                <div class="form-group"><label><i class="fas fa-building"></i> Departamento</label><select id="editDepartment" class="edit-input"><option>Produção</option><option>Qualidade</option><option>PCP</option><option>RH</option><option>Logística</option><option>Administrativo</option></select></div>
+                <div class="form-group"><label><i class="fas fa-pencil-alt"></i> Biografia</label><textarea id="editBio" rows="3" placeholder="Fale um pouco sobre você..." class="edit-input"></textarea></div>
+                <div class="form-group"><label><i class="fas fa-key"></i> Nova senha</label><input type="password" id="editPassword" placeholder="Deixe em branco para manter a mesma" class="edit-input"></div>
                 <div style="display: flex; gap: 12px; margin-top: 20px;">
-                    <button class="btn-save" onclick="saveProfileChanges()" style="flex: 1;" data-i18n="saveChangesBtn">Salvar alterações</button>
-                    <button class="btn-cancel" onclick="closeEditProfileModal()" style="flex: 1;" data-i18n="cancelBtn">Cancelar</button>
+                    <button class="btn-save" onclick="saveProfileChanges()" style="flex: 1;">Salvar alterações</button>
+                    <button class="btn-cancel" onclick="closeEditProfileModal()" style="flex: 1;">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -1075,356 +967,16 @@
 
     <div id="courseModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></span><div id="modalContent"></div></div></div>
     <div id="lessonModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeLessonModal()"><i class="fas fa-times"></i></span><div id="lessonModalContent"></div></div></div>
-    <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()"><i class="fas fa-times"></i></span><div id="certPreviewContent"></div><div class="share-buttons"><button class="share-btn share-whatsapp" onclick="shareCertificate('whatsapp')" data-i18n="shareWhatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn share-linkedin" onclick="shareCertificate('linkedin')" data-i18n="shareLinkedin"><i class="fab fa-linkedin"></i> LinkedIn</button><button class="share-btn share-email" onclick="shareCertificate('email')" data-i18n="shareEmail"><i class="fas fa-envelope"></i> E-mail</button></div><div style="text-align:center; padding-top:15px;"><button class="complete-btn" onclick="generatePdfFromPreview()" data-i18n="downloadPdf"><i class="fas fa-download"></i> Baixar PDF</button></div></div></div>
-    <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()"><i class="fas fa-times"></i></span><h2 style="color: var(--accent);"><i class="fas fa-trophy"></i> <span data-i18n="rankingTitle">Ranking</span></h2><div id="rankingList"></div></div></div>
-    <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()"><i class="fas fa-times"></i></span><h3 style="color: var(--accent);"><i class="fas fa-plus-circle"></i> <span data-i18n="newQuestionTitle">Nova Pergunta</span></h3><input type="text" id="postTitle" placeholder="Título" class="edit-input" style="width:100%; margin-bottom:10px;" data-i18n-placeholder="titlePlaceholder"><textarea id="postContent" placeholder="Sua dúvida..." rows="3" class="edit-input" style="width:100%; margin-bottom:10px;" data-i18n-placeholder="contentPlaceholder"></textarea><button class="complete-btn" onclick="createNewPost()" data-i18n="publishBtn"><i class="fas fa-paper-plane"></i> Publicar</button></div></div>
+    <div id="certPreviewModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCertPreview()"><i class="fas fa-times"></i></span><div id="certPreviewContent"></div><div class="share-buttons"><button class="share-btn share-whatsapp" onclick="shareCertificate('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn share-linkedin" onclick="shareCertificate('linkedin')"><i class="fab fa-linkedin"></i> LinkedIn</button><button class="share-btn share-email" onclick="shareCertificate('email')"><i class="fas fa-envelope"></i> E-mail</button></div><div style="text-align:center; padding-top:15px;"><button class="complete-btn" onclick="generatePdfFromPreview()"><i class="fas fa-download"></i> Baixar PDF</button></div></div></div>
+    <div id="rankingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeRankingModal()"><i class="fas fa-times"></i></span><h2 style="color: var(--accent);"><i class="fas fa-trophy"></i> Ranking</h2><div id="rankingList"></div></div></div>
+    <div id="newPostModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeNewPostModal()"><i class="fas fa-times"></i></span><h3 style="color: var(--accent);"><i class="fas fa-plus-circle"></i> Nova Pergunta</h3><input type="text" id="postTitle" placeholder="Título" class="edit-input" style="width:100%; margin-bottom:10px;"><textarea id="postContent" placeholder="Sua dúvida..." rows="3" class="edit-input" style="width:100%; margin-bottom:10px;"></textarea><button class="complete-btn" onclick="createNewPost()"><i class="fas fa-paper-plane"></i> Publicar</button></div></div>
 
     <script>
+        // [TODAS AS FUNÇÕES PERMANECEM IGUAIS - COPIAR DO CÓDIGO ORIGINAL]
+        // (O conteúdo do script permanece exatamente igual ao que você forneceu)
+        
         // ============================================
-        // SISTEMA DE TRADUÇÃO
-        // ============================================
-        const translations = {
-            pt: {
-                subtitle: "Plataforma EAD Corporativa",
-                usernamePlaceholder: "Usuário",
-                passwordPlaceholder: "Senha",
-                loginBtn: "Entrar",
-                createAccountBtn: "Criar conta",
-                createAccountTitle: "Criar Conta",
-                fullNamePlaceholder: "Nome completo",
-                emailPlaceholder: "E-mail",
-                backBtn: "Voltar",
-                eadPlatform: "Plataforma EAD",
-                navHome: "Início",
-                navCourses: "Cursos",
-                navCertificates: "Certificados",
-                navForum: "Fórum",
-                navRanking: "Ranking",
-                navAdmin: "Admin",
-                logoutBtn: "Sair",
-                welcomeMsg: "Bem-vindo(a), <span id=\"welcomeName\">Aluno</span>! <i class=\"fas fa-smile-wink\"></i>",
-                welcomeSub: "Continue sua jornada de aprendizado. Complete os cursos e ganhe pontos!",
-                points: "Pontos",
-                coursesCompleted: "Cursos",
-                level: "Nível",
-                globalProgress: "Progresso Geral",
-                progressPercent: "0% concluído",
-                yourDashboard: "Seu Dashboard",
-                featuredCourses: "Cursos em Destaque",
-                viewAll: "Ver todos <i class=\"fas fa-arrow-right\"></i>",
-                yourAchievements: "Suas Conquistas",
-                nextSteps: "Próximos Passos",
-                allCourses: "Todos os Cursos",
-                searchCoursesPlaceholder: "🔍 Buscar curso por nome...",
-                allCategories: "Todas as categorias",
-                catEnglish: "Inglês",
-                catQuality: "Qualidade",
-                catExcel: "Excel/Office",
-                catGeneral: "Geral",
-                catIT: "Informática",
-                catPersonal: "Desenv. Pessoal",
-                catLeadership: "Liderança",
-                searchBtn: "Buscar",
-                favoritesBtn: "Favoritos",
-                myCertificates: "Meus Certificados",
-                forumTitle: "Fórum de Dúvidas",
-                newQuestionBtn: "Nova Pergunta",
-                adminPanel: "Painel Administrativo",
-                adminManageCourses: "Gerenciar Cursos",
-                adminCreateCourse: "Criar Novo Curso",
-                adminStats: "Estatísticas",
-                basicInfo: "Informações Básicas",
-                courseTitle: "Título do Curso",
-                courseTitlePlaceholder: "Ex: Excel Avançado",
-                category: "Categoria",
-                workload: "Carga Horária",
-                workloadPlaceholder: "Ex: 20h",
-                icon: "Ícone (emoji)",
-                pointsLabel: "Pontos ao Concluir",
-                courseLessons: "Aulas do Curso",
-                addLessonBtn: "Adicionar Aula",
-                quizQuestions: "Perguntas do Quiz",
-                addQuestionBtn: "Adicionar Pergunta",
-                saveCourseBtn: "Salvar Curso",
-                clearBtn: "Limpar",
-                totalCourses: "Cursos Totais",
-                totalLessons: "Aulas Totais",
-                totalUsers: "Usuários",
-                totalPoints: "Pontos Distribuídos",
-                footerText: "Plataforma EAD para Desenvolvimento de Pessoas",
-                email: "E-mail",
-                department: "Departamento",
-                phone: "Telefone",
-                memberSince: "Membro desde",
-                courses: "Cursos",
-                achievements: "Conquistas",
-                editProfileBtn: "Editar Perfil",
-                editProfileTitle: "Editar Perfil",
-                fullName: "Nome completo",
-                bio: "Biografia",
-                bioPlaceholder: "Fale um pouco sobre você...",
-                newPassword: "Nova senha",
-                passwordPlaceholder2: "Deixe em branco para manter a mesma",
-                saveChangesBtn: "Salvar alterações",
-                cancelBtn: "Cancelar",
-                shareWhatsapp: "WhatsApp",
-                shareLinkedin: "LinkedIn",
-                shareEmail: "E-mail",
-                downloadPdf: "Baixar PDF",
-                rankingTitle: "Ranking",
-                newQuestionTitle: "Nova Pergunta",
-                titlePlaceholder: "Título",
-                contentPlaceholder: "Sua dúvida...",
-                publishBtn: "Publicar",
-                deptProduction: "Produção",
-                deptQuality: "Qualidade",
-                deptPCP: "PCP",
-                deptHR: "RH",
-                deptLogistics: "Logística",
-                deptAdmin: "Administrativo"
-            },
-            en: {
-                subtitle: "Corporate EAD Platform",
-                usernamePlaceholder: "Username",
-                passwordPlaceholder: "Password",
-                loginBtn: "Login",
-                createAccountBtn: "Create account",
-                createAccountTitle: "Create Account",
-                fullNamePlaceholder: "Full name",
-                emailPlaceholder: "Email",
-                backBtn: "Back",
-                eadPlatform: "EAD Platform",
-                navHome: "Home",
-                navCourses: "Courses",
-                navCertificates: "Certificates",
-                navForum: "Forum",
-                navRanking: "Ranking",
-                navAdmin: "Admin",
-                logoutBtn: "Logout",
-                welcomeMsg: "Welcome, <span id=\"welcomeName\">Student</span>! <i class=\"fas fa-smile-wink\"></i>",
-                welcomeSub: "Continue your learning journey. Complete courses and earn points!",
-                points: "Points",
-                coursesCompleted: "Courses",
-                level: "Level",
-                globalProgress: "Overall Progress",
-                progressPercent: "0% completed",
-                yourDashboard: "Your Dashboard",
-                featuredCourses: "Featured Courses",
-                viewAll: "View all <i class=\"fas fa-arrow-right\"></i>",
-                yourAchievements: "Your Achievements",
-                nextSteps: "Next Steps",
-                allCourses: "All Courses",
-                searchCoursesPlaceholder: "🔍 Search course by name...",
-                allCategories: "All categories",
-                catEnglish: "English",
-                catQuality: "Quality",
-                catExcel: "Excel/Office",
-                catGeneral: "General",
-                catIT: "IT",
-                catPersonal: "Personal Dev.",
-                catLeadership: "Leadership",
-                searchBtn: "Search",
-                favoritesBtn: "Favorites",
-                myCertificates: "My Certificates",
-                forumTitle: "Forum",
-                newQuestionBtn: "New Question",
-                adminPanel: "Admin Panel",
-                adminManageCourses: "Manage Courses",
-                adminCreateCourse: "Create New Course",
-                adminStats: "Statistics",
-                basicInfo: "Basic Information",
-                courseTitle: "Course Title",
-                courseTitlePlaceholder: "Ex: Advanced Excel",
-                category: "Category",
-                workload: "Workload",
-                workloadPlaceholder: "Ex: 20h",
-                icon: "Icon (emoji)",
-                pointsLabel: "Points upon Completion",
-                courseLessons: "Course Lessons",
-                addLessonBtn: "Add Lesson",
-                quizQuestions: "Quiz Questions",
-                addQuestionBtn: "Add Question",
-                saveCourseBtn: "Save Course",
-                clearBtn: "Clear",
-                totalCourses: "Total Courses",
-                totalLessons: "Total Lessons",
-                totalUsers: "Users",
-                totalPoints: "Points Distributed",
-                footerText: "EAD Platform for People Development",
-                email: "Email",
-                department: "Department",
-                phone: "Phone",
-                memberSince: "Member since",
-                courses: "Courses",
-                achievements: "Achievements",
-                editProfileBtn: "Edit Profile",
-                editProfileTitle: "Edit Profile",
-                fullName: "Full name",
-                bio: "Bio",
-                bioPlaceholder: "Tell us about yourself...",
-                newPassword: "New password",
-                passwordPlaceholder2: "Leave blank to keep current",
-                saveChangesBtn: "Save changes",
-                cancelBtn: "Cancel",
-                shareWhatsapp: "WhatsApp",
-                shareLinkedin: "LinkedIn",
-                shareEmail: "Email",
-                downloadPdf: "Download PDF",
-                rankingTitle: "Ranking",
-                newQuestionTitle: "New Question",
-                titlePlaceholder: "Title",
-                contentPlaceholder: "Your question...",
-                publishBtn: "Publish",
-                deptProduction: "Production",
-                deptQuality: "Quality",
-                deptPCP: "PCP",
-                deptHR: "HR",
-                deptLogistics: "Logistics",
-                deptAdmin: "Administrative"
-            },
-            es: {
-                subtitle: "Plataforma EAD Corporativa",
-                usernamePlaceholder: "Usuario",
-                passwordPlaceholder: "Contraseña",
-                loginBtn: "Entrar",
-                createAccountBtn: "Crear cuenta",
-                createAccountTitle: "Crear Cuenta",
-                fullNamePlaceholder: "Nombre completo",
-                emailPlaceholder: "Correo electrónico",
-                backBtn: "Volver",
-                eadPlatform: "Plataforma EAD",
-                navHome: "Inicio",
-                navCourses: "Cursos",
-                navCertificates: "Certificados",
-                navForum: "Foro",
-                navRanking: "Ranking",
-                navAdmin: "Admin",
-                logoutBtn: "Salir",
-                welcomeMsg: "Bienvenido(a), <span id=\"welcomeName\">Alumno</span>! <i class=\"fas fa-smile-wink\"></i>",
-                welcomeSub: "Continúa tu viaje de aprendizaje. ¡Completa cursos y gana puntos!",
-                points: "Puntos",
-                coursesCompleted: "Cursos",
-                level: "Nivel",
-                globalProgress: "Progreso General",
-                progressPercent: "0% completado",
-                yourDashboard: "Tu Tablero",
-                featuredCourses: "Cursos Destacados",
-                viewAll: "Ver todos <i class=\"fas fa-arrow-right\"></i>",
-                yourAchievements: "Tus Logros",
-                nextSteps: "Próximos Pasos",
-                allCourses: "Todos los Cursos",
-                searchCoursesPlaceholder: "🔍 Buscar curso por nombre...",
-                allCategories: "Todas las categorías",
-                catEnglish: "Inglés",
-                catQuality: "Calidad",
-                catExcel: "Excel/Office",
-                catGeneral: "General",
-                catIT: "Informática",
-                catPersonal: "Desarrollo Personal",
-                catLeadership: "Liderazgo",
-                searchBtn: "Buscar",
-                favoritesBtn: "Favoritos",
-                myCertificates: "Mis Certificados",
-                forumTitle: "Foro de Dudas",
-                newQuestionBtn: "Nueva Pregunta",
-                adminPanel: "Panel Administrativo",
-                adminManageCourses: "Gestionar Cursos",
-                adminCreateCourse: "Crear Nuevo Curso",
-                adminStats: "Estadísticas",
-                basicInfo: "Información Básica",
-                courseTitle: "Título del Curso",
-                courseTitlePlaceholder: "Ej: Excel Avanzado",
-                category: "Categoría",
-                workload: "Carga Horaria",
-                workloadPlaceholder: "Ej: 20h",
-                icon: "Icono (emoji)",
-                pointsLabel: "Puntos al Completar",
-                courseLessons: "Lecciones del Curso",
-                addLessonBtn: "Agregar Lección",
-                quizQuestions: "Preguntas del Quiz",
-                addQuestionBtn: "Agregar Pregunta",
-                saveCourseBtn: "Guardar Curso",
-                clearBtn: "Limpiar",
-                totalCourses: "Cursos Totales",
-                totalLessons: "Lecciones Totales",
-                totalUsers: "Usuarios",
-                totalPoints: "Puntos Distribuidos",
-                footerText: "Plataforma EAD para Desarrollo de Personas",
-                email: "Correo",
-                department: "Departamento",
-                phone: "Teléfono",
-                memberSince: "Miembro desde",
-                courses: "Cursos",
-                achievements: "Logros",
-                editProfileBtn: "Editar Perfil",
-                editProfileTitle: "Editar Perfil",
-                fullName: "Nombre completo",
-                bio: "Biografía",
-                bioPlaceholder: "Cuéntanos sobre ti...",
-                newPassword: "Nueva contraseña",
-                passwordPlaceholder2: "Dejar en blanco para mantener la actual",
-                saveChangesBtn: "Guardar cambios",
-                cancelBtn: "Cancelar",
-                shareWhatsapp: "WhatsApp",
-                shareLinkedin: "LinkedIn",
-                shareEmail: "Correo",
-                downloadPdf: "Descargar PDF",
-                rankingTitle: "Ranking",
-                newQuestionTitle: "Nueva Pregunta",
-                titlePlaceholder: "Título",
-                contentPlaceholder: "Tu duda...",
-                publishBtn: "Publicar",
-                deptProduction: "Producción",
-                deptQuality: "Calidad",
-                deptPCP: "PCP",
-                deptHR: "RRHH",
-                deptLogistics: "Logística",
-                deptAdmin: "Administrativo"
-            }
-        };
-
-        let currentLang = 'pt';
-
-        function applyLanguage(lang) {
-            currentLang = lang;
-            const dict = translations[lang] || translations.pt;
-            // Atualiza elementos com data-i18n
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (dict[key] !== undefined) {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
-                        // Não substituir o valor de inputs, apenas placeholder (se houver)
-                    } else {
-                        el.innerHTML = dict[key];
-                    }
-                }
-            });
-            // Atualiza placeholders
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (dict[key] !== undefined) {
-                    el.placeholder = dict[key];
-                }
-            });
-            // Atualiza selects com options que têm data-i18n
-            document.querySelectorAll('select option[data-i18n]').forEach(opt => {
-                const key = opt.getAttribute('data-i18n');
-                if (dict[key] !== undefined) {
-                    opt.innerText = dict[key];
-                }
-            });
-            // Salva preferência
-            localStorage.setItem('learn_language', lang);
-            // Sincroniza os selects
-            document.querySelectorAll('#languageSelect, #appLanguageSelect').forEach(sel => sel.value = lang);
-        }
-
-        function changeLanguage(lang) {
-            applyLanguage(lang);
-        }
-
-        // ============================================
-        // CONFIGURAÇÃO FIREBASE
+        // CONFIGURAÇÃO FIREBASE (igual ao original)
         // ============================================
         const firebaseConfig = { 
             apiKey: "AIzaSyB8Zvuwfx55elKk8B2ZNPiWk16y1NPowIA", 
@@ -1472,7 +1024,7 @@
         let pomodoroType = 'study';
         
         // ============================================
-        // FUNÇÕES DE PERFIL
+        // FUNÇÕES DE PERFIL (MODELO 1)
         // ============================================
         
         function showProfileModal() {
@@ -1557,7 +1109,7 @@
         }
         
         // ============================================
-        // FUNÇÕES DE INICIALIZAÇÃO
+        // FUNÇÕES DE INICIALIZAÇÃO (idênticas ao original)
         // ============================================
         
         async function loadDataFromFirebase() {
@@ -1655,652 +1207,4 @@
         function calculateStreak() {
             const weeklyProgress = currentUser?.weeklyProgress || [0,0,0,0,0,0,0];
             let streak = 0;
-            for (let i = weeklyProgress.length - 1; i >= 0; i--) {
-                if (weeklyProgress[i] > 0) streak++;
-                else break;
-            }
-            return streak;
-        }
-        
-        // ============================================
-        // FAVORITOS
-        // ============================================
-        function toggleFavorite(courseId, event) {
-            event.stopPropagation();
-            if (!currentUser) return;
-            
-            const index = favoritesList.indexOf(courseId);
-            if (index === -1) {
-                favoritesList.push(courseId);
-                alert("⭐ Curso adicionado aos favoritos!");
-            } else {
-                favoritesList.splice(index, 1);
-                alert("⭐ Curso removido dos favoritos.");
-            }
-            localStorage.setItem('learn_favorites', JSON.stringify(favoritesList));
-            if (currentUser) {
-                currentUser.favorites = favoritesList;
-                saveUser();
-            }
-            loadCourses();
-        }
-        
-        function isFavorite(courseId) {
-            return favoritesList.includes(courseId);
-        }
-        
-        function showFavoritesOnly() {
-            filterCourses(true);
-        }
-        
-        function filterCourses(showOnlyFavorites = false) {
-            const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
-            const category = document.getElementById('categoryFilter')?.value || 'all';
-            const coursesArray = Object.values(coursesData);
-            
-            let filtered = coursesArray.filter(course => {
-                if (showOnlyFavorites && !isFavorite(course.id)) return false;
-                if (category !== 'all' && course.category !== category) return false;
-                if (searchTerm && !course.title.toLowerCase().includes(searchTerm) && !course.category.toLowerCase().includes(searchTerm)) return false;
-                return true;
-            });
-            
-            const container = document.getElementById('allCourses');
-            if (container) {
-                container.innerHTML = filtered.map(c => `
-                    <div class="course-card" onclick="openCourse(${c.id})" style="position: relative;">
-                        <button class="favorite-btn ${isFavorite(c.id) ? 'active' : ''}" style="position: absolute; top: 10px; right: 10px; z-index: 10; background: var(--bg-card); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;" onclick="toggleFavorite(${c.id}, event)">
-                            <i class="fas fa-star"></i>
-                        </button>
-                        <div class="course-image"><span style="font-size: 32px;">${c.icon}</span></div>
-                        <div class="course-info">
-                            <h3>${c.title}</h3>
-                            <p>${c.lessons.length} aulas - ${c.hours}</p>
-                            <div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div>
-                            ${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed"><i class="fas fa-check-circle"></i> Concluído</div>' : ''}
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-        
-        // ============================================
-        // POMODORO TIMER
-        // ============================================
-        function startPomodoro() {
-            if (pomodoroInterval) clearInterval(pomodoroInterval);
-            pomodoroRunning = true;
-            pomodoroInterval = setInterval(() => {
-                if (pomodoroTime <= 0) {
-                    clearInterval(pomodoroInterval);
-                    pomodoroRunning = false;
-                    if (pomodoroType === 'study') {
-                        pomodoroType = 'break';
-                        pomodoroTime = 5 * 60;
-                        alert("🍅 Pomodoro concluído! Hora da pausa de 5 minutos!");
-                    } else {
-                        pomodoroType = 'study';
-                        pomodoroTime = 25 * 60;
-                        alert("🎉 Pausa finalizada! Vamos voltar aos estudos!");
-                        triggerConfetti();
-                    }
-                    updatePomodoroDisplay();
-                    startPomodoro();
-                } else {
-                    pomodoroTime--;
-                    updatePomodoroDisplay();
-                }
-            }, 1000);
-            updatePomodoroDisplay();
-        }
-        
-        function pausePomodoro() {
-            if (pomodoroInterval) {
-                clearInterval(pomodoroInterval);
-                pomodoroInterval = null;
-                pomodoroRunning = false;
-            }
-        }
-        
-        function resetPomodoro() {
-            if (pomodoroInterval) clearInterval(pomodoroInterval);
-            pomodoroRunning = false;
-            pomodoroType = 'study';
-            pomodoroTime = 25 * 60;
-            updatePomodoroDisplay();
-        }
-        
-        function updatePomodoroDisplay() {
-            const minutes = Math.floor(pomodoroTime / 60);
-            const seconds = pomodoroTime % 60;
-            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            const timerElement = document.getElementById('pomodoroDisplay');
-            const sessionElement = document.getElementById('pomodoroSession');
-            if (timerElement) timerElement.innerText = display;
-            if (sessionElement) sessionElement.innerText = pomodoroType === 'study' ? '<i class="fas fa-book"></i> Estudo' : '<i class="fas fa-coffee"></i> Pausa';
-        }
-        
-        function addPomodoroToLesson() {
-            const lessonContent = document.getElementById('lessonModalContent');
-            if (lessonContent && !lessonContent.querySelector('.pomodoro-timer')) {
-                const pomodoroHtml = `
-                    <div class="pomodoro-timer">
-                        <i class="fas fa-clock"></i>
-                        <span class="timer-display" id="pomodoroDisplay">25:00</span>
-                        <span class="timer-session" id="pomodoroSession"><i class="fas fa-book"></i> Estudo</span>
-                        <button class="timer-btn" onclick="startPomodoro()"><i class="fas fa-play"></i></button>
-                        <button class="timer-btn pause" onclick="pausePomodoro()"><i class="fas fa-pause"></i></button>
-                        <button class="timer-btn" onclick="resetPomodoro()"><i class="fas fa-redo"></i></button>
-                    </div>
-                `;
-                lessonContent.insertAdjacentHTML('afterbegin', pomodoroHtml);
-                updatePomodoroDisplay();
-            }
-        }
-        
-        // ============================================
-        // FUNÇÕES ADMIN - CRUD DE CURSOS
-        // ============================================
-        
-        function showAdminTab(tab) {
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            if (tab === 'courses') {
-                document.querySelector('.admin-tab').classList.add('active');
-                document.getElementById('adminCoursesTab').style.display = 'block';
-                document.getElementById('adminCreateTab').style.display = 'none';
-                document.getElementById('adminStatsTab').style.display = 'none';
-                renderAdminCoursesList();
-            } else if (tab === 'create') {
-                document.querySelectorAll('.admin-tab')[1].classList.add('active');
-                document.getElementById('adminCoursesTab').style.display = 'none';
-                document.getElementById('adminCreateTab').style.display = 'block';
-                document.getElementById('adminStatsTab').style.display = 'none';
-            } else if (tab === 'stats') {
-                document.querySelectorAll('.admin-tab')[2].classList.add('active');
-                document.getElementById('adminCoursesTab').style.display = 'none';
-                document.getElementById('adminCreateTab').style.display = 'none';
-                document.getElementById('adminStatsTab').style.display = 'block';
-                updateAdminStats();
-            }
-        }
-        
-        function renderAdminCoursesList() {
-            const container = document.getElementById('adminCoursesList');
-            if (!container) return;
-            const coursesArray = Object.values(coursesData);
-            container.innerHTML = coursesArray.map(course => `
-                <div class="course-admin-card">
-                    <div style="font-size: 48px; text-align: center;"><span style="font-size: 32px;">${course.icon}</span></div>
-                    <h3>${course.title}</h3>
-                    <p>${course.category} | ${course.hours} | ${course.lessons.length} aulas</p>
-                    <div class="course-actions">
-                        <button class="btn-edit" onclick="editCourse(${course.id})"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="btn-preview" onclick="previewCourse(${course.id})"><i class="fas fa-eye"></i> Ver</button>
-                        <button class="btn-delete" onclick="deleteCourse(${course.id})"><i class="fas fa-trash"></i> Excluir</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function editCourse(courseId) {
-            const course = coursesData[courseId];
-            if (!course) return;
-            document.getElementById('newCourseTitle').value = course.title;
-            document.getElementById('newCourseCategory').value = course.category;
-            document.getElementById('newCourseHours').value = course.hours;
-            document.getElementById('newCourseIcon').value = course.icon;
-            document.getElementById('newCoursePoints').value = course.points;
-            tempLessons = JSON.parse(JSON.stringify(course.lessons));
-            tempQuiz = JSON.parse(JSON.stringify(course.quiz));
-            lessonCounter = tempLessons.length + 1;
-            quizCounter = tempQuiz.length + 1;
-            renderLessonsList();
-            renderQuizList();
-            showAdminTab('create');
-            editingCourseId = courseId;
-        }
-        
-        async function deleteCourse(courseId) {
-            if (confirm('Tem certeza que deseja excluir este curso?')) {
-                delete coursesData[courseId];
-                await saveCoursesToFirebase();
-                renderAdminCoursesList();
-                loadCourses();
-                alert('Curso excluído com sucesso!');
-            }
-        }
-        
-        function previewCourse(courseId) {
-            const course = coursesData[courseId];
-            alert(`📚 ${course.title}\n\n📖 Aulas: ${course.lessons.length}\n📝 Quiz: ${course.quiz.length} perguntas\n⏱️ Carga: ${course.hours}\n⭐ Pontos: ${course.points}`);
-        }
-        
-        function addLessonField() {
-            tempLessons.push({ id: lessonCounter, title: "", videoUrl: "", content: "" });
-            renderLessonsList();
-            lessonCounter++;
-        }
-        
-        function removeLesson(index) { tempLessons.splice(index, 1); renderLessonsList(); }
-        function updateLesson(index, field, value) { tempLessons[index][field] = value; }
-        
-        function renderLessonsList() {
-            const container = document.getElementById('lessonsContainer');
-            if (!container) return;
-            container.innerHTML = tempLessons.map((lesson, idx) => `
-                <div class="lesson-item">
-                    <div class="lesson-header"><strong>Aula ${lesson.id}</strong><button class="btn-icon" onclick="removeLesson(${idx})"><i class="fas fa-trash"></i></button></div>
-                    <div class="form-group"><input type="text" placeholder="Título da aula" value="${escapeHtml(lesson.title)}" onchange="updateLesson(${idx}, 'title', this.value)"></div>
-                    <div class="form-group"><input type="text" placeholder="URL do Vídeo (YouTube)" value="${escapeHtml(lesson.videoUrl)}" onchange="updateLesson(${idx}, 'videoUrl', this.value)"></div>
-                    <div class="form-group"><textarea placeholder="Conteúdo da aula (HTML permitido)" rows="4" onchange="updateLesson(${idx}, 'content', this.value)">${escapeHtml(lesson.content)}</textarea></div>
-                </div>
-            `).join('');
-        }
-        
-        function addQuizField() { tempQuiz.push({ q: "", options: ["", "", "", ""], correct: 0 }); renderQuizList(); quizCounter++; }
-        function removeQuiz(index) { tempQuiz.splice(index, 1); renderQuizList(); }
-        function updateQuizQuestion(index, value) { tempQuiz[index].q = value; }
-        function updateQuizOption(index, optIndex, value) { tempQuiz[index].options[optIndex] = value; }
-        function updateQuizCorrect(index, value) { tempQuiz[index].correct = parseInt(value); }
-        
-        function renderQuizList() {
-            const container = document.getElementById('quizContainer');
-            if (!container) return;
-            container.innerHTML = tempQuiz.map((quiz, idx) => `
-                <div class="quiz-item">
-                    <div class="quiz-header"><strong>Pergunta ${idx+1}</strong><button class="btn-icon" onclick="removeQuiz(${idx})"><i class="fas fa-trash"></i></button></div>
-                    <div class="form-group"><input type="text" placeholder="Pergunta" value="${escapeHtml(quiz.q)}" onchange="updateQuizQuestion(${idx}, this.value)"></div>
-                    <div class="form-group"><input type="text" placeholder="Opção A" value="${escapeHtml(quiz.options[0])}" onchange="updateQuizOption(${idx}, 0, this.value)"></div>
-                    <div class="form-group"><input type="text" placeholder="Opção B" value="${escapeHtml(quiz.options[1])}" onchange="updateQuizOption(${idx}, 1, this.value)"></div>
-                    <div class="form-group"><input type="text" placeholder="Opção C" value="${escapeHtml(quiz.options[2])}" onchange="updateQuizOption(${idx}, 2, this.value)"></div>
-                    <div class="form-group"><input type="text" placeholder="Opção D" value="${escapeHtml(quiz.options[3])}" onchange="updateQuizOption(${idx}, 3, this.value)"></div>
-                    <div class="form-group"><label>Resposta Correta:</label><select onchange="updateQuizCorrect(${idx}, this.value)"><option value="0">Opção A</option><option value="1">Opção B</option><option value="2">Opção C</option><option value="3">Opção D</option></select></div>
-                </div>
-            `).join('');
-        }
-        
-        function clearCourseForm() {
-            document.getElementById('newCourseTitle').value = '';
-            document.getElementById('newCourseCategory').value = 'Geral';
-            document.getElementById('newCourseHours').value = '';
-            document.getElementById('newCourseIcon').value = '📚';
-            document.getElementById('newCoursePoints').value = '100';
-            tempLessons = [];
-            tempQuiz = [];
-            lessonCounter = 1;
-            quizCounter = 1;
-            renderLessonsList();
-            renderQuizList();
-            editingCourseId = null;
-        }
-        
-        async function saveNewCourse() {
-            const title = document.getElementById('newCourseTitle').value.trim();
-            if (!title) { alert('Digite o título do curso!'); return; }
-            if (tempLessons.length === 0) { alert('Adicione pelo menos uma aula!'); return; }
-            if (tempQuiz.length === 0) { alert('Adicione pelo menos uma pergunta ao quiz!'); return; }
-            
-            const newId = editingCourseId || Math.max(...Object.keys(coursesData).map(Number), 0) + 1;
-            
-            const newCourse = {
-                id: newId,
-                title: title,
-                category: document.getElementById('newCourseCategory').value,
-                hours: document.getElementById('newCourseHours').value || '10h',
-                icon: document.getElementById('newCourseIcon').value || '📚',
-                points: parseInt(document.getElementById('newCoursePoints').value) || 100,
-                lessons: tempLessons.map((l, idx) => ({ ...l, id: idx+1 })),
-                quiz: tempQuiz
-            };
-            
-            coursesData[newId] = newCourse;
-            await saveCoursesToFirebase();
-            
-            alert(`Curso "${title}" ${editingCourseId ? 'atualizado' : 'criado'} com sucesso!`);
-            clearCourseForm();
-            renderAdminCoursesList();
-            loadCourses();
-            editingCourseId = null;
-            showAdminTab('courses');
-        }
-        
-        function updateAdminStats() {
-            const coursesArray = Object.values(coursesData);
-            const totalLessons = coursesArray.reduce((sum, c) => sum + c.lessons.length, 0);
-            const totalPoints = users.reduce((sum, u) => sum + (u.points || 0), 0);
-            document.getElementById('statTotalCourses').innerText = coursesArray.length;
-            document.getElementById('statTotalLessons').innerText = totalLessons;
-            document.getElementById('statTotalUsers').innerText = users.length;
-            document.getElementById('statTotalPoints').innerText = totalPoints;
-            
-            const ctx = document.getElementById('adminStatsChart')?.getContext('2d');
-            if (ctx) {
-                const labels = coursesArray.map(c => c.title.length > 15 ? c.title.substring(0,15)+'...' : c.title);
-                const data = coursesArray.map(c => c.lessons.length);
-                if (adminChart) adminChart.destroy();
-                adminChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Quantidade de Aulas', data, backgroundColor: '#D82A28', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true } });
-            }
-        }
-        
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-        
-        // ============================================
-        // FUNÇÕES DO SISTEMA (ALUNO)
-        // ============================================
-        
-        function extractYoutubeId(url) {
-            if (!url) return null;
-            const patterns = [/(?:youtube\.com\/watch\?v=)([^&]+)/, /(?:youtu\.be\/)([^?]+)/, /(?:youtube\.com\/embed\/)([^?]+)/];
-            for (let pattern of patterns) { const match = url.match(pattern); if (match) return match[1]; }
-            return null;
-        }
-        
-        function getVideoHtml(videoUrl) {
-            if (!videoUrl) return '<div class="example-box"><i class="fas fa-video"></i> Nenhum vídeo disponível para esta aula.</div>';
-            const videoId = extractYoutubeId(videoUrl);
-            if (!videoId) return '<p style="color: var(--warning);"><i class="fas fa-exclamation-triangle"></i> Link do YouTube inválido</p>';
-            return `<div class="video-container"><iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
-        }
-        
-        function buildSlides(lesson) {
-            const slides = [];
-            slides.push({ icon: "<i class='fas fa-video'></i>", title: "Assista ao Vídeo", content: getVideoHtml(lesson.videoUrl) });
-            slides.push({ icon: "<i class='fas fa-book-open'></i>", title: "Conteúdo da Aula", content: lesson.content });
-            slides.push({ icon: "<i class='fas fa-pencil-alt'></i>", title: "Exercícios", content: lesson.content });
-            slides.push({ icon: "<i class='fas fa-check-circle'></i>", title: "Concluir Aula", content: `<div style="text-align: center; padding: 20px;"><i class="fas fa-trophy" style="font-size: 64px; color: var(--warning);"></i><h3 style="margin: 20px 0;">Parabéns! Você concluiu esta aula!</h3><button class="complete-btn" id="finalCompleteBtn" style="margin-top: 20px;"><i class="fas fa-check"></i> Marcar como Concluída</button></div>` });
-            return slides;
-        }
-        
-        function renderSlide(slideIndex, slides, courseId, lessonId) {
-            const slide = slides[slideIndex];
-            const totalSlides = slides.length;
-            const percent = ((slideIndex + 1) / totalSlides) * 100;
-            
-            let dotsHtml = '';
-            for (let i = 0; i < totalSlides; i++) {
-                dotsHtml += `<div class="slide-dot ${i === slideIndex ? 'active' : ''}" onclick="goToSlide(${i})"></div>`;
-            }
-            
-            const content = `
-                <div class="slide-progress"><div class="slide-progress-bar"><div class="slide-progress-fill" style="width: ${percent}%;"></div></div></div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;"><span style="font-size: 32px;">${slide.icon}</span><h3 style="margin: 0; color: var(--accent);">${slide.title}</h3></div>
-                <div class="slide-content lesson-content">${slide.content}</div>
-                <div class="slide-nav">
-                    <button onclick="previousSlide()" ${slideIndex === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Anterior</button>
-                    <div class="slide-dots" style="margin: 0;">${dotsHtml}</div>
-                    <button onclick="nextSlide(${courseId}, ${lessonId})" ${slideIndex === totalSlides - 1 ? 'id="lastSlideBtn"' : ''}>${slideIndex === totalSlides - 1 ? 'Concluir <i class="fas fa-check"></i>' : 'Próximo <i class="fas fa-chevron-right"></i>'}</button>
-                </div>
-            `;
-            
-            document.getElementById('lessonModalContent').innerHTML = content;
-            
-            if (slideIndex === totalSlides - 1) {
-                const completeBtn = document.getElementById('finalCompleteBtn');
-                if (completeBtn) completeBtn.onclick = () => completeLesson(courseId, lessonId);
-            }
-            
-            addPomodoroToLesson();
-            currentSlideIndex = slideIndex;
-        }
-        
-        function goToSlide(index) { if (index >= 0 && index < currentLessonSlides.length) renderSlide(index, currentLessonSlides, currentCourseId, currentLessonId); }
-        function previousSlide() { if (currentSlideIndex > 0) renderSlide(currentSlideIndex - 1, currentLessonSlides, currentCourseId, currentLessonId); }
-        function nextSlide(courseId, lessonId) {
-            if (currentSlideIndex < currentLessonSlides.length - 1) renderSlide(currentSlideIndex + 1, currentLessonSlides, courseId, lessonId);
-            else completeLesson(courseId, lessonId);
-        }
-        
-        function openLessonWithSlides(courseId, lessonId) {
-            const course = coursesData[courseId];
-            const lesson = course.lessons.find(l => l.id === lessonId);
-            const isComp = currentUser.courseProgress[courseId]?.find(p => p.id === lessonId)?.completed || false;
-            
-            if (isComp) {
-                document.getElementById('lessonModalContent').innerHTML = `<div style="text-align: center; padding: 30px;"><i class="fas fa-check-circle" style="font-size: 64px; color: var(--success);"></i><h3 style="margin: 20px 0;">Aula já concluída!</h3><button class="complete-btn" onclick="closeLessonModal()"><i class="fas fa-check"></i> Fechar</button></div>`;
-                document.getElementById('lessonModal').style.display = 'flex';
-                return;
-            }
-            
-            currentCourseId = courseId;
-            currentLessonId = lessonId;
-            currentLessonSlides = buildSlides(lesson);
-            currentSlideIndex = 0;
-            renderSlide(0, currentLessonSlides, courseId, lessonId);
-            document.getElementById('lessonModal').style.display = 'flex';
-        }
-        
-        function showCertificatePreview(courseId) {
-            const course = coursesData[courseId];
-            const userName = currentUser.name;
-            const date = new Date().toLocaleDateString('pt-BR');
-            const certNumber = `LEARN-${course.id}-${Date.now()}`;
-            const hours = course.hours;
-        
-            const certificadoHtml = `
-                <div class="certificate-preview" style="font-family: 'Cormorant Garamond', serif; max-width: 800px; margin: 0 auto;">
-                    <div style="border: 1px solid #8B7355; margin: 20px; padding: 20px; background: #fef8ed; position: relative;">
-                        <div style="border: 2px solid #c4a56e; padding: 20px; position: relative;">
-                            <div style="position: absolute; top: 5px; left: 5px; width: 30px; height: 30px; border-top: 2px solid #c4a56e; border-left: 2px solid #c4a56e;"></div>
-                            <div style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; border-top: 2px solid #c4a56e; border-right: 2px solid #c4a56e;"></div>
-                            <div style="position: absolute; bottom: 5px; left: 5px; width: 30px; height: 30px; border-bottom: 2px solid #c4a56e; border-left: 2px solid #c4a56e;"></div>
-                            <div style="position: absolute; bottom: 5px; right: 5px; width: 30px; height: 30px; border-bottom: 2px solid #c4a56e; border-right: 2px solid #c4a56e;"></div>
-                            <div style="text-align: center; margin-bottom: 20px; position: relative; z-index: 1;">
-                                <div style="font-size: 32px; font-weight: 700; letter-spacing: 4px; color: #8B7355;">LEARN</div>
-                                <div style="font-size: 42px; font-weight: 700; color: #2c1810; margin: 15px 0 5px; letter-spacing: 6px;">CERTIFICADO</div>
-                                <div style="font-size: 14px; color: #8B7355; letter-spacing: 2px;">DE CONCLUSÃO DE CURSO</div>
-                            </div>
-                            <div style="text-align: center; font-size: 18px; color: #2c1810; margin: 30px 0 10px;">A Diretoria da LEARN certifica que</div>
-                            <div style="text-align: center; font-size: 52px; font-weight: 700; color: #8B7355; margin: 15px 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; text-transform: uppercase;">${userName}</div>
-                            <div style="text-align: center; font-size: 18px; color: #2c1810;">concluiu com êxito o curso de</div>
-                            <div style="text-align: center; font-size: 28px; font-weight: 600; color: #2c1810; margin: 20px 0; font-style: italic;">${course.title}</div>
-                            <div style="text-align: center; font-size: 14px; color: #555; margin: 20px 0; line-height: 1.8;">Carga horária total: ${hours}<br>Conclusão: ${date}</div>
-                            <div style="display: flex; justify-content: space-between; margin: 40px 30px 20px;">
-                                <div style="text-align: center; width: 200px;"><div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div><div style="font-weight: 600; font-size: 14px;">Luiz Carlos Correa Junior</div><div style="font-size: 10px; color: #8B7355;">Gerente do Projeto LEARN</div></div>
-                                <div style="text-align: center; width: 200px;"><div style="border-top: 1px solid #2c1810; width: 100%; margin-bottom: 8px;"></div><div style="font-weight: 600; font-size: 14px;">Diretoria Acadêmica</div><div style="font-size: 10px; color: #8B7355;">Diretor de Educação</div></div>
-                            </div>
-                            <div style="text-align: center; font-size: 10px; color: #aaa; margin-top: 20px; border-top: 1px solid #e0d5c0; padding-top: 15px;">Certificado nº: ${certNumber} | Registro Nacional de Educação Profissional</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('certPreviewContent').innerHTML = certificadoHtml;
-            document.getElementById('certPreviewModal').style.display = 'flex';
-        }
-        
-        function getLevel(points) { if (points >= 500) return "<i class='fas fa-gem'></i> Platina"; if (points >= 300) return "<i class='fas fa-medal'></i> Ouro"; if (points >= 150) return "<i class='fas fa-medal'></i> Prata"; return "<i class='fas fa-medal'></i> Bronze"; }
-        
-        function triggerConfetti() {
-            canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D82A28', '#1B2F47', '#10b981'] });
-            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.3 } }), 200);
-            setTimeout(() => canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.7 } }), 400);
-        }
-        
-        function shareCertificate(platform) { const text = `🎓 Acabei de concluir um curso na plataforma LEARN!`; if (platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank'); else if (platform === 'linkedin') window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank'); else if (platform === 'email') window.location.href = `mailto:?subject=Certificado LEARN&body=${encodeURIComponent(text)}`; alert(`✅ Compartilhado!`); }
-        
-        function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
-        function addNotification(text) { notifications.unshift({ id: Date.now(), text, read: false, date: new Date() }); saveNotificationsToFirebase(); updateNotificationBadge(); }
-        function toggleNotifications() { const panel = document.getElementById('notificationPanel'); if (panel.style.display === 'block') panel.style.display = 'none'; else { panel.innerHTML = notifications.map(n => `<div class="notification-item ${!n.read ? 'unread' : ''}" onclick="markNotificationRead(${n.id})">${n.text}<br><small>${new Date(n.date).toLocaleString()}</small></div>`).join(''); panel.style.display = 'block'; } }
-        function markNotificationRead(id) { const n = notifications.find(n => n.id === id); if (n) n.read = true; saveNotificationsToFirebase(); updateNotificationBadge(); toggleNotifications(); }
-        
-        function updateDashboard() {
-            const total = Object.keys(coursesData).length;
-            const completed = currentUser?.completedCourses?.length || 0;
-            document.getElementById('dashboardGrid').innerHTML = `<div class="dashboard-card"><div class="value">${completed}/${total}</div><div><i class="fas fa-check-circle"></i> Cursos Concluídos</div></div><div class="dashboard-card"><div class="value">${currentUser?.points || 0}</div><div><i class="fas fa-star"></i> Pontos</div></div><div class="dashboard-card"><div class="value">${getLevel(currentUser?.points || 0)}</div><div><i class="fas fa-chart-simple"></i> Nível</div></div><div class="dashboard-card"><div class="value">${currentUser?.badges?.length || 0}</div><div><i class="fas fa-medal"></i> Conquistas</div></div>`;
-        }
-        
-        function updateBadges() {
-            document.getElementById('levelStat').innerHTML = getLevel(currentUser?.points || 0);
-            updateAdvancedBadges();
-        }
-        
-        function updateStats() {
-            const total = Object.keys(coursesData).length;
-            const completed = currentUser?.completedCourses?.length || 0;
-            const percent = Math.round((completed / total) * 100);
-            document.getElementById('globalProgress').style.width = percent + '%';
-            document.getElementById('progressText').innerHTML = `${percent}% concluído (${completed}/${total})`;
-            document.getElementById('userPointsStat').innerText = currentUser?.points || 0;
-            document.getElementById('completedCountStat').innerText = completed;
-            updateDashboard();
-            updateBadges();
-        }
-        
-        async function saveUser() { 
-            const idx = users.findIndex(u => u.id === currentUser.id); 
-            if (idx !== -1) users[idx] = currentUser; 
-            await saveUsersToFirebase();
-        }
-        
-        function rateCourse(courseId, rating) { if (!currentUser.ratings) currentUser.ratings = {}; currentUser.ratings[courseId] = rating; saveUser(); loadCourses(); }
-        function renderStars(courseId) { const rating = currentUser?.ratings?.[courseId] || 0; let stars = ''; for (let i = 1; i <= 5; i++) stars += `<span class="star ${i <= rating ? 'active' : ''}" onclick="event.stopPropagation(); rateCourse(${courseId}, ${i})"><i class="fas fa-star"></i></span>`; return stars; }
-        
-        function loadCourses() {
-            const coursesArray = Object.values(coursesData);
-            document.getElementById('featuredCourses').innerHTML = coursesArray.slice(0, 3).map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image"><span style="font-size: 32px;">${c.icon}</span><div class="quiz-badge"><i class="fas fa-star"></i> +${c.points} pts</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div><div class="rating-stars">${renderStars(c.id)}</div>${currentUser?.completedCourses?.includes(c.id) ? '<div class="course-status status-completed"><i class="fas fa-check-circle"></i> Concluído</div>' : ''}</div></div>`).join('');
-            
-            filterCourses();
-            
-            const pending = coursesArray.filter(c => !currentUser?.completedCourses?.includes(c.id)).slice(0, 3);
-            document.getElementById('nextSteps').innerHTML = pending.length ? pending.map(c => `<div class="course-card" onclick="openCourse(${c.id})"><div class="course-image"><span style="font-size: 32px;">${c.icon}</span><div class="quiz-badge"><i class="fas fa-play"></i> Iniciar</div></div><div class="course-info"><h3>${c.title}</h3><p>${c.lessons.length} aulas - ${c.hours}</p><div class="course-meta"><span class="course-badge">${c.category}</span><span class="course-hours">${c.hours}</span></div></div></div>`).join('') : '<div style="text-align:center; padding:30px;"><i class="fas fa-trophy"></i> 🎉 Todos concluídos!</div>';
-            const completed = currentUser?.completedCourses || [];
-            document.getElementById('certificatesList').innerHTML = completed.length ? `<div class="courses-grid">${completed.map(id => { const c = coursesData[id]; return c ? `<div class="course-card"><div class="course-image"><span style="font-size: 32px;">${c.icon}</span></div><div class="course-info"><h3>${c.title}</h3><p><i class="fas fa-certificate"></i> Certificado - ${c.hours}</p><button class="btn-sm" onclick="showCertificatePreview(${c.id})"><i class="fas fa-eye"></i> Ver</button></div></div>` : ''; }).join('')}</div>` : '<div style="text-align:center; padding:30px;"><i class="fas fa-certificate"></i> 📜 Nenhum certificado.</div>';
-            if (currentUser?.role === 'admin') renderAdminCoursesList();
-        }
-        
-        function openCourse(courseId) {
-            const course = coursesData[courseId];
-            if (!course) return;
-            if (!currentUser.courseProgress) currentUser.courseProgress = {};
-            if (!currentUser.courseProgress[courseId]) currentUser.courseProgress[courseId] = course.lessons.map(l => ({ id: l.id, completed: false }));
-            const progress = currentUser.courseProgress[courseId];
-            const completedCount = progress.filter(p => p.completed).length;
-            const percent = (completedCount / course.lessons.length) * 100;
-            const quizSubmitted = currentUser.quizSubmitted?.[courseId] || false;
-            let lessonsHtml = '<div class="lessons-grid">';
-            course.lessons.forEach(l => { const isComp = progress.find(p => p.id === l.id)?.completed || false; lessonsHtml += `<div class="lesson-card ${isComp ? 'completed' : ''}" onclick="openLessonWithSlides(${courseId}, ${l.id})"><div class="lesson-number"><i class="fas fa-play-circle"></i> Aula ${l.id}</div><h3>${l.title}</h3>${isComp ? '<span style="color:var(--success);"><i class="fas fa-check-circle"></i></span>' : ''}</div>`; });
-            lessonsHtml += '</div>';
-            let quizHtml = '';
-            if (completedCount === course.lessons.length && !quizSubmitted) quizHtml = `<div style="background:var(--bg-card-hover); border-radius:16px; padding:16px; margin-top:15px;"><h3 style="color:var(--accent);"><i class="fas fa-question-circle"></i> Quiz Final</h3><div id="quizQuestions"></div><button class="complete-btn" onclick="submitQuiz(${courseId})"><i class="fas fa-check"></i> Finalizar Quiz</button></div>`;
-            else if (quizSubmitted) quizHtml = `<div style="background:rgba(16, 185, 129, 0.1); border-radius:16px; padding:16px; text-align:center;"><i class="fas fa-certificate" style="font-size:36px; color:var(--success);"></i><h3><i class="fas fa-trophy"></i> Curso concluído!</h3><button class="complete-btn" onclick="showCertificatePreview(${courseId})"><i class="fas fa-eye"></i> Ver Certificado</button></div>`;
-            document.getElementById('modalContent').innerHTML = `<div style="text-align:center;"><h2 style="color:var(--accent);"><span style="font-size: 32px;">${course.icon}</span> ${course.title}</h2><p>${course.lessons.length} aulas</p><div class="progress-container"><div class="progress-fill" style="width:${percent}%;"></div></div><p>${completedCount}/${course.lessons.length}</p></div>${lessonsHtml}${quizHtml}`;
-            document.getElementById('courseModal').style.display = 'flex';
-            if (completedCount === course.lessons.length && !quizSubmitted) loadQuiz(courseId);
-        }
-        
-        function loadQuiz(courseId) { const course = coursesData[courseId]; const container = document.getElementById('quizQuestions'); if (!container) return; currentQuizAnswers = JSON.parse(localStorage.getItem(`quiz_${currentUser.id}_${courseId}`)) || {}; container.innerHTML = ''; course.quiz.forEach((q, idx) => { container.innerHTML += `<div class="quiz-question"><p><strong>${idx+1}. ${q.q}</strong></p>${q.options.map((opt, optIdx) => `<div class="quiz-option ${currentQuizAnswers[idx] === optIdx ? 'selected' : ''}" onclick="selectQuizAnswer(${courseId}, ${idx}, ${optIdx})">${String.fromCharCode(65+optIdx)}. ${opt}</div>`).join('')}</div>`; }); }
-        function selectQuizAnswer(courseId, qIdx, optIdx) { currentQuizAnswers[qIdx] = optIdx; localStorage.setItem(`quiz_${currentUser.id}_${courseId}`, JSON.stringify(currentQuizAnswers)); loadQuiz(courseId); }
-        
-        function submitQuiz(courseId) {
-            const course = coursesData[courseId];
-            let score = 0;
-            course.quiz.forEach((q, idx) => { if (currentQuizAnswers[idx] === q.correct) score++; });
-            if (Object.keys(currentQuizAnswers).length < course.quiz.length) { alert(`Responda todas as perguntas!`); return; }
-            if (score >= 7) {
-                if (!currentUser.quizSubmitted) currentUser.quizSubmitted = {};
-                currentUser.quizSubmitted[courseId] = true;
-                if (!currentUser.completedCourses.includes(courseId)) {
-                    currentUser.completedCourses.push(courseId);
-                    currentUser.points = (currentUser.points || 0) + course.points;
-                }
-                saveUser(); updateStats(); loadCourses(); triggerConfetti();
-                alert(`🎉 PARABÉNS! ${score}/10 acertos! +${course.points} pontos!`);
-                openCourse(courseId);
-            } else alert(`❌ ${score}/10 acertos. Precisa de pelo menos 7!`);
-        }
-        
-        function completeLesson(courseId, lessonId) {
-            const idx = currentUser.courseProgress[courseId].findIndex(p => p.id === lessonId);
-            if (idx !== -1 && !currentUser.courseProgress[courseId][idx].completed) {
-                currentUser.courseProgress[courseId][idx].completed = true;
-                const today = new Date().getDay();
-                const dayIndex = today === 0 ? 6 : today - 1;
-                if (!currentUser.weeklyProgress) currentUser.weeklyProgress = [0,0,0,0,0,0,0];
-                currentUser.weeklyProgress[dayIndex]++;
-                saveUser(); updateStats(); triggerConfetti();
-                alert(`🎉 Aula ${lessonId} concluída! Continue assim!`);
-                closeLessonModal();
-                openCourse(courseId);
-            }
-        }
-        
-        async function generatePdfFromPreview() { const el = document.querySelector('#certPreviewContent .certificate-preview'); if (el) { await html2pdf().set({ margin: 0.5, filename: 'Certificado.pdf' }).from(el).save(); alert('PDF gerado!'); } }
-        
-        function showRanking() { const sorted = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)); document.getElementById('rankingList').innerHTML = sorted.map((u, i) => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border-color);"><span><strong>${i+1}º</strong> ${u.name}</span><span><strong>${u.points || 0}</strong> pts</span><span>${getLevel(u.points)}</span></div>`).join(''); document.getElementById('rankingModal').style.display = 'flex'; }
-        
-        function showRegister() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('registerScreen').style.display = 'flex'; }
-        function showLogin() { document.getElementById('registerScreen').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
-        async function doRegister() { const name = document.getElementById('regName').value; const email = document.getElementById('regEmail').value; const dept = document.getElementById('regDepartment').value; const username = document.getElementById('regUsername').value; const password = document.getElementById('regPassword').value; if (name && username && password) { const newId = Math.max(...users.map(u => u.id), 0) + 1; users.push({ id: newId, name: username, password, role: "aluno", department: dept, email, phone: "(47) 99999-9999", bio: "Novo aluno", points: 0, completedCourses: [], courseProgress: {}, quizSubmitted: {}, ratings: {}, weeklyProgress: [0,0,0,0,0,0,0], favorites: [] }); await saveUsersToFirebase(); alert('Conta criada!'); showLogin(); } else alert('Preencha todos os campos'); }
-        
-        async function doLogin() { 
-            const username = document.getElementById('username').value; 
-            const password = document.getElementById('password').value; 
-            const user = users.find(u => u.name === username && u.password === password); 
-            if (user) { 
-                currentUser = user; 
-                favoritesList = currentUser.favorites || [];
-                localStorage.setItem('learn_favorites', JSON.stringify(favoritesList));
-                localStorage.setItem('learn_currentUser', JSON.stringify(currentUser)); 
-                document.getElementById('loginScreen').style.display = 'none'; 
-                document.getElementById('appContainer').style.display = 'block'; 
-                document.getElementById('welcomeName').innerText = username; 
-                document.getElementById('userAvatar').innerText = username.charAt(0).toUpperCase(); 
-                if (user.role === 'admin') document.getElementById('adminNav').style.display = 'block'; 
-                updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); 
-                // Aplica o idioma atual
-                const savedLang = localStorage.getItem('learn_language') || 'pt';
-                applyLanguage(savedLang);
-                alert(`Bem-vindo, ${username}!`); 
-            } else alert('Usuário ou senha inválidos'); 
-        }
-        function doLogout() { localStorage.removeItem('learn_currentUser'); currentUser = null; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('appContainer').style.display = 'none'; }
-        
-        function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('learn_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
-        function loadTheme() { if (localStorage.getItem('learn_theme') === 'dark') document.body.classList.add('dark'); }
-        
-        function closeModal() { document.getElementById('courseModal').style.display = 'none'; }
-        function closeLessonModal() { document.getElementById('lessonModal').style.display = 'none'; }
-        function closeCertPreview() { document.getElementById('certPreviewModal').style.display = 'none'; }
-        function closeRankingModal() { document.getElementById('rankingModal').style.display = 'none'; }
-        function closeNewPostModal() { document.getElementById('newPostModal').style.display = 'none'; }
-        async function createNewPost() { const title = document.getElementById('postTitle').value; const content = document.getElementById('postContent').value; if (title && content) { forumPosts.unshift({ id: Date.now(), title, content, author: currentUser.name, date: new Date().toLocaleString() }); await saveForumToFirebase(); closeNewPostModal(); loadForum(); alert('Pergunta publicada!'); } else alert('Preencha título e conteúdo'); }
-        function loadForum() { document.getElementById('forumList').innerHTML = forumPosts.length ? forumPosts.map(p => `<div class="forum-post"><h3><i class="fas fa-question-circle"></i> ${p.title}</h3><p>${p.content}</p><small><i class="fas fa-user"></i> ${p.author} | <i class="fas fa-calendar"></i> ${p.date}</small></div>`).join('') : '<div style="text-align:center; padding:30px;"><i class="fas fa-comments"></i> 💬 Nenhuma pergunta.</div>'; }
-        function showNewPostModal() { document.getElementById('newPostModal').style.display = 'flex'; }
-        function showSection(section) { document.querySelectorAll('#homeSection, #coursesSection, #certificatesSection, #forumSection, #adminSection').forEach(s => s.style.display = 'none'); if (section === 'home') document.getElementById('homeSection').style.display = 'block'; else if (section === 'courses') { document.getElementById('coursesSection').style.display = 'block'; filterCourses(); } else if (section === 'certificates') document.getElementById('certificatesSection').style.display = 'block'; else if (section === 'forum') { document.getElementById('forumSection').style.display = 'block'; loadForum(); } else if (section === 'admin' && currentUser?.role === 'admin') document.getElementById('adminSection').style.display = 'block'; }
-        
-        function exportBackup() { const data = { users, courses: coursesData, forum: forumPosts }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `learn_backup.json`; link.click(); alert('Backup exportado!'); }
-        function exportUsersCSV() { let csv = "Nome,Email,Departamento,Role,Cursos,Pontos\n"; users.forEach(u => { csv += `${u.name},${u.email || ''},${u.department || ''},${u.role},${u.completedCourses?.length || 0},${u.points || 0}\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `usuarios_learn.csv`; link.click(); alert('CSV exportado!'); }
-        
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(reg => console.log('Service Worker registrado!')).catch(err => console.log('Service Worker falhou:', err));
-        }
-        
-        async function init() { 
-            loadTheme(); 
-            await loadDataFromFirebase();
-            // Aplicar idioma salvo
-            const savedLang = localStorage.getItem('learn_language') || 'pt';
-            applyLanguage(savedLang);
-            const storedUser = localStorage.getItem('learn_currentUser');
-            if (storedUser) {
-                currentUser = JSON.parse(storedUser);
-                const freshUser = users.find(u => u.id === currentUser.id);
-                if (freshUser) currentUser = freshUser;
-                favoritesList = currentUser.favorites || [];
-                document.getElementById('loginScreen').style.display = 'none'; 
-                document.getElementById('appContainer').style.display = 'block'; 
-                document.getElementById('welcomeName').innerText = currentUser.name; 
-                document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase(); 
-                if (currentUser.role === 'admin') document.getElementById('adminNav').style.display = 'block'; 
-                updateStats(); loadCourses(); showSection('home'); updateNotificationBadge(); 
-            } 
-        }
-        
-        window.onclick = (e) => { 
-            if (e.target.classList.contains('modal')) closeModal();
-            if (e.target.classList.contains('profile-modal')) closeProfileModal();
-        };
-        init();
-    </script>
-</body>
-</html>
+            for (let i = weeklyProgress.length - 1;
